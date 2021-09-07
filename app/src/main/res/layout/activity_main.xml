@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="@drawable/mainbg_03">
+
+    <RelativeLayout
+        android:id="@+id/container1"
+        android:layout_width="match_parent"
+        android:layout_height="112dp">
+
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="64dp"
+            android:layout_marginTop="40dp"
+            android:background="#FF333333" />
+
+        <io.alterac.blurkit.BlurLayout
+            android:id="@+id/blurlayout"
+            android:layout_width="200dp"
+            android:layout_height="64dp"
+            android:layout_marginLeft="72dp"
+            android:layout_marginTop="40dp"
+            app:blk_blurRadius="12"
+            app:blk_downscaleFactor="0.12"
+            app:blk_fps="0" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="12dp"
+            android:text="Tool"
+            android:textColor="#FFFFFFFF"
+            android:textSize="40sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_title"
+            android:layout_marginLeft="16sp"
+            android:layout_marginTop="4dp"
+            android:text="Hello Android This is neumorphism"
+            android:textColor="#FFFFFFFF"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/container1"
+        android:orientation="vertical">
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="4dp"
+            android:layout_weight="1">
+
+
+        <RelativeLayout
+            android:id="@+id/container2"
+            android:layout_width="296dp"
+            android:layout_height="296dp"
+            android:layout_centerVertical="true">
+
+            <soup.neumorphism.NeumorphCardView
+                android:id="@+id/cd_work"
+                style="@style/Widget.Neumorph.CardView"
+                android:layout_width="248dp"
+                android:layout_height="248dp"
+                android:layout_alignParentBottom="true"
+                android:clickable="true"
+                android:onClick="clickGotoWorkShopActivity"
+                app:neumorph_shadowColorDark="#77999999"
+                app:neumorph_shadowColorLight="#77FFFFFF">
+
+                <ImageView
+                    android:id="@+id/iv_workshop"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"/>
+
+                <io.alterac.blurkit.BlurLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:blk_blurRadius="12"
+                    app:blk_downscaleFactor="0.12"
+                    app:blk_fps="0"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|right"
+                    android:layout_margin="12dp"
+                    android:text="WorkShop"
+                    android:textColor="#FFFFFFFF"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+
+            </soup.neumorphism.NeumorphCardView>
+
+            <!--            비시블 능력이 있는 친구-->
+            <soup.neumorphism.NeumorphCardView
+                android:id="@+id/cd_alarm"
+                android:layout_width="148dp"
+                android:layout_height="148dp"
+                android:clickable="true"
+                android:onClick="clickGotoWorkShopActivity"
+                android:visibility="visible"
+                app:neumorph_shadowColorDark="#55FFFFFF"
+                app:neumorph_shadowColorLight="#55FFFFFF"
+                app:neumorph_shapeType="pressed"
+                android:layout_alignParentRight="true"
+                android:layout_margin="12dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"/>
+
+                <io.alterac.blurkit.BlurLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:blk_blurRadius="12"
+                    app:blk_downscaleFactor="0.12"
+                    app:blk_fps="0" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|right"
+                    android:layout_margin="12dp"
+                    android:text="Set"
+                    android:textColor="#FFFFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+
+            </soup.neumorphism.NeumorphCardView>
+
+
+            <soup.neumorphism.NeumorphCardView
+                android:layout_width="148dp"
+                android:layout_height="148dp"
+                android:layout_alignParentRight="true"
+                android:clickable="true"
+                android:onClick="clickGotoSetActivity"
+                app:neumorph_shadowColorDark="#77999999"
+                app:neumorph_shadowColorLight="#77FFFFFF"
+                android:layout_margin="12dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY" />
+
+                <io.alterac.blurkit.BlurLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:blk_blurRadius="12"
+                    app:blk_downscaleFactor="0.12"
+                    app:blk_fps="0" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|right"
+                    android:layout_margin="12dp"
+                    android:text="Set"
+                    android:textColor="#FFFFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+
+            </soup.neumorphism.NeumorphCardView>
+
+
+        </RelativeLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Main"
+                android:textColor="#FFFFFFFF"
+                android:textSize="32sp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="16dp"/>
+
+        </RelativeLayout>
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="4dp"
+            android:layout_weight="1">
+
+        <RelativeLayout
+            android:id="@+id/container3"
+            android:layout_width="296dp"
+            android:layout_height="296dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:padding="4dp">
+
+            <soup.neumorphism.NeumorphCardView
+                style="@style/Widget.Neumorph.CardView"
+                android:layout_width="148dp"
+                android:layout_height="148dp"
+                android:clickable="true"
+                android:onClick="clickGotoStatisticalActivity"
+                app:neumorph_shadowColorDark="#77999999"
+                app:neumorph_shadowColorLight="#77FFFFFF">
+
+                <ImageView
+                    android:id="@+id/iv_statistical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"/>
+
+                <io.alterac.blurkit.BlurLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:blk_blurRadius="12"
+                    app:blk_downscaleFactor="0.12"
+                    app:blk_fps="0" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|bottom"
+                    android:layout_margin="12dp"
+                    android:text="Statistical"
+                    android:textColor="#FFFFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+
+
+
+
+            </soup.neumorphism.NeumorphCardView>
+
+
+
+            <soup.neumorphism.NeumorphCardView
+                style="@style/Widget.Neumorph.CardView"
+                android:layout_width="148dp"
+                android:layout_height="148dp"
+                android:layout_alignParentRight="true"
+                android:clickable="true"
+                android:onClick="clickGotoAlarmActivity"
+                app:neumorph_shadowColorDark="#77999999"
+                app:neumorph_shadowColorLight="#77FFFFFF">
+
+                <ImageView
+                    android:id="@+id/iv_alarm"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY" />
+
+                <io.alterac.blurkit.BlurLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:blk_blurRadius="12"
+                    app:blk_downscaleFactor="0.12"
+                    app:blk_fps="0" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|bottom"
+                    android:layout_margin="12dp"
+                    android:text="Alarm"
+                    android:textColor="#FFFFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+
+            </soup.neumorphism.NeumorphCardView>
+
+            <soup.neumorphism.NeumorphCardView
+                style="@style/Widget.Neumorph.CardView"
+                android:layout_width="148dp"
+                android:layout_height="148dp"
+                android:layout_alignParentBottom="true"
+                android:clickable="true"
+                android:onClick="clickGotoSquareActivity"
+                app:neumorph_shadowColorDark="#77999999"
+                app:neumorph_shadowColorLight="#77FFFFFF">
+
+                <ImageView
+                    android:id="@+id/iv_square"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY" />
+
+                <io.alterac.blurkit.BlurLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:blk_blurRadius="12"
+                    app:blk_downscaleFactor="0.12"
+                    app:blk_fps="0" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|bottom"
+                    android:layout_margin="12dp"
+                    android:text="Square"
+                    android:textColor="#FFFFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+
+            </soup.neumorphism.NeumorphCardView>
+
+            <soup.neumorphism.NeumorphCardView
+                style="@style/Widget.Neumorph.CardView"
+                android:layout_width="148dp"
+                android:layout_height="148dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:clickable="true"
+                android:onClick="clickGotoTrafficActivity"
+                app:neumorph_shadowColorDark="#77999999"
+                app:neumorph_shadowColorLight="#77FFFFFF">
+
+                <ImageView
+                    android:id="@+id/iv_traffic"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY" />
+
+                <io.alterac.blurkit.BlurLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:blk_blurRadius="12"
+                    app:blk_downscaleFactor="0.12"
+                    app:blk_fps="0" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|bottom"
+                    android:layout_margin="12dp"
+                    android:text="Traffic"
+                    android:textColor="#FFFFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+
+            </soup.neumorphism.NeumorphCardView>
+
+
+
+        </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sub"
+                android:textColor="#FFFFFFFF"
+                android:textSize="32sp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"/>
+
+
+        </RelativeLayout>
+
+
+
+
+    </LinearLayout>
+    
+
+
+
+
+
+
+</RelativeLayout>

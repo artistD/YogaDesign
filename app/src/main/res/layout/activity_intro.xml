@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".IntroActivity"
+    android:background="@drawable/mainbg_03">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true">
+
+        <soup.neumorphism.NeumorphCardView
+            style="@style/Widget.Neumorph.CardView"
+            android:layout_width="144dp"
+            android:layout_height="144dp"
+            app:neumorph_shadowColorDark="#aa999999"
+            app:neumorph_shadowColorLight="#aaFFFFFF"
+            android:onClick="clickBtn">
+
+            <ImageView
+                android:id="@+id/iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="fitXY"/>
+
+        </soup.neumorphism.NeumorphCardView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Yoga88"
+            android:layout_gravity="center_horizontal"
+            android:textSize="24sp"
+            android:textColor="#FFFFFFFF" />
+
+    </LinearLayout>
+
+</RelativeLayout>

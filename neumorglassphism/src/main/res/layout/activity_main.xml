@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:padding="16dp"
+    android:background="#FFeeeeFF">
+
+
+
+<!--     ** Nuemorphism 구현하는 방법-->
+<!--     -  "https://fornewid.medium.com/neumorphism-in-android-3a298e0337b0" ["https://github.com/fornewid/neumorphism"]사이트에서 라이브러리 추가-->
+<!--     - 라이브러리 추가할때 버전 조심해서 다룰것-->
+
+
+<!--   1. neumorphism CardView-->
+<!--    1) CardView, ImageView, TextView 등 스타일에 맞게 style="@style/Widget.Neumorph.CardView" 써주자-->
+
+<!--    2) 그림자 조절 **-->
+<!--      app:neumorph_strokeWidth=""
+          app:neumorph_shadowElevation="8dp"
+          android:padding="16dp"
+          app:neumorph_lightSource=""-->
+
+<!--    3) 색상 조절 **-->
+<!--    app:neumorph_shadowColorDark=""-->
+<!--    app:neumorph_shadowColorLight=""-->
+<!--    app:neumorph_backgroundColor=""-->
+<!--    app:neumorph_strokeColor=""-->
+
+<!--    5) 모양, 형태 조절 app:neumorph_shapeAppearance=""은 테마에서 스타일 조절해야줘야함-->
+<!--    app:neumorph_shapeAppearance=""-->
+<!--    app:neumorph_shapeType="flat"-->
+<!--    app:neumorph_inset=""-->
+    <soup.neumorphism.NeumorphCardView
+        android:id="@+id/nmp_card"
+        style="@style/Widget.Neumorph.CardView"
+        android:layout_width="240dp"
+        android:layout_height="240dp"
+        app:neumorph_shapeAppearance="@style/ShapeAppearance"
+        app:neumorph_shapeType="flat"
+        app:neumorph_shadowElevation="8dp"
+        android:padding="16dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center">
+
+            <ImageView
+                android:id="@+id/iv"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@mipmap/ic_launcher"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hello neumorphism"
+                android:layout_toRightOf="@id/iv"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
+                android:textColor="#FF333333"/>
+
+        </RelativeLayout>
+
+    </soup.neumorphism.NeumorphCardView>
+
+    <!--    만약 라운드를 뭉뚝하게 하고싶으면 app:neumorph_shapeAppearance="@style/ShapeAppearance2" 이걸 건드려야됨-->
+    <soup.neumorphism.NeumorphButton
+        android:id="@+id/nmp_button"
+        style="@style/Widget.Neumorph.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="neumorphism button"
+        android:layout_below="@id/nmp_card"
+        app:neumorph_shapeType="flat"
+        app:neumorph_shapeAppearance="@style/ShapeAppearance2"/>
+
+        <soup.neumorphism.NeumorphFloatingActionButton
+            android:id="@+id/nmp_fab"
+            style="@style/Widget.Neumorph.FloatingActionButton"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_below="@id/nmp_button"
+            app:neumorph_shapeType="flat"
+            android:onClick="clickBtn"/>
+
+    <soup.neumorphism.NeumorphImageButton
+        android:id="@+id/nmp_imgbtn"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_below="@id/nmp_fab"
+        android:src="@drawable/ic_launcher_background"
+        app:neumorph_shapeType="pressed"
+        android:padding="30dp"/>
+
+    <soup.neumorphism.NeumorphTextView
+        android:id="@+id/nmp_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello android"
+        android:layout_below="@id/nmp_imgbtn"
+        android:textColor="#FFeeeeFF"
+        android:textSize="24sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello android"
+        android:textSize="24sp"
+        android:layout_toRightOf="@id/nmp_tv"
+        android:layout_below="@id/nmp_imgbtn"
+        android:layout_marginLeft="16dp"/>
+
+    <soup.neumorphism.NeumorphImageView
+        android:id="@+id/nmp_img"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/ic_launcher_background"
+        android:layout_below="@id/nmp_tv"
+        app:neumorph_shapeType="basin"
+        android:padding="24dp"/>
+
+<!--     ** Glassmorphism 구현하는 방법 : blurkit사용[ 참고 : glide도 모자이크 처리하는 기능이 있음 ] -->
+<!--    https://github.com/CameraKit/blurkit-android/blob/master/README.md 라이브러리 등록-->
+<!--    *** java에서 꼭 제어해 줘야함-->
+
+
+    <TextView
+        android:layout_width="120dp"
+        android:layout_height="80dp"
+        android:background="#FF333333"
+        android:layout_below="@id/nmp_tv"
+        android:layout_toRightOf="@+id/nmp_img"
+        android:layout_marginTop="8dp"/>
+
+    <io.alterac.blurkit.BlurLayout
+        android:id="@+id/blurlayout"
+        android:layout_width="120dp"
+        android:layout_height="80dp"
+        app:blk_fps="0"
+        app:blk_blurRadius="12"
+        app:blk_downscaleFactor="0.5"
+        android:layout_below="@id/nmp_tv"
+        android:layout_toRightOf="@+id/nmp_img"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="64dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello neumorphism and glassmorphism"
+        android:maxWidth="120dp"
+        android:textColor="#FFFFFFFF"
+        android:layout_below="@id/nmp_tv"
+        android:layout_toRightOf="@+id/nmp_img"
+        android:layout_marginTop="16dp"/>
+
+
+
+
+
+
+
+
+</RelativeLayout>
