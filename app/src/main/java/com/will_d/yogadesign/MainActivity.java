@@ -9,8 +9,12 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
+import java.lang.ref.ReferenceQueue;
 
 import io.alterac.blurkit.BlurLayout;
+import jp.wasabeef.glide.transformations.BlurTransformation;
 import soup.neumorphism.NeumorphCardView;
 
 //프로젝트 하면서 주의 사항
@@ -50,17 +54,10 @@ public class MainActivity extends AppCompatActivity {
         ivTraffic = findViewById(R.id.iv_traffic);
 
 
-//        ivWorkShop.setImageResource(R.drawable.bg_maincontents01);
-        Log.i("TAG", "Glide");
-//        ivWorkShop.setImageResource(R.drawable.bg_maincontents01);
-        Glide.with(this).load(R.drawable.bg_maincontents01).override(248,248).into(ivWorkShop);
-        Log.i("TAG", "Glide");
+        Glide.with(this).load(R.drawable.bg_maincontents01).override(248, 248).into(ivWorkShop);
         Glide.with(this).load(R.drawable.bg_maincontents03).override(148, 148).into(ivStatistical);
-        Log.i("TAG", "Glide");
         Glide.with(this).load(R.drawable.bg_maincontents04).override(148, 148).into(ivAlarm);
-        Log.i("TAG", "Glide");
         Glide.with(this).load(R.drawable.bg_maincontents05).override(148, 148).into(ivSquare);
-        Log.i("TAG", "Glide");
         Glide.with(this).load(R.drawable.bg_maincontents06).override(148, 148).into(ivTraffic);
 
 
