@@ -189,12 +189,14 @@
 
 
 <!--    드로우어 레이아웃-->
+<!--    android:layout_gravity="start"-->
     <RelativeLayout
         android:id="@+id/nav"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="@drawable/mainbg_02">
+
 
 
     </RelativeLayout>

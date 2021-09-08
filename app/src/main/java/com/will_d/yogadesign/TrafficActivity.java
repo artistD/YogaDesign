@@ -17,4 +17,11 @@ public class TrafficActivity extends AppCompatActivity {
     public void clickBackPress(View view) {
         onBackPressed();
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        overridePendingTransition(R.anim.activity_vertical_none, R.anim.activity_horizontal_left_end);
+    }
 }

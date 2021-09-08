@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -35,12 +36,14 @@ public class WorkShopActivity extends AppCompatActivity {
     private ImageView ivNabMusic;
 
     private DrawerLayout drawerLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workshop);
 
         drawerLayout = findViewById(R.id.drawer);
+
         cdNabWork = findViewById(R.id.cd_nab_work);
         cdNabTimer = findViewById(R.id.cd_nab_timer);
         cdNabMusic = findViewById(R.id.cd_nab_music);
@@ -49,18 +52,17 @@ public class WorkShopActivity extends AppCompatActivity {
         ivNabTimer = findViewById(R.id.iv_nab_timer);
         ivNabMusic = findViewById(R.id.iv_nab_music);
 
+
+
+
         manager = getSupportFragmentManager();
         tran = manager.beginTransaction();
-
         if (fragments[0] == null) {
             fragments[0] = new WorkShopWorkFragment();
             tran.add(R.id.container, fragments[0]);
         }
         tran.commit();
-
-        cdNabWork.setShapeType(ShapeType.PRESSED);
-        cdNabWork.setBackgroundColor(0xFF9999ff);
-        ivNabWork.setImageResource(R.drawable.ic_fragment_check_push);
+        BnvChangeState(cdNabWork, ivNabWork, R.drawable.ic_fragment_check_push); //처음에 클릭되있어야 되니까
 
     }
 
@@ -74,6 +76,7 @@ public class WorkShopActivity extends AppCompatActivity {
 
     public void clickGotoToolList(View view) {
         startActivity(new Intent(this, MainActivity.class));
+        overridePendingTransition(R.anim.activity_horizontal_right, R.anim.activity_vertical_none);
 
     }
 
@@ -98,18 +101,18 @@ public class WorkShopActivity extends AppCompatActivity {
 
 
 
-
-
-    public void BnvFragmentChange(int BNV_ARRAY, Fragment bnVFragment){
+    public void BnvFragmentChange(int BNV_ARRAYNUM, Fragment bnVFragment){
         tran = manager.beginTransaction();
         tran.hide(fragments[0]);
         if(fragments[1]!=null) tran.hide(fragments[1]);
         if(fragments[2]!=null) tran.hide(fragments[2]);
-        if (fragments[BNV_ARRAY] == null) {
-            fragments[BNV_ARRAY] = bnVFragment;
-            tran.add(R.id.container, fragments[BNV_ARRAY]);
+        if (fragments[BNV_ARRAYNUM] == null) {
+            fragments[BNV_ARRAYNUM] = bnVFragment;
+            Log.i("TAG", "Fragment");
+            tran.add(R.id.container, fragments[BNV_ARRAYNUM]);
         }
-        tran.show(fragments[BNV_ARRAY]);
+        tran.setCustomAnimations(R.anim.activity_alpha, R.anim.activity_vertical_none);
+        tran.show(fragments[BNV_ARRAYNUM]);
         tran.commit();
     }
 

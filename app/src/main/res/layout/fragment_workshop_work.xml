@@ -5,24 +5,63 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/mainbg_03">
 
-    <soup.neumorphism.NeumorphImageView
-        style="@style/ShapeAppearance.Neumorph.ImageView"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:padding="16dp"
-        android:src="@drawable/ic_drawer"
-        app:neumorph_shadowColorDark="#77999999"
-        app:neumorph_shadowColorLight="#77FFFFFF"
-        android:clickable="true"
-        android:onClick="clickDrawer"
-        android:layout_margin="8dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="fragment_1"
-        android:textSize="32sp"
-        android:textColor="#FF333333"
-        android:layout_centerInParent="true"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="72dp">
+
+            <soup.neumorphism.NeumorphImageView
+                style="@style/ShapeAppearance.Neumorph.ImageView"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:padding="16dp"
+                android:src="@drawable/ic_drawer"
+                app:neumorph_shadowColorDark="#77999999"
+                app:neumorph_shadowColorLight="#77FFFFFF"
+                android:clickable="true"
+                android:onClick="clickDrawer"
+                android:layout_margin="8dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <soup.neumorphism.NeumorphImageView
+                android:id="@+id/niv_addbtn"
+                style="@style/Widget.Neumorph.ImageView"
+                android:layout_width="128dp"
+                android:layout_height="72dp"
+                android:layout_alignParentBottom="true"
+                app:neumorph_shadowColorDark="#77999999"
+                app:neumorph_shadowColorLight="#77FFFFFF"
+                android:src="@drawable/ic_bnv_home"
+                android:padding="16dp"
+                android:layout_centerHorizontal="true"
+                android:clickable="true"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:orientation="vertical">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+
+
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+
 
 </RelativeLayout>

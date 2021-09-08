@@ -78,29 +78,41 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+        overridePendingTransition(R.anim.activity_vertical_none, R.anim.activity_horizontal_left_end);
+    }
+
+
 
     public void clickGotoWorkShopActivity(View view) {
-        startActivity(new Intent(this, WorkShopActivity.class));
+        onBackPressed();
     }
 
     public void clickGotoSetActivity(View view) {
         startActivity(new Intent(this, SetActivity.class));
+        overridePendingTransition(R.anim.activity_horizontal_right, R.anim.activity_vertical_none);
     }
 
     public void clickGotoStatisticalActivity(View view) {
         startActivity(new Intent(this, StatisticalActivity.class));
+        overridePendingTransition(R.anim.activity_horizontal_right, R.anim.activity_vertical_none);
     }
 
     public void clickGotoAlarmActivity(View view) {
         startActivity(new Intent(this, AlarmActivity.class));
+        overridePendingTransition(R.anim.activity_horizontal_right, R.anim.activity_vertical_none);
     }
 
     public void clickGotoSquareActivity(View view) {
         startActivity(new Intent(this, SquareActivity.class));
+        overridePendingTransition(R.anim.activity_horizontal_right, R.anim.activity_vertical_none);
     }
 
     public void clickGotoTrafficActivity(View view) {
         startActivity(new Intent(this, TrafficActivity.class));
+        overridePendingTransition(R.anim.activity_horizontal_right, R.anim.activity_vertical_none);
     }
 
 
