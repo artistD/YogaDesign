@@ -36,11 +36,11 @@
                     android:id="@+id/tv_property"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Morning"
-                    android:layout_toRightOf="@id/civ"
-                    android:textSize="24sp"
                     android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"/>
+                    android:layout_marginTop="8dp"
+                    android:layout_toRightOf="@id/civ"
+                    android:text="Morning"
+                    android:textSize="24sp" />
 
                 <Switch
                     android:id="@+id/sw"
@@ -54,30 +54,31 @@
                     android:id="@+id/ln_goal"
                     android:layout_width="match_parent"
                     android:layout_height="24dp"
-                    android:orientation="horizontal"
                     android:layout_below="@id/tv_property"
-                    android:layout_toRightOf="@id/civ"
+                    android:layout_marginLeft="8dp"
                     android:layout_marginTop="4dp"
-                    android:layout_marginLeft="8dp">
+                    android:layout_toRightOf="@id/civ"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:text="목표"
-                        android:textStyle="bold"
-                        android:layout_gravity="center"/>
+                        android:textStyle="bold" />
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="16dp"
                         android:layout_height="16dp"
-                        app:cardCornerRadius="16dp"
                         android:layout_gravity="center"
-                        android:layout_marginLeft="4dp">
+                        android:layout_marginLeft="4dp"
+                        app:cardCornerRadius="16dp">
 
                         <ImageView
+                            android:id="@+id/iv_goal"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="#FF9999ff"/>
+                            android:background="#FF9999ff" />
 
 
                     </androidx.cardview.widget.CardView>
@@ -85,45 +86,47 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="미리알림"
-                        android:textStyle="bold"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="16dp"/>
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        app:cardCornerRadius="16dp"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="4dp">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="#FF9999ff"/>
-
-
-                    </androidx.cardview.widget.CardView>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="위치알림"
                         android:layout_gravity="center"
                         android:layout_marginLeft="16dp"
-                        android:textStyle="bold"/>
+                        android:text="미리알림"
+                        android:textStyle="bold" />
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="16dp"
                         android:layout_height="16dp"
-                        app:cardCornerRadius="16dp"
                         android:layout_gravity="center"
-                        android:layout_marginLeft="4dp">
+                        android:layout_marginLeft="4dp"
+                        app:cardCornerRadius="16dp">
 
                         <ImageView
+                            android:id="@+id/iv_preNotification"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="#FF9999ff"/>
+                            android:background="#FF9999ff" />
+
+
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="16dp"
+                        android:text="위치알림"
+                        android:textStyle="bold" />
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="4dp"
+                        app:cardCornerRadius="16dp">
+
+                        <ImageView
+                            android:id="@+id/iv_locationNotification"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="#FF9999ff" />
 
 
                     </androidx.cardview.widget.CardView>
@@ -135,16 +138,16 @@
                     android:id="@+id/tv_explanation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="매일 아침 물마시기!안녕하세연 반갑습니당"
                     android:layout_below="@id/ln_goal"
-                    android:layout_toRightOf="@id/civ"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="4dp"
+                    android:layout_toRightOf="@id/civ"
+                    android:ellipsize="end"
                     android:maxWidth="240dp"
                     android:maxLines="1"
-                    android:ellipsize="end"
+                    android:text="매일 아침 물마시기!안녕하세연 반갑습니당"
                     android:textSize="12sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tv_addexplanation"

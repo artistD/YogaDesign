@@ -7,46 +7,62 @@ public class WorkItem {
     private String imgUrl;
     private String property;
 
-    private boolean goal;
-    private boolean preNotification;
-    private boolean locationNotification;
+    private int goalColor;
+    private int preNotificationColor;
+    private int locationNotificationColor;
 
     private String explanation;
     private String addExplanation;
 
-    private String weekMon;
-    private String weekTues;
-    private String weekWendnes;
-    private String weekThurs;
-    private String weekFri;
-    private String weekSatur;
-    private String weekSun;
+    private int[] weeksColor = new int[7];
 
     public WorkItem() {
 
-
     }
 
-    public WorkItem(String imgUrl, String property, boolean goal, boolean preNotification, boolean locationNotification,
-                    String explanation, String addExplanation, String weekMon, String weekTues, String weekWendnes, String weekThurs, String weekFri, String weekSatur, String weekSun) {
-
-
+    public WorkItem(String imgUrl, String property, int goalColor, int preNotificationColor, int locationNotificationColor, String explanation, String addExplanation, int[] weeksColor) {
         this.imgUrl = imgUrl;
         this.property = property;
-
-        this.goal = goal;
-        this.preNotification = preNotification;
-        this.locationNotification = locationNotification;
-
+        this.goalColor = goalColor;
+        this.preNotificationColor = preNotificationColor;
+        this.locationNotificationColor = locationNotificationColor;
         this.explanation = explanation;
         this.addExplanation = addExplanation;
+        this.weeksColor = weeksColor;
+    }
 
-        this.weekMon = weekMon;
-        this.weekTues = weekTues;
-        this.weekWendnes = weekWendnes;
-        this.weekThurs = weekThurs;
-        this.weekFri = weekFri;
-        this.weekSatur = weekSatur;
-        this.weekSun = weekSun;
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public String getProperty() {
+        return property;
+    }
+
+    public int getGoalColor() {
+        return goalColor;
+    }
+
+    public int getPreNotificationColor() {
+        return preNotificationColor;
+    }
+
+    public int getLocationNotificationColor() {
+        return locationNotificationColor;
+    }
+
+    public String getExplanation() {
+        return explanation;
+    }
+
+    public String getAddExplanation() {
+        return addExplanation;
+    }
+
+    public int[] getWeeksColor() {
+        return weeksColor;
     }
 }
+
+
+

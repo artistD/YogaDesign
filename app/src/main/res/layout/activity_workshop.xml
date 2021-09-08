@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".WorkShopActivity"
     android:id="@+id/drawer"
-    android:background="@drawable/mainbg_03">
+    android:background="#C7DDFF">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,6 +19,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/mainbg_02"/>
 
 
 <!--        바텀네비게이션바 -->
@@ -198,6 +203,86 @@
         android:background="@drawable/mainbg_02">
 
 
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ddC7DDFF"
+        android:visibility="visible">
+
+
+
+        <soup.neumorphism.NeumorphCardView
+            android:id="@+id/cd_addbtn"
+            style="@style/Widget.Neumorph.CardView"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="12dp"
+            android:layout_marginBottom="4dp"
+            android:clickable="true"
+            android:padding="16dp"
+            app:neumorph_shadowColorDark="#77999999"
+            app:neumorph_shadowColorLight="#77FFFFFF"
+            android:visibility="invisible">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_add" />
+
+        </soup.neumorphism.NeumorphCardView>
+
+
+
+
+        <soup.neumorphism.NeumorphCardView
+            android:id="@+id/cd_addbtn_item"
+            style="@style/Widget.Neumorph.CardView"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginBottom="8dp"
+            android:clickable="true"
+            android:padding="16dp"
+            app:neumorph_shadowColorDark="#77999999"
+            app:neumorph_shadowColorLight="#77FFFFFF"
+            android:layout_above="@id/cd_addbtn"
+            android:layout_alignParentRight="true">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_add" />
+
+        </soup.neumorphism.NeumorphCardView>
+
+
+
+
+        <soup.neumorphism.NeumorphCardView
+            android:id="@+id/cd_addbtn_sub"
+            style="@style/Widget.Neumorph.CardView"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="16dp"
+            android:layout_toLeftOf="@id/cd_addbtn"
+            android:clickable="true"
+            android:padding="16dp"
+            app:neumorph_shadowColorDark="#77999999"
+            app:neumorph_shadowColorLight="#77FFFFFF">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_add" />
+
+        </soup.neumorphism.NeumorphCardView>
 
     </RelativeLayout>
 

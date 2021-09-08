@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -37,6 +38,9 @@ public class WorkShopActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
 
+    private NeumorphCardView cdAddBtnItem;
+    private NeumorphCardView cdAddBtnSub;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +57,10 @@ public class WorkShopActivity extends AppCompatActivity {
         ivNabMusic = findViewById(R.id.iv_nab_music);
 
 
+        cdAddBtnItem = findViewById(R.id.cd_addbtn_item);
+        cdAddBtnSub = findViewById(R.id.cd_addbtn_sub);
+
+//        ObjectAnimator.ofFloat(cdAddBtnItem, "translationY", ).start();
 
 
         manager = getSupportFragmentManager();
