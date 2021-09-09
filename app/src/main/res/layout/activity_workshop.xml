@@ -21,172 +21,190 @@
             android:layout_weight="1"/>
 
         <View
+            android:id="@+id/view_line"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@drawable/mainbg_02"/>
+            android:background="@drawable/mainbg_02"
+            android:visibility="visible"/>
 
 
 <!--        바텀네비게이션바 -->
-        <LinearLayout
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="104dp"
-            android:orientation="horizontal">
+            android:layout_height="104dp">
 
-            <RelativeLayout
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="88dp"
-                android:layout_weight="1">
+                android:layout_height="104dp"
+                android:orientation="horizontal">
 
-                <soup.neumorphism.NeumorphCardView
-                    android:id="@+id/cd_nab_work"
-                    style="@style/Widget.Neumorph.CardView"
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
-                    android:layout_centerHorizontal="true"
-                    app:neumorph_shadowColorDark="#77999999"
-                    app:neumorph_shadowColorLight="#77FFFFFF"
-                    app:neumorph_shapeAppearance="@style/ShapeAppearance"
-                    android:onClick="clickNabWork">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="88dp"
+                    android:layout_weight="1">
 
-                    <ImageView
-                        android:id="@+id/iv_nab_work"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_fragment_work" />
+                    <soup.neumorphism.NeumorphCardView
+                        android:id="@+id/cd_nab_work"
+                        style="@style/Widget.Neumorph.CardView"
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
+                        android:layout_centerHorizontal="true"
+                        app:neumorph_shadowColorDark="#77999999"
+                        app:neumorph_shadowColorLight="#77FFFFFF"
+                        app:neumorph_shapeAppearance="@style/ShapeAppearance"
+                        android:onClick="clickNabWork">
 
-                </soup.neumorphism.NeumorphCardView>
+                        <ImageView
+                            android:id="@+id/iv_nab_work"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_fragment_work" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="4dp"
-                    android:text="Work"
-                    android:textColor="#FF333333"
-                    android:textSize="12sp"/>
+                    </soup.neumorphism.NeumorphCardView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="4dp"
+                        android:text="Work"
+                        android:textColor="#FF333333"
+                        android:textSize="12sp"/>
 
 
 
-            </RelativeLayout>
+                </RelativeLayout>
 
-            <RelativeLayout
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="88dp"
+                    android:layout_weight="1">
+
+                    <soup.neumorphism.NeumorphCardView
+                        android:id="@+id/cd_nab_timer"
+                        style="@style/Widget.Neumorph.CardView"
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
+                        app:neumorph_shapeAppearance="@style/ShapeAppearance"
+                        app:neumorph_shadowColorLight="#77FFFFFF"
+                        app:neumorph_shadowColorDark="#77999999"
+                        android:layout_centerHorizontal="true"
+                        android:onClick="clickNabTimer">
+
+                        <ImageView
+                            android:id="@+id/iv_nab_timer"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_fragment_timer"/>
+
+                    </soup.neumorphism.NeumorphCardView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="4dp"
+                        android:text="Timer"
+                        android:textColor="#FF333333"
+                        android:textSize="12sp" />
+
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="88dp"
+                    android:layout_weight="1">
+
+                    <soup.neumorphism.NeumorphCardView
+                        android:id="@+id/cd_nab_music"
+                        style="@style/Widget.Neumorph.CardView"
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
+                        app:neumorph_shapeAppearance="@style/ShapeAppearance"
+                        app:neumorph_shadowColorLight="#77FFFFFF"
+                        app:neumorph_shadowColorDark="#77999999"
+                        android:layout_centerHorizontal="true"
+                        android:onClick="clickNabMusic">
+
+                        <ImageView
+                            android:id="@+id/iv_nab_music"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_fragment_music"/>
+
+                    </soup.neumorphism.NeumorphCardView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="4dp"
+                        android:text="Music"
+                        android:textColor="#FF333333"
+                        android:textSize="12sp" />
+
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="88dp"
+                    android:layout_weight="1">
+
+                    <soup.neumorphism.NeumorphCardView
+                        style="@style/Widget.Neumorph.CardView"
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
+                        app:neumorph_shapeAppearance="@style/ShapeAppearance"
+                        app:neumorph_shadowColorLight="#77FFFFFF"
+                        app:neumorph_shadowColorDark="#77999999"
+                        android:layout_centerHorizontal="true"
+                        android:onClick="clickGotoToolList">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_fragment_tool"/>
+
+                    </soup.neumorphism.NeumorphCardView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="4dp"
+                        android:text="Tool"
+                        android:textColor="#FF333333"
+                        android:textSize="12sp" />
+
+
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/iv_bnvBlur"
                 android:layout_width="match_parent"
-                android:layout_height="88dp"
-                android:layout_weight="1">
+                android:layout_height="match_parent"
+                android:background="#ccC7DDFF"
+                android:clickable="true"
+                android:visibility="invisible"/>
 
-                <soup.neumorphism.NeumorphCardView
-                    android:id="@+id/cd_nab_timer"
-                    style="@style/Widget.Neumorph.CardView"
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
-                    app:neumorph_shapeAppearance="@style/ShapeAppearance"
-                    app:neumorph_shadowColorLight="#77FFFFFF"
-                    app:neumorph_shadowColorDark="#77999999"
-                    android:layout_centerHorizontal="true"
-                    android:onClick="clickNabTimer">
-
-                    <ImageView
-                        android:id="@+id/iv_nab_timer"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_fragment_timer"/>
-
-                </soup.neumorphism.NeumorphCardView>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="4dp"
-                    android:text="Timer"
-                    android:textColor="#FF333333"
-                    android:textSize="12sp" />
-
-
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="88dp"
-                android:layout_weight="1">
-
-                <soup.neumorphism.NeumorphCardView
-                    android:id="@+id/cd_nab_music"
-                    style="@style/Widget.Neumorph.CardView"
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
-                    app:neumorph_shapeAppearance="@style/ShapeAppearance"
-                    app:neumorph_shadowColorLight="#77FFFFFF"
-                    app:neumorph_shadowColorDark="#77999999"
-                    android:layout_centerHorizontal="true"
-                    android:onClick="clickNabMusic">
-
-                    <ImageView
-                        android:id="@+id/iv_nab_music"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_fragment_music"/>
-
-                </soup.neumorphism.NeumorphCardView>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="4dp"
-                    android:text="Music"
-                    android:textColor="#FF333333"
-                    android:textSize="12sp" />
-
-
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="88dp"
-                android:layout_weight="1">
-
-                <soup.neumorphism.NeumorphCardView
-                    style="@style/Widget.Neumorph.CardView"
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
-                    app:neumorph_shapeAppearance="@style/ShapeAppearance"
-                    app:neumorph_shadowColorLight="#77FFFFFF"
-                    app:neumorph_shadowColorDark="#77999999"
-                    android:layout_centerHorizontal="true"
-                    android:onClick="clickGotoToolList">
-
-                    <ImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_fragment_tool"/>
-
-                </soup.neumorphism.NeumorphCardView>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="4dp"
-                    android:text="Tool"
-                    android:textColor="#FF333333"
-                    android:textSize="12sp" />
-
-
-
-            </RelativeLayout>
-
-        </LinearLayout>
+        </RelativeLayout>
 
 
 
@@ -206,85 +224,7 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#ddC7DDFF"
-        android:visibility="visible">
 
-
-
-        <soup.neumorphism.NeumorphCardView
-            android:id="@+id/cd_addbtn"
-            style="@style/Widget.Neumorph.CardView"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginRight="12dp"
-            android:layout_marginBottom="4dp"
-            android:clickable="true"
-            android:padding="16dp"
-            app:neumorph_shadowColorDark="#77999999"
-            app:neumorph_shadowColorLight="#77FFFFFF"
-            android:visibility="invisible">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_add" />
-
-        </soup.neumorphism.NeumorphCardView>
-
-
-
-
-        <soup.neumorphism.NeumorphCardView
-            android:id="@+id/cd_addbtn_item"
-            style="@style/Widget.Neumorph.CardView"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:layout_marginRight="24dp"
-            android:layout_marginBottom="8dp"
-            android:clickable="true"
-            android:padding="16dp"
-            app:neumorph_shadowColorDark="#77999999"
-            app:neumorph_shadowColorLight="#77FFFFFF"
-            android:layout_above="@id/cd_addbtn"
-            android:layout_alignParentRight="true">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_add" />
-
-        </soup.neumorphism.NeumorphCardView>
-
-
-
-
-        <soup.neumorphism.NeumorphCardView
-            android:id="@+id/cd_addbtn_sub"
-            style="@style/Widget.Neumorph.CardView"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="16dp"
-            android:layout_toLeftOf="@id/cd_addbtn"
-            android:clickable="true"
-            android:padding="16dp"
-            app:neumorph_shadowColorDark="#77999999"
-            app:neumorph_shadowColorLight="#77FFFFFF">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_add" />
-
-        </soup.neumorphism.NeumorphCardView>
-
-    </RelativeLayout>
 
 
 

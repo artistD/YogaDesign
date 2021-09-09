@@ -38,8 +38,11 @@ public class WorkShopActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
 
-    private NeumorphCardView cdAddBtnItem;
-    private NeumorphCardView cdAddBtnSub;
+    private View viewLine;
+    private ImageView ivBnvBlur;
+
+//    private NeumorphCardView cdAddBtnItem;
+//    private NeumorphCardView cdAddBtnSub;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +59,8 @@ public class WorkShopActivity extends AppCompatActivity {
         ivNabTimer = findViewById(R.id.iv_nab_timer);
         ivNabMusic = findViewById(R.id.iv_nab_music);
 
-
-        cdAddBtnItem = findViewById(R.id.cd_addbtn_item);
-        cdAddBtnSub = findViewById(R.id.cd_addbtn_sub);
-
-//        ObjectAnimator.ofFloat(cdAddBtnItem, "translationY", ).start();
+        viewLine = findViewById(R.id.view_line);
+        ivBnvBlur = findViewById(R.id.iv_bnvBlur);
 
 
         manager = getSupportFragmentManager();
@@ -142,4 +142,11 @@ public class WorkShopActivity extends AppCompatActivity {
         ivNab.setImageResource(nabRes);
     }
 
+    public View getViewLine() {
+        return viewLine;
+    }
+
+    public ImageView getIvBnvBlur() {
+        return ivBnvBlur;
+    }
 }

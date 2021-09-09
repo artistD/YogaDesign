@@ -7,28 +7,28 @@ public class WorkItem {
     private String imgUrl;
     private String property;
 
-    private int goalColor;
-    private int preNotificationColor;
-    private int locationNotificationColor;
+    private boolean isgoal;
+    private boolean ispreNotification;
+    private boolean islocationNotification;
 
     private String explanation;
     private String addExplanation;
 
-    private int[] weeksColor = new int[7];
+    private boolean[] isweeks = new boolean[7];
 
     public WorkItem() {
 
     }
 
-    public WorkItem(String imgUrl, String property, int goalColor, int preNotificationColor, int locationNotificationColor, String explanation, String addExplanation, int[] weeksColor) {
+    public WorkItem(String imgUrl, String property, boolean isgoal, boolean ispreNotification, boolean islocationNotification, String explanation, String addExplanation, boolean[] isweeks) {
         this.imgUrl = imgUrl;
         this.property = property;
-        this.goalColor = goalColor;
-        this.preNotificationColor = preNotificationColor;
-        this.locationNotificationColor = locationNotificationColor;
+        this.isgoal = isgoal;
+        this.ispreNotification = ispreNotification;
+        this.islocationNotification = islocationNotification;
         this.explanation = explanation;
         this.addExplanation = addExplanation;
-        this.weeksColor = weeksColor;
+        this.isweeks = isweeks;
     }
 
     public String getImgUrl() {
@@ -39,16 +39,16 @@ public class WorkItem {
         return property;
     }
 
-    public int getGoalColor() {
-        return goalColor;
+    public boolean getIsgoal() {
+        return isgoal;
     }
 
-    public int getPreNotificationColor() {
-        return preNotificationColor;
+    public boolean getIspreNotification() {
+        return ispreNotification;
     }
 
-    public int getLocationNotificationColor() {
-        return locationNotificationColor;
+    public boolean getIslocationNotification() {
+        return islocationNotification;
     }
 
     public String getExplanation() {
@@ -59,10 +59,9 @@ public class WorkItem {
         return addExplanation;
     }
 
-    public int[] getWeeksColor() {
-        return weeksColor;
+    public boolean[] getIsweeks() {
+        return isweeks;
     }
 }
-
 
 

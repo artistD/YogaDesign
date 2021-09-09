@@ -40,17 +40,25 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
         String imgUrl = item.getImgUrl();
         Glide.with(context).load(imgUrl).into(holder.civ);
         holder.tvProperty.setText(item.getProperty());
-        holder.ivGaol.setBackgroundColor(item.getGoalColor());
-        holder.ivPreNotification.setBackgroundColor(item.getPreNotificationColor());
-        holder.ivLocationNotification.setBackgroundColor(item.getLocationNotificationColor());
+
+        if (item.getIsgoal()) holder.ivGaol.setBackgroundColor(0xFF9999FF);
+        else holder.ivGaol.setBackgroundColor(0xFF999999);
+
+        if (item.getIspreNotification()) holder.ivPreNotification.setBackgroundColor(0xFF9999FF);
+        else holder.ivPreNotification.setBackgroundColor(0xFF999999);
+
+        if (item.getIslocationNotification()) holder.ivLocationNotification.setBackgroundColor(0xFF9999FF);
+        else holder.ivLocationNotification.setBackgroundColor(0xFF999999);
 
         holder.tvExplanation.setText(item.getExplanation());
         holder.tvAddexplanation.setText(item.getAddExplanation());
 
-        int[] weeksColor = item.getWeeksColor();
-        for (int i=0; i<weeksColor.length; i++){
-            holder.weeks[i].setTextColor(weeksColor[i]);
+        boolean[] weeks = item.getIsweeks();
+        for (int i=0; i<weeks.length; i++){
+            if (weeks[i]) holder.weeks[i].setTextColor(0xFF9999FF);
+            else holder.weeks[i].setTextColor(0xFF999999);
         }
+
 
 
 
