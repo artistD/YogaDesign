@@ -12,6 +12,7 @@
         app:neumorph_shadowColorLight="#77FFFFFF">
 
         <LinearLayout
+            android:id="@+id/ll_itemcontainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/mainbg_03"
@@ -48,7 +49,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_marginTop="12dp"
-                    android:layout_marginRight="20dp"/>
+                    android:layout_marginRight="20dp"
+                    android:checked="true"/>
 
                 <LinearLayout
                     android:id="@+id/ln_goal"
@@ -256,6 +258,7 @@
                 </LinearLayout>
 
                 <ImageView
+                    android:id="@+id/iv_itemSet"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:src="@drawable/ic_recycler_fix"
@@ -272,6 +275,43 @@
 
 
         </LinearLayout>
+
+<!--        클릭하면 완료되는 이벤트-->
+        <RelativeLayout
+            android:id="@+id/rl_complete"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/mainbg_03"
+            android:visibility="invisible"
+            android:clickable="true">
+
+            <TextView
+                android:id="@+id/tv_clear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="clear!!"
+                android:textSize="32sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="8dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_switch_off"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#aaC7DDFF"
+            android:visibility="invisible">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="clear!!"
+                android:textSize="32sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="8dp"/>
+
+        </RelativeLayout>
 
     </soup.neumorphism.NeumorphCardView>
 

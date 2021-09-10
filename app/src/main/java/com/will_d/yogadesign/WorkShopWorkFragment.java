@@ -9,6 +9,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -48,12 +49,12 @@ public class WorkShopWorkFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_workshop_work, container, false);
+
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
 
         String imgUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjCjgVv-4Cl9Z-XQT3uCV_KKtjPzSNG-q2XA&usqp=CAU";
         boolean[] weeks = new boolean[]{true, true, true, true, true, false, false};
@@ -84,7 +85,7 @@ public class WorkShopWorkFragment extends Fragment {
 
 
 
-        ani = AnimationUtils.loadAnimation(getActivity(), R.anim.fab_translate);
+        ani = AnimationUtils.loadAnimation(getActivity(), R.anim.fab_fade);
         ani2 = AnimationUtils.loadAnimation(getActivity(), R.anim.fab_translate_end);
         ani3 = AnimationUtils.loadAnimation(getActivity(), R.anim.layout_fade);
         ani4 = AnimationUtils.loadAnimation(getActivity(), R.anim.layout_fade_end);
@@ -97,7 +98,6 @@ public class WorkShopWorkFragment extends Fragment {
             cdAddBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     isclick=!isclick;
                     if (isclick) cdAddBtnBeginning();
                     else cdAddBtnEnd();
@@ -111,11 +111,15 @@ public class WorkShopWorkFragment extends Fragment {
 
     public void cdAddBtnBeginning(){
         cdAddBtnItem.startAnimation(ani);
+        cdAddBtnItem2.startAnimation(ani);
         cdAddBtnSub.startAnimation(ani);
+        cdAddBtnSub2.startAnimation(ani);
+
         cdAddBtnItem.setVisibility(View.VISIBLE);
         cdAddBtnItem2.setVisibility(View.VISIBLE);
         cdAddBtnSub.setVisibility(View.VISIBLE);
         cdAddBtnSub2.setVisibility(View.VISIBLE);
+
 
         workShopActivity.getViewLine().startAnimation(ani3);
         workShopActivity.getIvBnvBlur().startAnimation(ani3);

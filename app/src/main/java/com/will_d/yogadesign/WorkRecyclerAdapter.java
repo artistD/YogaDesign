@@ -1,13 +1,20 @@
 package com.will_d.yogadesign;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.widget.PopupWindowCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -78,22 +85,23 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
         private ImageView ivLocationNotification;
         private TextView tvExplanation;
         private TextView tvAddexplanation;
-
         private TextView[] weeks = new TextView[7];
 
 
-        public VH(@NonNull View itemView) {
-            super(itemView);
+        private Switch sw;
+        private LinearLayout llItenContainer;
+        private ImageView ivItemSet;
 
+
+        public VH(@NonNull View itemView) {//#################################################################
+            super(itemView);
             civ = itemView.findViewById(R.id.civ);
             tvProperty = itemView.findViewById(R.id.tv_property);
             ivGaol = itemView.findViewById(R.id.iv_goal);
             ivPreNotification = itemView.findViewById(R.id.iv_preNotification);
             ivLocationNotification = itemView.findViewById(R.id.iv_locationNotification);
-
             tvExplanation = itemView.findViewById(R.id.tv_explanation);
             tvAddexplanation = itemView.findViewById(R.id.tv_addexplanation);
-
             weeks[0] = itemView.findViewById(R.id.tv_week_mon);
             weeks[1] = itemView.findViewById(R.id.tv_week_tues);
             weeks[2] = itemView.findViewById(R.id.tv_week_wendnes);
@@ -103,6 +111,43 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
             weeks[6] = itemView.findViewById(R.id.tv_week_sun);
 
 
+            sw = itemView.findViewById(R.id.sw);
+            llItenContainer = itemView.findViewById(R.id.ll_itemcontainer);
+            ivItemSet = itemView.findViewById(R.id.iv_itemSet);
+
+            ivItemSet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showPopup();
+                }
+            });
+
+            sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) llItenContainer.setBackgroundResource(R.drawable.mainbg_03);
+                    else llItenContainer.setBackgroundColor(0x33333333);
+
+                }
+            });
+
+        }//#################################################################
+
+        public void showPopup(){
+            LayoutInflater inflater = LayoutInflater.from(context);
+            View popupView = inflater.inflate(R.layout.workitem_popupmenu, null);
+
+            int width = RelativeLayout.LayoutParams.WRAP_CONTENT;
+            int height = RelativeLayout.LayoutParams.WRAP_CONTENT;
+            boolean focusable = true;
+
+            PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+            popupWindow.setElevation(10f);
+
+            PopupWindowCompat.showAsDropDown(popupWindow, ivItemSet, 0, 0, Gravity.CENTER);
+
         }
+
+
     }
 }
