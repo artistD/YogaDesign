@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class WorkShopWorkFragment extends Fragment {
     private ArrayList<WorkItem> workItems = new ArrayList<>();
     private RecyclerView recyclerView;
     private WorkRecyclerAdapter adapter;
+    ItemTouchHelper helper;
 
     private NeumorphCardView cdAddBtn;
     private NeumorphCardView cdAddBtn2;
@@ -73,6 +75,10 @@ public class WorkShopWorkFragment extends Fragment {
         recyclerView =view.findViewById(R.id.recycler);
         adapter = new WorkRecyclerAdapter(getActivity(), workItems);
         recyclerView.setAdapter(adapter);
+        helper = new ItemTouchHelper(new ItemTouchHelperCallback(adapter));
+        helper.attachToRecyclerView(recyclerView);
+
+
 
         cdAddBtn = view.findViewById(R.id.cd_addbtn);
         cdAddBtn2 = view.findViewById(R.id.cd_addbtn2);

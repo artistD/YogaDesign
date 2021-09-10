@@ -1,6 +1,7 @@
 package com.will_d.yogadesign;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +13,11 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.widget.PopupWindowCompat;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -23,10 +26,14 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapter.VH> {
+public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapter.VH> implements ItemTouchHelperListener{
 
     private Context context;
     private ArrayList<WorkItem> items;
+
+    private VH holder;
+
+
 
     public WorkRecyclerAdapter(Context context, ArrayList<WorkItem> items) {
         this.context = context;
@@ -42,6 +49,7 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
+        this.holder=holder;
         WorkItem item = items.get(position);
 
         String imgUrl = item.getImgUrl();
@@ -76,6 +84,25 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
         return items.size();
     }
 
+    @Override
+    public boolean onItemMove(int from_position, int to_position) {
+        WorkItem workItem = items.get(from_position);
+        items.remove(from_position);
+        items.add(to_position, workItem);
+
+        notifyItemMoved(from_position,to_position);
+        return true;
+    }
+
+
+    @Override
+    public void onItemSwipe(int position) {
+        WorkItem workItem = items.get(position);
+        items.remove(position);
+        items.add(workItem);
+        notifyItemMoved(position, items.size()-1);
+    }
+
     public class VH extends RecyclerView.ViewHolder{
 
         private CircleImageView civ;
@@ -91,6 +118,9 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
         private Switch sw;
         private LinearLayout llItenContainer;
         private ImageView ivItemSet;
+
+        private RelativeLayout popupRlModify;
+        private RelativeLayout popupRlDelete;
 
 
         public VH(@NonNull View itemView) {//#################################################################
@@ -115,12 +145,35 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
             llItenContainer = itemView.findViewById(R.id.ll_itemcontainer);
             ivItemSet = itemView.findViewById(R.id.iv_itemSet);
 
+
             ivItemSet.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     showPopup();
+
+                    popupRlModify.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(context, "Modify", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                    popupRlDelete.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(context, "delete", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+
+
+
                 }
-            });
+            });//#######
+
+
+
+
 
             sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -133,9 +186,21 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
         }//#################################################################
 
+
+
         public void showPopup(){
             LayoutInflater inflater = LayoutInflater.from(context);
             View popupView = inflater.inflate(R.layout.workitem_popupmenu, null);
+
+            if(popupRlModify==null) {
+                popupRlModify =  popupView.findViewById(R.id.rl_modify);
+                Toast.makeText(context, "qwfwfq", Toast.LENGTH_SHORT).show();
+            }
+            if(popupRlDelete==null){
+                popupRlDelete = popupView.findViewById(R.id.rl_delete);
+                Toast.makeText(context, "qwfwfq", Toast.LENGTH_SHORT).show();
+            }
+
 
             int width = RelativeLayout.LayoutParams.WRAP_CONTENT;
             int height = RelativeLayout.LayoutParams.WRAP_CONTENT;
@@ -148,6 +213,13 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
         }
 
-
+        public Switch getSw() {//####################getter
+            return sw;
+        }
     }
+
+
+
+
+
 }

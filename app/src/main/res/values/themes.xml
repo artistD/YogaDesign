@@ -136,6 +136,12 @@
     </style>
 
 
+    <style name="ShapeAppearance2">
+        <item name="neumorph_cornerFamily">rounded</item>
+        <item name="neumorph_cornerSize">16dp</item>
+    </style>
+
+
 
 
 </resources>
