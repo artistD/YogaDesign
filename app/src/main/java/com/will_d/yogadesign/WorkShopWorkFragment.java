@@ -7,13 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,29 +25,29 @@ import soup.neumorphism.NeumorphCardView;
 
 public class WorkShopWorkFragment extends Fragment {
 
-    private ArrayList<WorkItem> workItems = new ArrayList<>();
-    private RecyclerView recyclerView;
-    private WorkRecyclerAdapter adapter;
-    ItemTouchHelper helper;
+    private TextView tvToday;
+    private TextView tvMonth;
+    private View viewLineToday;
+    private View viewLineMonth;
 
-    private NeumorphCardView cdAddBtn;
-    private NeumorphCardView cdAddBtn2;
 
-    private NeumorphCardView cdAddBtnItem;
-    private NeumorphCardView cdAddBtnItem2;
-    private NeumorphCardView cdAddBtnSub;
-    private NeumorphCardView cdAddBtnSub2;
+    private Fragment[] fragments = new Fragment[2];
+    private FragmentManager fragmentManager;
+    private FragmentTransaction tran;
 
-    private boolean isclick = false;
-    private RelativeLayout rlBlur;
+    private Toolbar toolbarBlur;
 
-    private WorkShopActivity workShopActivity;
 
-    private Animation ani;
-    private Animation ani2;
-    private Animation ani3;
-    private Animation ani4;
+//##########
+    public Toolbar getToolbarBlur() {
+        return toolbarBlur;
+    }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
 
     @Nullable
     @Override
@@ -58,117 +60,70 @@ public class WorkShopWorkFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        String imgUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjCjgVv-4Cl9Z-XQT3uCV_KKtjPzSNG-q2XA&usqp=CAU";
-        boolean[] weeks = new boolean[]{true, true, true, true, true, false, false};
-        workItems.add(new WorkItem(imgUrl, "passion", true, true, false, "dwqqwfgfwqqfqqfqwfqwf", "fqwfqwqwfqwffqw", weeks));
-        workItems.add(new WorkItem(imgUrl, "passion", true, true, false, "dwqqwfgfwqqfqqfqwfqwf", "fqwfqwqwfqwffqw", weeks));
-        workItems.add(new WorkItem(imgUrl, "passion", true, true, false, "dwqqwfgfwqqfqqfqwfqwf", "fqwfqwqwfqwffqw", weeks));
-        workItems.add(new WorkItem(imgUrl, "passion", true, true, false, "dwqqwfgfwqqfqqfqwfqwf", "fqwfqwqwfqwffqw", weeks));
-        workItems.add(new WorkItem(imgUrl, "passion", true, true, false, "dwqqwfgfwqqfqqfqwfqwf", "fqwfqwqwfqwffqw", weeks));
-        workItems.add(new WorkItem(imgUrl, "passion", true, true, false, "dwqqwfgfwqqfqqfqwfqwf", "fqwfqwqwfqwffqw", weeks));
-        workItems.add(new WorkItem(imgUrl, "passion", true, true, false, "dwqqwfgfwqqfqqfqwfqwf", "fqwfqwqwfqwffqw", weeks));
-        workItems.add(new WorkItem(imgUrl, "passion", true, true, false, "dwqqwfgfwqqfqqfqwfqwf", "fqwfqwqwfqwffqw", weeks));
-        workItems.add(new WorkItem(imgUrl, "passion", true, true, false, "dwqqwfgfwqqfqqfqwfqwf", "fqwfqwqwfqwffqw", weeks));
-        workItems.add(new WorkItem(imgUrl, "passion", true, true, false, "dwqqwfgfwqqfqqfqwfqwf", "fqwfqwqwfqwffqw", weeks));
+        tvToday= view.findViewById(R.id.tv_today);
+        tvMonth=view.findViewById(R.id.tv_month);
+        viewLineToday = view.findViewById(R.id.view_line_today);
+        viewLineMonth = view.findViewById(R.id.view_line_month);
 
+        toolbarBlur = view.findViewById(R.id.toolbar_blur);
+        Log.i("TAG", "bbb");
 
-        recyclerView =view.findViewById(R.id.recycler);
-        adapter = new WorkRecyclerAdapter(getActivity(), workItems);
-        recyclerView.setAdapter(adapter);
-        helper = new ItemTouchHelper(new ItemTouchHelperCallback(adapter));
-        helper.attachToRecyclerView(recyclerView);
+        fragments[0] = new WorkTodayFragment();
+        fragmentManager = getActivity().getSupportFragmentManager();
+        tran = fragmentManager.beginTransaction();
+        tran.add(R.id.container3, fragments[0]);
+        tran.show(fragments[0]);
+        tran.commit();
 
+        tvToday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tvToday.setTextColor(0xFF999999);
+                tvMonth.setTextColor(0xFF999999);
+                viewLineToday.setVisibility(View.INVISIBLE);
+                viewLineMonth.setVisibility(View.INVISIBLE);
 
+                tvToday.setTextColor(0xFF333333);
+                viewLineToday.setVisibility(View.VISIBLE);
 
-        cdAddBtn = view.findViewById(R.id.cd_addbtn);
-        cdAddBtn2 = view.findViewById(R.id.cd_addbtn2);
+                tran = fragmentManager.beginTransaction();
+                tran.hide(fragments[0]);
+                if (fragments[1]!=null) tran.hide(fragments[1]);
 
-        cdAddBtnItem = view.findViewById(R.id.cd_addbtn_item);
-        cdAddBtnItem2 = view.findViewById(R.id.cd_addbtn_item2);
+                tran.setCustomAnimations(R.anim.fragment_actionbar_translate_timer_end, R.anim.fragment_actionbar_translate_timer);
+                tran.replace(R.id.container3, fragments[0]);
+                tran.show(fragments[0]);
+                tran.commit();
 
-        cdAddBtnSub = view.findViewById(R.id.cd_addbtn_sub);
-        cdAddBtnSub2 = view.findViewById(R.id.cd_addbtn_sub2);
+            }
+        });
 
+        tvMonth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tvToday.setTextColor(0xFF999999);
+                tvMonth.setTextColor(0xFF999999);
+                viewLineToday.setVisibility(View.INVISIBLE);
+                viewLineMonth.setVisibility(View.INVISIBLE);
 
+                tvToday.setTextColor(0xFF333333);
+                viewLineMonth.setVisibility(View.VISIBLE);
 
-        ani = AnimationUtils.loadAnimation(getActivity(), R.anim.fab_fade);
-        ani2 = AnimationUtils.loadAnimation(getActivity(), R.anim.fab_translate_end);
-        ani3 = AnimationUtils.loadAnimation(getActivity(), R.anim.layout_fade);
-        ani4 = AnimationUtils.loadAnimation(getActivity(), R.anim.layout_fade_end);
-
-        rlBlur = view.findViewById(R.id.rl_Blur);
-        workShopActivity = (WorkShopActivity)getActivity();
-
-
-
-            cdAddBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    isclick=!isclick;
-                    if (isclick) cdAddBtnBeginning();
-                    else cdAddBtnEnd();
-
+                tran = fragmentManager.beginTransaction();
+                tran.hide(fragments[0]);
+                if (fragments[1]!=null) tran.hide(fragments[1]);
+                if (fragments[1]==null){
+                    fragments[1] = new WorkMonthFragment();
+                    tran.add(R.id.container3, fragments[1]);
                 }
-            });
 
-            setcdAddBtnToPreventBlurring();
-
-    }
-
-    public void cdAddBtnBeginning(){
-        cdAddBtnItem.startAnimation(ani);
-        cdAddBtnItem2.startAnimation(ani);
-        cdAddBtnSub.startAnimation(ani);
-        cdAddBtnSub2.startAnimation(ani);
-
-        cdAddBtnItem.setVisibility(View.VISIBLE);
-        cdAddBtnItem2.setVisibility(View.VISIBLE);
-        cdAddBtnSub.setVisibility(View.VISIBLE);
-        cdAddBtnSub2.setVisibility(View.VISIBLE);
-
-
-        workShopActivity.getViewLine().startAnimation(ani3);
-        workShopActivity.getIvBnvBlur().startAnimation(ani3);
-        rlBlur.startAnimation(ani3);
-
-        workShopActivity.getViewLine().setVisibility(View.INVISIBLE);
-        workShopActivity.getIvBnvBlur().setVisibility(View.VISIBLE);
-        rlBlur.setVisibility(View.VISIBLE);
-    }
-
-    public void cdAddBtnEnd(){
-        cdAddBtnItem.startAnimation(ani2);
-        cdAddBtnSub.startAnimation(ani2);
-
-        cdAddBtnItem.setVisibility(View.INVISIBLE);
-        cdAddBtnItem2.setVisibility(View.INVISIBLE);
-        cdAddBtnSub.setVisibility(View.INVISIBLE);
-        cdAddBtnSub2.setVisibility(View.INVISIBLE);
-
-        workShopActivity.getViewLine().startAnimation(ani4);
-        workShopActivity.getIvBnvBlur().startAnimation(ani4);
-        rlBlur.startAnimation(ani4);
-
-        rlBlur.setVisibility(View.INVISIBLE);
-        workShopActivity.getViewLine().setVisibility(View.VISIBLE);
-        workShopActivity.getIvBnvBlur().setVisibility(View.INVISIBLE);
+                tran.setCustomAnimations(R.anim.fragment_actionbar_translate_alarm_end, R.anim.fragment_actionbar_translate_alarm);
+                tran.replace(R.id.container3, fragments[1]);
+                tran.show(fragments[1]);
+                tran.commit();
+            }
+        });
 
     }
-
-    public void setcdAddBtnToPreventBlurring(){
-        cdAddBtn.setBackgroundColor(0xFFC7DDFF);
-        cdAddBtn2.setBackgroundColor(0xFFC7DDFF);
-
-        cdAddBtnItem.setBackgroundColor(0xFFC7DDFF);
-        cdAddBtnItem2.setBackgroundColor(0xFFC7DDFF);
-
-        cdAddBtnSub.setBackgroundColor(0xFFC7DDFF);
-        cdAddBtnSub2.setBackgroundColor(0xFFC7DDFF);
-
-    }
-
-
-
-
 
 }

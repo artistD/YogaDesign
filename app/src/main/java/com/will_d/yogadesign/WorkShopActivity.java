@@ -1,16 +1,14 @@
 package com.will_d.yogadesign;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.animation.ObjectAnimator;
-import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -21,28 +19,37 @@ import soup.neumorphism.ShapeType;
 public class WorkShopActivity extends AppCompatActivity {
 
     private final int BNV_WORK=0;
-    private final int BNV_TIMER=1;
-    private final int BNV_MUSIC=2;
+    private final int BNV_TIME=1;
+    private final int BNV_STATISTICS=2;
+    private final int BNV_SQUARE=3;
 
-    private Fragment[] fragments = new Fragment[3];
+    private Fragment[] fragments = new Fragment[4];
     private FragmentManager manager;
     private FragmentTransaction tran;
 
     private NeumorphCardView cdNabWork;
-    private NeumorphCardView cdNabTimer;
-    private NeumorphCardView cdNabMusic;
+    private NeumorphCardView cdNabTime;
+    private NeumorphCardView cdNabStatistics;
+    private NeumorphCardView cdNabSquare;
 
     private ImageView ivNabWork;
-    private ImageView ivNabTimer;
-    private ImageView ivNabMusic;
+    private ImageView ivNabTime;
+    private ImageView ivNabStatistics;
+    private ImageView ivNabSquare;
 
     private DrawerLayout drawerLayout;
 
     private View viewLine;
     private ImageView ivBnvBlur;
+    private Toolbar toolbarBlur;
 
 //    private NeumorphCardView cdAddBtnItem;
 //    private NeumorphCardView cdAddBtnSub;
+
+
+    public Toolbar getToolbarBlur() {
+        return toolbarBlur;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,12 +59,14 @@ public class WorkShopActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer);
 
         cdNabWork = findViewById(R.id.cd_nab_work);
-        cdNabTimer = findViewById(R.id.cd_nab_timer);
-        cdNabMusic = findViewById(R.id.cd_nab_music);
+        cdNabTime = findViewById(R.id.cd_nab_time);
+        cdNabStatistics = findViewById(R.id.cd_nab_statistics);
+        cdNabSquare = findViewById(R.id.cd_nab_square);
 
         ivNabWork = findViewById(R.id.iv_nab_work);
-        ivNabTimer = findViewById(R.id.iv_nab_timer);
-        ivNabMusic = findViewById(R.id.iv_nab_music);
+        ivNabTime = findViewById(R.id.iv_nab_time);
+        ivNabStatistics = findViewById(R.id.iv_nab_statistics);
+        ivNabSquare = findViewById(R.id.iv_nab_square);
 
         viewLine = findViewById(R.id.view_line);
         ivBnvBlur = findViewById(R.id.iv_bnvBlur);
@@ -74,17 +83,21 @@ public class WorkShopActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (fragments[0] !=null){
+            Log.i("TAG", "aaa");
+            WorkShopWorkFragment workShopWorkFragment = (WorkShopWorkFragment) fragments[0];
+            toolbarBlur =  workShopWorkFragment.getToolbarBlur();
+        }
+    }
 
     public void clickDrawer(View view) {
         if (!drawerLayout.isDrawerOpen(GravityCompat.START)){
             drawerLayout.openDrawer(GravityCompat.START);
         }
-
-    }
-
-    public void clickGotoToolList(View view) {
-        startActivity(new Intent(this, MainActivity.class));
-        overridePendingTransition(R.anim.activity_horizontal_right, R.anim.activity_vertical_none);
 
     }
 
@@ -95,18 +108,23 @@ public class WorkShopActivity extends AppCompatActivity {
 
     }
 
-    public void clickNabTimer(View view) {
-        BnvFragmentChange(BNV_TIMER, new WorkShopTimerFragment());
+    public void clickNabTime(View view) {
+        BnvFragmentChange(BNV_TIME, new WorkShopTimeFragment());
         BnvRevertState();
-        BnvChangeState(cdNabTimer, ivNabTimer, R.drawable.ic_fragment_timer_push);
+        BnvChangeState(cdNabTime, ivNabTime, R.drawable.ic_fragment_time_push);
     }
 
-    public void clickNabMusic(View view) {
-        BnvFragmentChange(BNV_MUSIC, new WorkShopMusicFragment());
+    public void clickNabStatistics(View view) {
+        BnvFragmentChange(BNV_STATISTICS, new WorkShopStatisticsFragment());
         BnvRevertState();
-        BnvChangeState(cdNabMusic, ivNabMusic, R.drawable.ic_fragment_music_push);
+        BnvChangeState(cdNabStatistics, ivNabStatistics, R.drawable.ic_fragment_statistics_push);
     }
 
+    public void clickNabSquare(View view) {
+        BnvFragmentChange(BNV_SQUARE, new WorkShopSquareFragment());
+        BnvRevertState();
+        BnvChangeState(cdNabSquare, ivNabSquare, R.drawable.ic_fragment_square_push);
+    }
 
 
     public void BnvFragmentChange(int BNV_ARRAYNUM, Fragment bnVFragment){
@@ -114,12 +132,13 @@ public class WorkShopActivity extends AppCompatActivity {
         tran.hide(fragments[0]);
         if(fragments[1]!=null) tran.hide(fragments[1]);
         if(fragments[2]!=null) tran.hide(fragments[2]);
+        if(fragments[3]!=null) tran.hide(fragments[3]);
         if (fragments[BNV_ARRAYNUM] == null) {
             fragments[BNV_ARRAYNUM] = bnVFragment;
             Log.i("TAG", "Fragment");
             tran.add(R.id.container, fragments[BNV_ARRAYNUM]);
         }
-        tran.setCustomAnimations(R.anim.activity_alpha, R.anim.activity_vertical_none);
+        tran.setCustomAnimations(R.anim.fragment_fade, R.anim.fragment_none);
         tran.show(fragments[BNV_ARRAYNUM]);
         tran.commit();
     }
@@ -128,12 +147,18 @@ public class WorkShopActivity extends AppCompatActivity {
         cdNabWork.setShapeType(ShapeType.FLAT);
         cdNabWork.setBackgroundColor(0x00);
         ivNabWork.setImageResource(R.drawable.ic_fragment_work);
-        cdNabTimer.setShapeType(ShapeType.FLAT);
-        cdNabTimer.setBackgroundColor(0x00);
-        ivNabTimer.setImageResource(R.drawable.ic_fragment_timer);
-        cdNabMusic.setShapeType(ShapeType.FLAT);
-        cdNabMusic.setBackgroundColor(0x00);
-        ivNabMusic.setImageResource(R.drawable.ic_fragment_music);
+
+        cdNabTime.setShapeType(ShapeType.FLAT);
+        cdNabTime.setBackgroundColor(0x00);
+        ivNabTime.setImageResource(R.drawable.ic_fragment_time);
+
+        cdNabStatistics.setShapeType(ShapeType.FLAT);
+        cdNabStatistics.setBackgroundColor(0x00);
+        ivNabStatistics.setImageResource(R.drawable.ic_fragment_statistics);
+
+        cdNabSquare.setShapeType(ShapeType.FLAT);
+        cdNabSquare.setBackgroundColor(0x00);
+        ivNabSquare.setImageResource(R.drawable.ic_fragment_square);
     }
 
     public void BnvChangeState(NeumorphCardView cdNab, ImageView ivNab, int nabRes){

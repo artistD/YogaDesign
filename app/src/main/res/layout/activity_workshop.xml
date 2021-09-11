@@ -85,7 +85,7 @@
                     android:layout_weight="1">
 
                     <soup.neumorphism.NeumorphCardView
-                        android:id="@+id/cd_nab_timer"
+                        android:id="@+id/cd_nab_time"
                         style="@style/Widget.Neumorph.CardView"
                         android:layout_width="72dp"
                         android:layout_height="72dp"
@@ -93,14 +93,14 @@
                         app:neumorph_shadowColorLight="#77FFFFFF"
                         app:neumorph_shadowColorDark="#77999999"
                         android:layout_centerHorizontal="true"
-                        android:onClick="clickNabTimer">
+                        android:onClick="clickNabTime">
 
                         <ImageView
-                            android:id="@+id/iv_nab_timer"
+                            android:id="@+id/iv_nab_time"
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_fragment_timer"/>
+                            android:src="@drawable/ic_fragment_time"/>
 
                     </soup.neumorphism.NeumorphCardView>
 
@@ -110,7 +110,7 @@
                         android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
                         android:layout_marginBottom="4dp"
-                        android:text="Timer"
+                        android:text="Time"
                         android:textColor="#FF333333"
                         android:textSize="12sp" />
 
@@ -124,22 +124,22 @@
                     android:layout_weight="1">
 
                     <soup.neumorphism.NeumorphCardView
-                        android:id="@+id/cd_nab_music"
+                        android:id="@+id/cd_nab_statistics"
                         style="@style/Widget.Neumorph.CardView"
                         android:layout_width="72dp"
                         android:layout_height="72dp"
-                        app:neumorph_shapeAppearance="@style/ShapeAppearance"
-                        app:neumorph_shadowColorLight="#77FFFFFF"
-                        app:neumorph_shadowColorDark="#77999999"
                         android:layout_centerHorizontal="true"
-                        android:onClick="clickNabMusic">
+                        android:onClick="clickNabStatistics"
+                        app:neumorph_shadowColorDark="#77999999"
+                        app:neumorph_shadowColorLight="#77FFFFFF"
+                        app:neumorph_shapeAppearance="@style/ShapeAppearance">
 
                         <ImageView
-                            android:id="@+id/iv_nab_music"
+                            android:id="@+id/iv_nab_statistics"
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_fragment_music"/>
+                            android:src="@drawable/ic_fragment_statistics" />
 
                     </soup.neumorphism.NeumorphCardView>
 
@@ -149,7 +149,7 @@
                         android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
                         android:layout_marginBottom="4dp"
-                        android:text="Music"
+                        android:text="Statistics"
                         android:textColor="#FF333333"
                         android:textSize="12sp" />
 
@@ -163,6 +163,7 @@
                     android:layout_weight="1">
 
                     <soup.neumorphism.NeumorphCardView
+                        android:id="@+id/cd_nab_square"
                         style="@style/Widget.Neumorph.CardView"
                         android:layout_width="72dp"
                         android:layout_height="72dp"
@@ -170,13 +171,14 @@
                         app:neumorph_shadowColorLight="#77FFFFFF"
                         app:neumorph_shadowColorDark="#77999999"
                         android:layout_centerHorizontal="true"
-                        android:onClick="clickGotoToolList">
+                        android:onClick="clickNabSquare">
 
                         <ImageView
+                            android:id="@+id/iv_nab_square"
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_fragment_tool"/>
+                            android:src="@drawable/ic_fragment_statistics"/>
 
                     </soup.neumorphism.NeumorphCardView>
 
@@ -186,7 +188,7 @@
                         android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
                         android:layout_marginBottom="4dp"
-                        android:text="Tool"
+                        android:text="Square"
                         android:textColor="#FF333333"
                         android:textSize="12sp" />
 

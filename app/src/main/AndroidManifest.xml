@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.will_d.yogadesign">
-
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
@@ -30,44 +29,9 @@
         </activity>
 
         <activity
-            android:name=".TrafficActivity"
-            android:exported="true"
-            android:theme="@style/TrafficActivity" />
-
-        <activity
-            android:name=".SquareActivity"
-            android:exported="true"
-            android:theme="@style/SquareActivity" />
-
-        <activity
-            android:name=".SetActivity"
-            android:exported="true"
-            android:theme="@style/SetActivity" />
-
-        <activity
-            android:name=".StatisticalActivity"
-            android:exported="true"
-            android:theme="@style/StatisticalActivity" />
-
-        <activity
-            android:name=".AlarmActivity"
-            android:exported="true"
-            android:theme="@style/AlarmActivity" />
-
-        <activity
             android:name=".WorkShopActivity"
             android:exported="true"
             android:theme="@style/WorkShopActivity" />
-
-        <activity
-            android:name=".MainActivity"
-            android:theme="@style/Theme.YogaDesign">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
 
     </application>
 
