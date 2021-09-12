@@ -33,7 +33,9 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
     private VH holder;
 
-
+    public VH getHolder() {
+        return holder;
+    }
 
     public WorkRecyclerAdapter(Context context, ArrayList<WorkItem> items) {
         this.context = context;
@@ -89,19 +91,20 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
         WorkItem workItem = items.get(from_position);
         items.remove(from_position);
         items.add(to_position, workItem);
-
         notifyItemMoved(from_position,to_position);
         return true;
     }
 
-
     @Override
     public void onItemSwipe(int position) {
-        WorkItem workItem = items.get(position);
-        items.remove(position);
-        items.add(workItem);
-        notifyItemMoved(position, items.size()-1);
+            WorkItem workItem = items.get(position);
+            items.remove(position);
+            notifyItemRemoved(position);
+            items.add(workItem);
+            notifyItemInserted(items.size()-1);
+
     }
+
 
     public class VH extends RecyclerView.ViewHolder{
 
@@ -178,8 +181,13 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
             sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) llItenContainer.setBackgroundResource(R.drawable.mainbg_03);
-                    else llItenContainer.setBackgroundColor(0x33333333);
+                    if (isChecked) {
+                        llItenContainer.setBackgroundResource(R.drawable.mainbg_03);
+                    }
+                    else {
+                        llItenContainer.setBackgroundColor(0x33333333);
+                    }
+
 
                 }
             });

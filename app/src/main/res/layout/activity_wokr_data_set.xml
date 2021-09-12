@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".WokrDataSetActivity"
+    android:orientation="vertical"
+    android:background="#FFC7DDFF">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_cancel"
+                android:layout_centerVertical="true"
+                android:onClick="clickClose"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="글작성"
+                android:layout_centerInParent="true"
+                android:textSize="20sp"
+                android:padding="8dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="저장"
+                android:textSize="16sp"
+                android:textColor="#FF9999FF"
+                android:layout_marginRight="16dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:onClick="clickSave"/>
+
+        </RelativeLayout>
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <soup.neumorphism.NeumorphCardView
+            style="@style/Widget.Neumorph.CardView"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            app:neumorph_shadowElevation="4dp"
+            app:neumorph_shadowColorDark="#bb999999"
+            app:neumorph_shadowColorLight="#bbFFFFFF"
+            app:neumorph_shapeType="pressed">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/mainbg_03"/>
+
+            <EditText
+                android:id="@+id/et_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="이름"
+                android:textSize="24sp"
+                android:textColorHint="#FF999999"
+                android:inputType="text"
+                android:background="@drawable/bg_edit"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:paddingRight="8dp"
+                android:paddingLeft="8dp"/>
+
+        </soup.neumorphism.NeumorphCardView>
+
+        <soup.neumorphism.NeumorphCardView
+            style="@style/Widget.Neumorph.CardView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:neumorph_shadowColorDark="#77999999"
+            app:neumorph_shadowColorLight="#77FFFFFF">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="164dp"
+                android:orientation="vertical"
+                android:background="@drawable/mainbg_03">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:text="별명"
+                        android:textSize="24sp" />
+
+
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="16dp"
+                        android:visibility="invisible"
+                        android:clickable="true">
+
+                        <TextView
+                            android:id="@+id/tv_nickname_change"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="property"
+                            android:textSize="20sp"
+                            android:padding="8dp"/>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@drawable/mainbg_02"/>
+
+                    </LinearLayout>
+
+
+
+
+                    <soup.neumorphism.NeumorphImageView
+                        android:id="@+id/niv_nickname"
+                        style="@style/Widget.Neumorph.ImageView"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="16dp"
+                        android:padding="16dp"
+                        android:src="@drawable/ic_property"
+                        app:neumorph_shadowColorDark="#77999999"
+                        app:neumorph_shadowColorLight="#77FFFFFF"
+                        app:neumorph_shapeAppearance="@style/ShapeAppearance"
+                        android:visibility="visible"
+                        android:clickable="true"/>
+
+
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@drawable/mainbg_02"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:text="사진"
+                        android:textSize="24sp" />
+
+                    <soup.neumorphism.NeumorphImageView
+                        android:id="@+id/niv_photo"
+                        style="@style/Widget.Neumorph.ImageView"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        app:neumorph_shapeAppearance="@style/ShapeAppearance"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="16dp"
+                        android:src="@drawable/ic_photo"
+                        android:padding="16dp"
+                        app:neumorph_shadowColorDark="#77999999"
+                        app:neumorph_shadowColorLight="#77FFFFFF"
+                        android:visibility="visible"
+                        android:clickable="true"/>
+
+
+                    <soup.neumorphism.NeumorphCardView
+                        android:id="@+id/cd_photo_change"
+                        style="@style/Widget.Neumorph.CardView"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        app:neumorph_shapeAppearance="@style/ShapeAppearance"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="16dp"
+                        app:neumorph_shadowColorDark="#77999999"
+                        app:neumorph_shadowColorLight="#77FFFFFF"
+                        android:visibility="invisible"
+                        android:clickable="true">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/bg_maincontents01"
+                            android:scaleType="centerCrop"/>
+
+
+                    </soup.neumorphism.NeumorphCardView>
+
+
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+
+        </soup.neumorphism.NeumorphCardView>
+
+
+
+
+
+        <soup.neumorphism.NeumorphCardView
+            style="@style/Widget.Neumorph.CardView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:neumorph_shadowColorDark="#77999999"
+            app:neumorph_shadowColorLight="#77FFFFFF"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="@drawable/mainbg_03">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:text="반복"
+                        android:textSize="24sp" />
+
+                    <Switch
+                        android:id="@+id/sw_weeks"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="16dp"/>
+
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@drawable/mainbg_02"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:text="목표"
+                        android:textSize="24sp" />
+
+                    <Switch
+                        android:id="@+id/sw_goal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="16dp"/>
+
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@drawable/mainbg_02"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:text="미리알림"
+                        android:textSize="24sp" />
+
+                    <Switch
+                        android:id="@+id/sw_preNotification"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="16dp"/>
+
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@drawable/mainbg_02"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:text="위치알림"
+                        android:textSize="24sp" />
+
+                    <Switch
+                        android:id="@+id/localNotification"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="16dp"/>
+
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+
+        </soup.neumorphism.NeumorphCardView>
+
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

@@ -43,6 +43,8 @@ public class WorkShopWorkFragment extends Fragment {
         return toolbarBlur;
     }
 
+    public Fragment[] getFragments() { return fragments; }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

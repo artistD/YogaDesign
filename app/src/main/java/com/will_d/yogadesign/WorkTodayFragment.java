@@ -1,5 +1,6 @@
 package com.will_d.yogadesign;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,10 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -53,25 +58,25 @@ public class WorkTodayFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
         String imgUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjCjgVv-4Cl9Z-XQT3uCV_KKtjPzSNG-q2XA&usqp=CAU";
+        String imgUrl2 = "https://editorial.uefa.com/resources/026c-12f705c46a6c-9f2eb0579483-1000/messi_graphic.jpg";
         boolean[] weeks = new boolean[]{true, true, true, true, true, false, false};
-        workItems.add(new WorkItem(imgUrl, "passion", true, true, false, "dwqqwfgfwqqfqqfqwfqwf", "fqwfqwqwfqwffqw", weeks));
-        workItems.add(new WorkItem(imgUrl, "passion", true, true, false, "dwqqwfgfwqqfqqfqwfqwf", "fqwfqwqwfqwffqw", weeks));
-        workItems.add(new WorkItem(imgUrl, "passion", true, true, false, "dwqqwfgfwqqfqqfqwfqwf", "fqwfqwqwfqwffqw", weeks));
-        workItems.add(new WorkItem(imgUrl, "passion", true, true, false, "dwqqwfgfwqqfqqfqwfqwf", "fqwfqwqwfqwffqw", weeks));
-        workItems.add(new WorkItem(imgUrl, "passion", true, true, false, "dwqqwfgfwqqfqqfqwfqwf", "fqwfqwqwfqwffqw", weeks));
-        workItems.add(new WorkItem(imgUrl, "passion", true, true, false, "dwqqwfgfwqqfqqfqwfqwf", "fqwfqwqwfqwffqw", weeks));
-        workItems.add(new WorkItem(imgUrl, "passion", true, true, false, "dwqqwfgfwqqfqqfqwfqwf", "fqwfqwqwfqwffqw", weeks));
-        workItems.add(new WorkItem(imgUrl, "passion", true, true, false, "dwqqwfgfwqqfqqfqwfqwf", "fqwfqwqwfqwffqw", weeks));
-        workItems.add(new WorkItem(imgUrl, "passion", true, true, false, "dwqqwfgfwqqfqqfqwfqwf", "fqwfqwqwfqwffqw", weeks));
-        workItems.add(new WorkItem(imgUrl, "passion", true, true, false, "dwqqwfgfwqqfqqfqwfqwf", "fqwfqwqwfqwffqw", weeks));
+        workItems.add(new WorkItem(imgUrl2, "1", true, true, false, "dqwdqwdqwdwqqw", "dqwdqwdqwdq", weeks));
+        workItems.add(new WorkItem(imgUrl, "2", true, true, false, "dqwdqwdqwdwqqw", "dqwdqwdqwdq", weeks));
+        workItems.add(new WorkItem(imgUrl2, "3", true, true, false, "dqwdqwdqwdwqqw", "dqwdqwdqwdq", weeks));
+        workItems.add(new WorkItem(imgUrl, "4", true, true, false, "dqwdqwdqwdwqqw", "dqwdqwdqwdq", weeks));
+        workItems.add(new WorkItem(imgUrl2, "5", true, true, false, "dqwdqwdqwdwqqw", "dqwdqwdqwdq", weeks));
+        workItems.add(new WorkItem(imgUrl, "6", true, true, false, "dqwdqwdqwdwqqw", "dqwdqwdqwdq", weeks));
+        workItems.add(new WorkItem(imgUrl2, "7", true, true, false, "dqwdqwdqwdwqqw", "dqwdqwdqwdq", weeks));
+
+
 
 
         recyclerView =view.findViewById(R.id.recycler);
         adapter = new WorkRecyclerAdapter(getActivity(), workItems);
         recyclerView.setAdapter(adapter);
         helper = new ItemTouchHelper(new ItemTouchHelperCallback(adapter));
+
         helper.attachToRecyclerView(recyclerView);
 
 
@@ -101,8 +106,31 @@ public class WorkTodayFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 isclick=!isclick;
-                if (isclick) cdAddBtnBeginning();
-                else cdAddBtnEnd();
+                if (isclick) {
+                    cdAddBtnBeginning();
+                    cdAddBtnItem.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getActivity(), WokrDataSetActivity.class);
+                            activityResultLauncher.launch(intent);
+                            getActivity().overridePendingTransition(R.anim.activity_data_set, R.anim.fragment_none);
+                            cdAddBtnEnd();
+                            isclick=false;
+                        }
+                    });
+
+                    cdAddBtnSub.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    });
+
+
+                }
+                else {
+                    cdAddBtnEnd();
+                }
 
             }
         });
@@ -110,6 +138,17 @@ public class WorkTodayFragment extends Fragment {
         setcdAddBtnToPreventBlurring();
 
     }
+
+
+    ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+
+            if (result.getResultCode() == getActivity().RESULT_OK){
+                Intent intent = result.getData();
+            }
+        }
+    });
 
     public void cdAddBtnBeginning(){
         cdAddBtnItem.startAnimation(ani);

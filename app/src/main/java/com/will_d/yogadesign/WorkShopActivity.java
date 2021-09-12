@@ -46,6 +46,13 @@ public class WorkShopActivity extends AppCompatActivity {
 //    private NeumorphCardView cdAddBtnItem;
 //    private NeumorphCardView cdAddBtnSub;
 
+    public View getViewLine() {
+        return viewLine;
+    }
+
+    public ImageView getIvBnvBlur() {
+        return ivBnvBlur;
+    }
 
     public Toolbar getToolbarBlur() {
         return toolbarBlur;
@@ -82,6 +89,7 @@ public class WorkShopActivity extends AppCompatActivity {
         BnvChangeState(cdNabWork, ivNabWork, R.drawable.ic_fragment_check_push); //처음에 클릭되있어야 되니까
 
     }
+
 
     @Override
     protected void onResume() {
@@ -165,13 +173,5 @@ public class WorkShopActivity extends AppCompatActivity {
         cdNab.setShapeType(ShapeType.PRESSED);
         cdNab.setBackgroundColor(0xFF9999ff);
         ivNab.setImageResource(nabRes);
-    }
-
-    public View getViewLine() {
-        return viewLine;
-    }
-
-    public ImageView getIvBnvBlur() {
-        return ivBnvBlur;
     }
 }

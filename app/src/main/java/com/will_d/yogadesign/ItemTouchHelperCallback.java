@@ -12,8 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     private ItemTouchHelperListener listener;
-    static int draf_flafs;
-    static int swipe_flags;
 
 
     public ItemTouchHelperCallback(ItemTouchHelperListener listener) {
@@ -22,11 +20,17 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-        draf_flafs = ItemTouchHelper.UP|ItemTouchHelper.DOWN;
-        swipe_flags = ItemTouchHelper.END;
-        Log.i("TAG","2");
+        int draf_flafs = ItemTouchHelper.UP|ItemTouchHelper.DOWN;
+        int swipe_flags = ItemTouchHelper.END;
         return makeMovementFlags(draf_flafs, swipe_flags);
 
+
+    }
+
+    
+    @Override
+    public boolean isItemViewSwipeEnabled() {
+        return true;
 
     }
 
