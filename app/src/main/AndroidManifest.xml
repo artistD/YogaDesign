@@ -12,7 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.YogaDesign"
         android:usesCleartextTraffic="true">
-
         <activity
             android:name=".IntroActivity"
             android:exported="true"
@@ -23,22 +22,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".LoginActivity"
             android:exported="true"
             android:theme="@style/LoginActivity" />
-
         <activity
             android:name=".WokrDataSetActivity"
             android:exported="true"
-            android:theme="@style/WorkSDataSetActivity"/>
-
+            android:theme="@style/WorkSDataSetActivity" />
         <activity
             android:name=".WorkShopActivity"
             android:exported="true"
             android:theme="@style/WorkShopActivity" />
-
     </application>
 
 </manifest>

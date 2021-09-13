@@ -2,6 +2,7 @@ package com.will_d.yogadesign;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -12,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import soup.neumorphism.NeumorphCardView;
 import soup.neumorphism.ShapeType;
@@ -20,28 +22,36 @@ public class WorkShopActivity extends AppCompatActivity {
 
     private final int BNV_WORK=0;
     private final int BNV_TIME=1;
-    private final int BNV_STATISTICS=2;
-    private final int BNV_SQUARE=3;
+    private final int BNV_SQUARE=2;
+    private final int BNV_STATISTICS=3;
+    private final int TODOLIST=4;
 
-    private Fragment[] fragments = new Fragment[4];
+
+    private Fragment[] fragments = new Fragment[5];
     private FragmentManager manager;
     private FragmentTransaction tran;
 
     private NeumorphCardView cdNabWork;
     private NeumorphCardView cdNabTime;
-    private NeumorphCardView cdNabStatistics;
     private NeumorphCardView cdNabSquare;
+    private NeumorphCardView cdNabStatistics;
 
     private ImageView ivNabWork;
     private ImageView ivNabTime;
-    private ImageView ivNabStatistics;
     private ImageView ivNabSquare;
+    private ImageView ivNabStatistics;
 
-    private DrawerLayout drawerLayout;
+    private CardView meterialCdTodolist;
+    private ImageView ivTodolistBack;
+
 
     private View viewLine;
     private ImageView ivBnvBlur;
-    private Toolbar toolbarBlur;
+    private RelativeLayout toolbarBlur;
+
+    private int isNav;
+
+
 
 //    private NeumorphCardView cdAddBtnItem;
 //    private NeumorphCardView cdAddBtnSub;
@@ -54,7 +64,7 @@ public class WorkShopActivity extends AppCompatActivity {
         return ivBnvBlur;
     }
 
-    public Toolbar getToolbarBlur() {
+    public RelativeLayout getToolbarBlur() {
         return toolbarBlur;
     }
 
@@ -63,17 +73,19 @@ public class WorkShopActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workshop);
 
-        drawerLayout = findViewById(R.id.drawer);
 
         cdNabWork = findViewById(R.id.cd_nab_work);
         cdNabTime = findViewById(R.id.cd_nab_time);
-        cdNabStatistics = findViewById(R.id.cd_nab_statistics);
         cdNabSquare = findViewById(R.id.cd_nab_square);
+        cdNabStatistics = findViewById(R.id.cd_nab_statistics);
 
         ivNabWork = findViewById(R.id.iv_nab_work);
         ivNabTime = findViewById(R.id.iv_nab_time);
-        ivNabStatistics = findViewById(R.id.iv_nab_statistics);
         ivNabSquare = findViewById(R.id.iv_nab_square);
+        ivNabStatistics = findViewById(R.id.iv_nab_statistics);
+
+        meterialCdTodolist = findViewById(R.id.meterial_cd_todolist);
+        ivTodolistBack = findViewById(R.id.iv_todolist_back);
 
         viewLine = findViewById(R.id.view_line);
         ivBnvBlur = findViewById(R.id.iv_bnvBlur);
@@ -86,7 +98,8 @@ public class WorkShopActivity extends AppCompatActivity {
             tran.add(R.id.container, fragments[0]);
         }
         tran.commit();
-        BnvChangeState(cdNabWork, ivNabWork, R.drawable.ic_fragment_check_push); //처음에 클릭되있어야 되니까
+        BnvChangeState(cdNabWork, ivNabWork, R.drawable.ic_fragment_work2_push); //처음에 클릭되있어야 되니까
+        isNav = BNV_WORK;
 
     }
 
@@ -102,17 +115,71 @@ public class WorkShopActivity extends AppCompatActivity {
         }
     }
 
-    public void clickDrawer(View view) {
-        if (!drawerLayout.isDrawerOpen(GravityCompat.START)){
-            drawerLayout.openDrawer(GravityCompat.START);
+
+
+    public void clickTodolist(View view) {
+        BnvFragmentChange(TODOLIST, new WorkShopTodolistFragment());
+
+        meterialCdTodolist.setVisibility(View.INVISIBLE);
+        ivTodolistBack.setVisibility(View.VISIBLE);
+        ivBnvBlur.setVisibility(View.VISIBLE);
+
+    }
+
+    public void clickTodolistBack(View view) {
+
+
+        switch (isNav){
+            case 0:
+                BnvFragmentChange(BNV_WORK, new WorkShopWorkFragment());
+                BnvRevertState();
+                BnvChangeState(cdNabWork, ivNabWork, R.drawable.ic_fragment_work2_push);
+
+                meterialCdTodolist.setVisibility(View.VISIBLE);
+                ivTodolistBack.setVisibility(View.INVISIBLE);
+                ivBnvBlur.setVisibility(View.INVISIBLE);
+                break;
+
+            case 1:
+                BnvFragmentChange(BNV_TIME, new WorkShopTimeFragment());
+                BnvRevertState();
+                BnvChangeState(cdNabTime, ivNabTime, R.drawable.ic_fragment_time_push);
+
+                meterialCdTodolist.setVisibility(View.VISIBLE);
+                ivTodolistBack.setVisibility(View.INVISIBLE);
+                ivBnvBlur.setVisibility(View.INVISIBLE);
+                break;
+
+            case 2:
+                BnvFragmentChange(BNV_SQUARE, new WorkShopSquareFragment());
+                BnvRevertState();
+                BnvChangeState(cdNabSquare, ivNabSquare, R.drawable.ic_fragment_square_push);
+
+                meterialCdTodolist.setVisibility(View.VISIBLE);
+                ivTodolistBack.setVisibility(View.INVISIBLE);
+                ivBnvBlur.setVisibility(View.INVISIBLE);
+                break;
+
+            case 3:
+                BnvFragmentChange(BNV_STATISTICS, new WorkShopStatisticsFragment());
+                BnvRevertState();
+                BnvChangeState(cdNabStatistics, ivNabStatistics, R.drawable.ic_fragment_statistics_push);
+
+                meterialCdTodolist.setVisibility(View.VISIBLE);
+                ivTodolistBack.setVisibility(View.INVISIBLE);
+                ivBnvBlur.setVisibility(View.INVISIBLE);
+                break;
         }
 
     }
 
+
     public void clickNabWork(View view) {
         BnvFragmentChange(BNV_WORK, new WorkShopWorkFragment());
         BnvRevertState();
-        BnvChangeState(cdNabWork, ivNabWork, R.drawable.ic_fragment_check_push);
+        BnvChangeState(cdNabWork, ivNabWork, R.drawable.ic_fragment_work2_push);
+
+        isNav = BNV_WORK;
 
     }
 
@@ -120,18 +187,24 @@ public class WorkShopActivity extends AppCompatActivity {
         BnvFragmentChange(BNV_TIME, new WorkShopTimeFragment());
         BnvRevertState();
         BnvChangeState(cdNabTime, ivNabTime, R.drawable.ic_fragment_time_push);
-    }
 
-    public void clickNabStatistics(View view) {
-        BnvFragmentChange(BNV_STATISTICS, new WorkShopStatisticsFragment());
-        BnvRevertState();
-        BnvChangeState(cdNabStatistics, ivNabStatistics, R.drawable.ic_fragment_statistics_push);
+        isNav = BNV_TIME;
     }
 
     public void clickNabSquare(View view) {
         BnvFragmentChange(BNV_SQUARE, new WorkShopSquareFragment());
         BnvRevertState();
         BnvChangeState(cdNabSquare, ivNabSquare, R.drawable.ic_fragment_square_push);
+
+        isNav = BNV_SQUARE;
+    }
+
+    public void clickNabStatistics(View view) {
+        BnvFragmentChange(BNV_STATISTICS, new WorkShopStatisticsFragment());
+        BnvRevertState();
+        BnvChangeState(cdNabStatistics, ivNabStatistics, R.drawable.ic_fragment_statistics_push);
+
+        isNav = BNV_STATISTICS;
     }
 
 
@@ -141,6 +214,7 @@ public class WorkShopActivity extends AppCompatActivity {
         if(fragments[1]!=null) tran.hide(fragments[1]);
         if(fragments[2]!=null) tran.hide(fragments[2]);
         if(fragments[3]!=null) tran.hide(fragments[3]);
+        if(fragments[4]!=null) tran.hide(fragments[4]);
         if (fragments[BNV_ARRAYNUM] == null) {
             fragments[BNV_ARRAYNUM] = bnVFragment;
             Log.i("TAG", "Fragment");
@@ -154,19 +228,19 @@ public class WorkShopActivity extends AppCompatActivity {
     public void BnvRevertState(){
         cdNabWork.setShapeType(ShapeType.FLAT);
         cdNabWork.setBackgroundColor(0x00);
-        ivNabWork.setImageResource(R.drawable.ic_fragment_work);
+        ivNabWork.setImageResource(R.drawable.ic_fragment_work2);
 
         cdNabTime.setShapeType(ShapeType.FLAT);
         cdNabTime.setBackgroundColor(0x00);
         ivNabTime.setImageResource(R.drawable.ic_fragment_time);
 
-        cdNabStatistics.setShapeType(ShapeType.FLAT);
-        cdNabStatistics.setBackgroundColor(0x00);
-        ivNabStatistics.setImageResource(R.drawable.ic_fragment_statistics);
-
         cdNabSquare.setShapeType(ShapeType.FLAT);
         cdNabSquare.setBackgroundColor(0x00);
         ivNabSquare.setImageResource(R.drawable.ic_fragment_square);
+
+        cdNabStatistics.setShapeType(ShapeType.FLAT);
+        cdNabStatistics.setBackgroundColor(0x00);
+        ivNabStatistics.setImageResource(R.drawable.ic_fragment_statistics);
     }
 
     public void BnvChangeState(NeumorphCardView cdNab, ImageView ivNab, int nabRes){

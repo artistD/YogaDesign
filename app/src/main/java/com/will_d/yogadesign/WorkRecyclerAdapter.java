@@ -56,9 +56,9 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
         String imgUrl = item.getImgUrl();
         Glide.with(context).load(imgUrl).into(holder.civ);
-        holder.tvProperty.setText(item.getProperty());
+        holder.tvNickname.setText(item.getNickName());
 
-        if (item.getIsgoal()) holder.ivGaol.setBackgroundColor(0xFF9999FF);
+        if (item.getIsGoal()) holder.ivGaol.setBackgroundColor(0xFF9999FF);
         else holder.ivGaol.setBackgroundColor(0xFF999999);
 
         if (item.getIspreNotification()) holder.ivPreNotification.setBackgroundColor(0xFF9999FF);
@@ -67,7 +67,7 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
         if (item.getIslocationNotification()) holder.ivLocationNotification.setBackgroundColor(0xFF9999FF);
         else holder.ivLocationNotification.setBackgroundColor(0xFF999999);
 
-        holder.tvExplanation.setText(item.getExplanation());
+        holder.tvName.setText(item.getName());
         holder.tvAddexplanation.setText(item.getAddExplanation());
 
         boolean[] weeks = item.getIsweeks();
@@ -109,11 +109,11 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
     public class VH extends RecyclerView.ViewHolder{
 
         private CircleImageView civ;
-        private TextView tvProperty;
+        private TextView tvNickname;
         private ImageView ivGaol;
         private ImageView ivPreNotification;
         private ImageView ivLocationNotification;
-        private TextView tvExplanation;
+        private TextView tvName;
         private TextView tvAddexplanation;
         private TextView[] weeks = new TextView[7];
 
@@ -129,11 +129,11 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
         public VH(@NonNull View itemView) {//#################################################################
             super(itemView);
             civ = itemView.findViewById(R.id.civ);
-            tvProperty = itemView.findViewById(R.id.tv_property);
+            tvNickname = itemView.findViewById(R.id.tv_nickname);
             ivGaol = itemView.findViewById(R.id.iv_goal);
             ivPreNotification = itemView.findViewById(R.id.iv_preNotification);
             ivLocationNotification = itemView.findViewById(R.id.iv_locationNotification);
-            tvExplanation = itemView.findViewById(R.id.tv_explanation);
+            tvName = itemView.findViewById(R.id.tv_name);
             tvAddexplanation = itemView.findViewById(R.id.tv_addexplanation);
             weeks[0] = itemView.findViewById(R.id.tv_week_mon);
             weeks[1] = itemView.findViewById(R.id.tv_week_tues);

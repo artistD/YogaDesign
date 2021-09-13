@@ -2,24 +2,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#C7DDFF">
 
-    <androidx.appcompat.widget.Toolbar
+    <RelativeLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize">
 
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="clickDrawer"
-            android:src="@drawable/ic_drawer" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_centerInParent="true"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -72,9 +68,9 @@
         </LinearLayout>
 
 
-    </androidx.appcompat.widget.Toolbar>
+    </RelativeLayout>
 
-    <androidx.appcompat.widget.Toolbar
+    <RelativeLayout
         android:id="@+id/toolbar_blur"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"

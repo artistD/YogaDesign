@@ -5,13 +5,13 @@ import androidx.dynamicanimation.animation.SpringAnimation;
 public class WorkItem {
 
     private String imgUrl;
-    private String property;
+    private String nickName;
 
     private boolean isgoal;
     private boolean ispreNotification;
     private boolean islocationNotification;
 
-    private String explanation;
+    private String name;
     private String addExplanation;
 
     private boolean[] isweeks = new boolean[7];
@@ -20,13 +20,13 @@ public class WorkItem {
 
     }
 
-    public WorkItem(String imgUrl, String property, boolean isgoal, boolean ispreNotification, boolean islocationNotification, String explanation, String addExplanation, boolean[] isweeks) {
+    public WorkItem(String imgUrl, String nickName, boolean isgoal, boolean ispreNotification, boolean islocationNotification, String name, String addExplanation, boolean[] isweeks) {
         this.imgUrl = imgUrl;
-        this.property = property;
+        this.nickName = nickName;
         this.isgoal = isgoal;
         this.ispreNotification = ispreNotification;
         this.islocationNotification = islocationNotification;
-        this.explanation = explanation;
+        this.name = name;
         this.addExplanation = addExplanation;
         this.isweeks = isweeks;
     }
@@ -35,11 +35,11 @@ public class WorkItem {
         return imgUrl;
     }
 
-    public String getProperty() {
-        return property;
+    public String getNickName() {
+        return nickName;
     }
 
-    public boolean getIsgoal() {
+    public boolean getIsGoal() {
         return isgoal;
     }
 
@@ -51,8 +51,8 @@ public class WorkItem {
         return islocationNotification;
     }
 
-    public String getExplanation() {
-        return explanation;
+    public String getName() {
+        return name;
     }
 
     public String getAddExplanation() {

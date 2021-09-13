@@ -1,5 +1,6 @@
 package com.will_d.yogadesign;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -35,11 +37,11 @@ public class WorkShopWorkFragment extends Fragment {
     private FragmentManager fragmentManager;
     private FragmentTransaction tran;
 
-    private Toolbar toolbarBlur;
+    private RelativeLayout toolbarBlur;
 
 
 //##########
-    public Toolbar getToolbarBlur() {
+    public RelativeLayout getToolbarBlur() {
         return toolbarBlur;
     }
 
@@ -76,6 +78,8 @@ public class WorkShopWorkFragment extends Fragment {
         tran.add(R.id.container3, fragments[0]);
         tran.show(fragments[0]);
         tran.commit();
+
+
 
         tvToday.setOnClickListener(new View.OnClickListener() {
             @Override

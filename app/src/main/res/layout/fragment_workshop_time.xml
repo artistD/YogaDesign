@@ -5,21 +5,16 @@
     android:orientation="vertical"
     android:background="#C7DDFF">
 
-    <androidx.appcompat.widget.Toolbar
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_drawer"
-            android:onClick="clickDrawer"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_gravity="center">
+            android:layout_centerInParent="true">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -71,7 +66,7 @@
         </LinearLayout>
 
 
-    </androidx.appcompat.widget.Toolbar>
+    </RelativeLayout>
 
     <FrameLayout
         android:id="@+id/container2"
