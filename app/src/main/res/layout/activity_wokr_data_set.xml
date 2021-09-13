@@ -252,7 +252,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="16dp"
                             android:text="날짜 선택"
-                            android:textSize="24sp"/>
+                            android:textSize="24dp" />
 
 
                         <soup.neumorphism.NeumorphImageView
@@ -402,6 +402,16 @@
         android:visibility="invisible">
 
 
+    </RelativeLayout>
+
+<!--    날짜 선택 다이아로그-->
+    <RelativeLayout
+        android:id="@+id/rl_weeks_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#bbC7DDFF"
+        android:visibility="invisible">
+
         <soup.neumorphism.NeumorphCardView
             style="@style/Widget.Neumorph.CardView"
             android:layout_width="wrap_content"
@@ -412,7 +422,7 @@
 
             <LinearLayout
                 android:layout_width="240dp"
-                android:layout_height="352dp"
+                android:layout_height="400dp"
                 android:background="@drawable/mainbg_03"
                 android:orientation="vertical"
                 android:padding="16dp">
@@ -616,7 +626,7 @@
                     android:orientation="horizontal"
                     android:layout_marginTop="8dp">
                     <TextView
-                        android:id="@+id/tv_nickname_dialog_cancel"
+                        android:id="@+id/tv_weeks_dialog_cancel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="취소"
@@ -627,7 +637,7 @@
                         android:clickable="true"/>
 
                     <TextView
-                        android:id="@+id/tv_nickname_dialog_success"
+                        android:id="@+id/tv_weeks_dialog_success"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="확인"
@@ -644,15 +654,6 @@
 
         </soup.neumorphism.NeumorphCardView>
 
-    </RelativeLayout>
-
-<!--    날짜 선택 다이아로그-->
-    <RelativeLayout
-        android:id="@+id/rl_weeks_dialog"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="invisible"
-        android:background="#FFC7DDFF">
 
 
     </RelativeLayout>

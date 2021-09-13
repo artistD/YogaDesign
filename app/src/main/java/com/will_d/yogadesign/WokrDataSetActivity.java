@@ -37,13 +37,14 @@ public class WokrDataSetActivity extends AppCompatActivity {
     private RelativeLayout preNotificationDialog;
 
 
-    //nickname dialog
+    //Weeks dialog
     private ImageView[] weeks = new ImageView[7];
 
-    private TextView tvNicknameDialogSuccess;
-    private TextView tvNicknameDialogCancel;
+    private TextView tvWeeksDialogSuccess;
+    private TextView tvWeeksDialogCancel;
+    private boolean isWeeksChecked= false;
 
-    private boolean[] weeksData;
+    private boolean[] weeksData = new boolean[7];
 
 
 
@@ -73,6 +74,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
 
         //nickName dialog
         weeks[0] = findViewById(R.id.iv_weeks_mon);
+        Log.i("TAG", "" + weeks[0]);
         weeks[1] = findViewById(R.id.iv_weeks_tues);
         weeks[2] = findViewById(R.id.iv_weeks_wendnes);
         weeks[3] = findViewById(R.id.iv_weeks_thurs);
@@ -80,8 +82,14 @@ public class WokrDataSetActivity extends AppCompatActivity {
         weeks[5] = findViewById(R.id.iv_weeks_satur);
         weeks[6] = findViewById(R.id.iv_weeks_sun);
 
-        tvNicknameDialogSuccess = findViewById(R.id.tv_nickname_dialog_success);
-        tvNicknameDialogCancel = findViewById(R.id.tv_nickname_dialog_cancel);
+        tvWeeksDialogSuccess = findViewById(R.id.tv_weeks_dialog_success);
+        tvWeeksDialogCancel = findViewById(R.id.tv_weeks_dialog_cancel);
+
+        for (int i=0; i<weeksData.length; i++) {
+            weeks[i].setTag("");
+            weeksData[i] = false;
+        }
+
 
 
         swGoal.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -133,44 +141,56 @@ public class WokrDataSetActivity extends AppCompatActivity {
     }
 
     public void clickSetWeeks(View view) {
-
-        boolean[] weeksData = new boolean[7];
-        for (int i=0; i<weeks.length; i++) weeks[i].setTag("");
-        for (int i=0; i<weeks.length; i++) weeksData[i] = false;
         Log.i("TAG", "월 : " + weeksData[0] + ", " + "화 : " + weeksData[1] + ", " + "수 : " + weeksData[2] + ", " + "목 : " + weeksData[3] + ", " + "금 : " + weeksData[4] + ", " + "토 : " + weeksData[5] + ", " + "일 : " + weeksData[6]);
-        nicknameDialog.setVisibility(View.VISIBLE);
+        weeksDialog.setVisibility(View.VISIBLE);
 
-        tvNicknameDialogSuccess.setOnClickListener(new View.OnClickListener() {
+        tvWeeksDialogSuccess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Log.i("TAG2", ""+ weeks[0] + weeksData[0] + "");
                 for (int i=0; i<weeks.length; i++){
                     if (weeks[i].getTag().toString().equals("Checked")) weeksData[i] = true;
                 }
                 Log.i("TAG", "월 : " + weeksData[0] + ", " + "화 : " + weeksData[1] + ", " + "수 : " + weeksData[2] + ", " + "목 : " + weeksData[3] + ", " + "금 : " + weeksData[4] + ", " + "토 : " + weeksData[5] + ", " + "일 : " + weeksData[6]);
 
-                for (int i=0; i<weeks.length; i++) weeks[i].setImageResource(R.drawable.ic_unchecked);
-                nicknameDialog.setVisibility(View.INVISIBLE);
+                StringBuffer buffer = new StringBuffer();
+                if (weeksData[0]) buffer.append(" 월 ");
+                if (weeksData[1]) buffer.append(" 화 ");
+                if (weeksData[2]) buffer.append(" 수 ");
+                if (weeksData[3]) buffer.append(" 목 ");
+                if (weeksData[4]) buffer.append(" 금 ");
+                if (weeksData[5]) buffer.append(" 토 ");
+                if (weeksData[6]) buffer.append(" 일 ");
 
-                WokrDataSetActivity.this.weeksData = weeksData;
-
+                weeksDialog.setVisibility(View.INVISIBLE);
+                String weeksStr = buffer.toString();
+                String replaceFirst = weeksStr.replaceFirst(" ", "");
+                if (replaceFirst.length()>0) {
+                    tvWeeks.setText(replaceFirst);
+                    tvWeeks.setTextSize(20f);
+                }
 
             }
         });
 
-        tvNicknameDialogCancel.setOnClickListener(new View.OnClickListener() {
+        tvWeeksDialogCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (int i=0; i<weeks.length; i++) weeks[i].setImageResource(R.drawable.ic_unchecked);
-                nicknameDialog.setVisibility(View.INVISIBLE);
+                weeksDialog.setVisibility(View.INVISIBLE);
             }
         });
 
     }
 
     public void clickWeeksChecked(View view) {
+        isWeeksChecked=!isWeeksChecked;
         ImageView imageView = (ImageView) view;
-        imageView.setImageResource(R.drawable.ic_checked);
-        imageView.setTag("Checked");
+        if (isWeeksChecked){
+            imageView.setImageResource(R.drawable.ic_checked);
+            imageView.setTag("Checked");
+        }else {
+            imageView.setImageResource(R.drawable.ic_unchecked);
+            imageView.setTag("");
+        }
     }
 }
