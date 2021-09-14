@@ -2,6 +2,7 @@ package com.will_d.yogadesign;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -61,7 +64,7 @@ public class WorkTodayFragment extends Fragment {
         String imgUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjCjgVv-4Cl9Z-XQT3uCV_KKtjPzSNG-q2XA&usqp=CAU";
         String imgUrl2 = "https://editorial.uefa.com/resources/026c-12f705c46a6c-9f2eb0579483-1000/messi_graphic.jpg";
         boolean[] weeks = new boolean[]{true, true, true, true, true, false, false};
-        workItems.add(new WorkItem(imgUrl2, "1", true, true, false, "dqwdqwdqwdwqqw", "dqwdqwdqwdq", weeks));
+        workItems.add(new WorkItem(imgUrl2, "도전", true, true, false, "dqwdqwdqwdwqqw", "dqwdqwdqwdq", weeks));
         workItems.add(new WorkItem(imgUrl, "2", true, true, false, "dqwdqwdqwdwqqw", "dqwdqwdqwdq", weeks));
         workItems.add(new WorkItem(imgUrl2, "3", true, true, false, "dqwdqwdqwdwqqw", "dqwdqwdqwdq", weeks));
         workItems.add(new WorkItem(imgUrl, "4", true, true, false, "dqwdqwdqwdwqqw", "dqwdqwdqwdq", weeks));
@@ -103,18 +106,28 @@ public class WorkTodayFragment extends Fragment {
 
 
         cdAddBtn.setOnClickListener(new View.OnClickListener() {
+            WorkShopActivity workShopActivity = (WorkShopActivity) getActivity();
             @Override
             public void onClick(View v) {
                 isclick=!isclick;
                 if (isclick) {
                     cdAddBtnBeginning();
+                    workShopActivity.getMeterialIvTodolistBlur().setVisibility(View.VISIBLE);
+                    workShopActivity.getMeterialCdTodolist().setCardElevation(0);
                     cdAddBtnItem.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             Intent intent = new Intent(getActivity(), WokrDataSetActivity.class);
+                            Gson gson = new Gson();
+                            String jsonstr = gson.toJson(workItems);
+                            Log.i("TAG", jsonstr);
+                            intent.putExtra("Workitems", jsonstr);
+
                             activityResultLauncher.launch(intent);
                             getActivity().overridePendingTransition(R.anim.activity_data_set, R.anim.fragment_none);
                             cdAddBtnEnd();
+                            workShopActivity.getMeterialCdTodolist().setCardElevation(4);
+                            workShopActivity.getMeterialIvTodolistBlur().setVisibility(View.INVISIBLE);
                             isclick=false;
                         }
                     });
@@ -130,6 +143,8 @@ public class WorkTodayFragment extends Fragment {
                 }
                 else {
                     cdAddBtnEnd();
+                    workShopActivity.getMeterialCdTodolist().setCardElevation(4);
+                    workShopActivity.getMeterialIvTodolistBlur().setVisibility(View.INVISIBLE);
                 }
 
             }

@@ -78,9 +78,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="이름"
-                    android:textSize="24sp"
-                    android:textColorHint="#FF999999"
+                    android:textSize="20sp"
+                    android:textColorHint="#FF666666"
                     android:inputType="text"
+                    android:maxLength="20"
                     android:background="@drawable/bg_edit"
                     android:layout_marginLeft="12dp"
                     android:layout_marginRight="12dp"
@@ -115,45 +116,14 @@
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="16dp"
                             android:text="별명"
-                            android:textSize="24sp" />
-
-
-
-
-                        <!--                    <LinearLayout-->
-                        <!--                        android:id="@+id/ll_nickname_change"-->
-                        <!--                        android:layout_width="wrap_content"-->
-                        <!--                        android:layout_height="wrap_content"-->
-                        <!--                        android:orientation="vertical"-->
-                        <!--                        android:layout_alignParentRight="true"-->
-                        <!--                        android:layout_centerVertical="true"-->
-                        <!--                        android:layout_marginRight="16dp"-->
-                        <!--                        android:visibility="invisible"-->
-                        <!--                        android:clickable="true"-->
-                        <!--                        android:onClick="clickSetNickName">-->
-
-                        <!--                        <TextView-->
-                        <!--                            android:layout_width="wrap_content"-->
-                        <!--                            android:layout_height="wrap_content"-->
-                        <!--                            android:text="property"-->
-                        <!--                            android:textSize="20sp"-->
-                        <!--                            android:padding="8dp"/>-->
-
-                        <!--                        <View-->
-                        <!--                            android:layout_width="match_parent"-->
-                        <!--                            android:layout_height="1dp"-->
-                        <!--                            android:background="@drawable/mainbg_02"/>-->
-
-                        <!--                    </LinearLayout>-->
-
-
-
+                            android:textColor="#FF666666"
+                            android:textSize="20sp" />
 
                         <soup.neumorphism.NeumorphImageView
                             android:id="@+id/niv_nickname"
                             style="@style/Widget.Neumorph.ImageView"
-                            android:layout_width="64dp"
-                            android:layout_height="64dp"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:layout_marginRight="16dp"
@@ -187,13 +157,24 @@
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="16dp"
                             android:text="사진"
-                            android:textSize="24sp" />
+                            android:textColor="#FF666666"
+                            android:textSize="20sp"
+                            android:visibility="visible"/>
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/civ_photo"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/bg_maincontents01"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="16dp"
+                            android:visibility="invisible"/>
 
                         <soup.neumorphism.NeumorphImageView
                             android:id="@+id/niv_photo"
                             style="@style/Widget.Neumorph.ImageView"
-                            android:layout_width="64dp"
-                            android:layout_height="64dp"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
                             app:neumorph_shapeAppearance="@style/ShapeAppearance"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
@@ -205,32 +186,6 @@
                             android:visibility="visible"
                             android:clickable="true"
                             android:onClick="clickSetPhoto"/>
-
-
-                        <!--                    <soup.neumorphism.NeumorphCardView-->
-                        <!--                        android:id="@+id/cd_photo_change"-->
-                        <!--                        style="@style/Widget.Neumorph.CardView"-->
-                        <!--                        android:layout_width="64dp"-->
-                        <!--                        android:layout_height="64dp"-->
-                        <!--                        app:neumorph_shapeAppearance="@style/ShapeAppearance"-->
-                        <!--                        android:layout_alignParentRight="true"-->
-                        <!--                        android:layout_centerVertical="true"-->
-                        <!--                        android:layout_marginRight="16dp"-->
-                        <!--                        app:neumorph_shadowColorDark="#77999999"-->
-                        <!--                        app:neumorph_shadowColorLight="#77FFFFFF"-->
-                        <!--                        android:visibility="invisible"-->
-                        <!--                        android:clickable="true"-->
-                        <!--                        android:onClick="clickSetPhoto">-->
-
-                        <!--                        <ImageView-->
-                        <!--                            android:layout_width="match_parent"-->
-                        <!--                            android:layout_height="match_parent"-->
-                        <!--                            android:src="@drawable/bg_maincontents01"-->
-                        <!--                            android:scaleType="centerCrop"/>-->
-
-
-                        <!--                    </soup.neumorphism.NeumorphCardView>-->
-
 
 
                     </RelativeLayout>
@@ -252,14 +207,15 @@
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="16dp"
                             android:text="날짜 선택"
-                            android:textSize="24dp" />
+                            android:textColor="#FF666666"
+                            android:textSize="20dp" />
 
 
                         <soup.neumorphism.NeumorphImageView
                             android:id="@+id/niv_weeks"
                             style="@style/Widget.Neumorph.ImageView"
-                            android:layout_width="64dp"
-                            android:layout_height="64dp"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
                             app:neumorph_shapeAppearance="@style/ShapeAppearance"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
@@ -310,7 +266,8 @@
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="16dp"
                             android:text="목표"
-                            android:textSize="24sp" />
+                            android:textColor="#FF666666"
+                            android:textSize="20sp" />
 
                         <Switch
                             android:id="@+id/sw_goal"
@@ -339,7 +296,8 @@
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="16dp"
                             android:text="미리알림"
-                            android:textSize="24sp" />
+                            android:textColor="#FF666666"
+                            android:textSize="20sp" />
 
                         <Switch
                             android:id="@+id/sw_preNotification"
@@ -368,7 +326,8 @@
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="16dp"
                             android:text="위치알림"
-                            android:textSize="24sp" />
+                            android:textColor="#FF666666"
+                            android:textSize="20sp" />
 
                         <Switch
                             android:id="@+id/sw_localNotification"
@@ -401,6 +360,354 @@
         android:background="#bbC7DDFF"
         android:visibility="invisible">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"/>
+
+        <soup.neumorphism.NeumorphCardView
+            style="@style/Widget.Neumorph.CardView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:neumorph_shadowColorDark="#77999999"
+            app:neumorph_shadowColorLight="#77FFFFFF">
+
+            <LinearLayout
+                android:layout_width="320dp"
+                android:layout_height="320dp"
+                android:background="@drawable/mainbg_03"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="별명 선택"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:textSize="20sp"
+                    android:gravity="center"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@drawable/mainbg_02"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:text="아침"
+                        android:textSize="16sp"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:onClick="clickNickNamePick"/>
+                    <TextView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:text="시간"
+                        android:textSize="16sp"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="8dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:onClick="clickNickNamePick"/>
+                    <TextView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:text="열정"
+                        android:textSize="16dp"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="8dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:onClick="clickNickNamePick"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:text="도전"
+                        android:textSize="16dp"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:onClick="clickNickNamePick"/>
+                    <TextView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:text="운동"
+                        android:textSize="16dp"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="8dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:onClick="clickNickNamePick"/>
+                    <TextView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:text="그림"
+                        android:textSize="16dp"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="8dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:onClick="clickNickNamePick"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:text="요가"
+                        android:textSize="16sp"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:onClick="clickNickNamePick"/>
+
+                    <TextView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:text="독서"
+                        android:textSize="16sp"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="8dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:onClick="clickNickNamePick"/>
+
+                    <TextView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:text="수영"
+                        android:textSize="16sp"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="8dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:onClick="clickNickNamePick"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:text="새벽"
+                        android:textSize="16sp"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:onClick="clickNickNamePick"/>
+                    <TextView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:text="끈기"
+                        android:textSize="16sp"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="8dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:onClick="clickNickNamePick"/>
+                    <TextView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:text="시도"
+                        android:textSize="16sp"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="8dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:onClick="clickNickNamePick"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:text="보충"
+                        android:textSize="16sp"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:onClick="clickNickNamePick"/>
+
+                    <TextView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:text="노력"
+                        android:textSize="16sp"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="8dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:onClick="clickNickNamePick"/>
+
+                    <TextView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:text="미술"
+                        android:textSize="16sp"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="8dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:onClick="clickNickNamePick"/>
+
+                </LinearLayout>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#ccC7DDFF"
+                        android:text="직접 입력"
+                        android:gravity="center"
+                        android:textSize="16sp"
+                        android:layout_weight="1"
+                        android:onClick="clickSetNickNameDialogDirectInput"/>
+
+                </androidx.cardview.widget.CardView>
+
+             </LinearLayout>
+
+        </soup.neumorphism.NeumorphCardView>
+
+    </RelativeLayout>
+
+<!--    nickNamedialog에서 직접입력을 했을떄 발생하는 이벤트-->
+    <RelativeLayout
+        android:id="@+id/rl_nickname_dialog_directlyinput"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#bbC7DDFF"
+        android:visibility="invisible">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"/>
+
+        <soup.neumorphism.NeumorphCardView
+            style="@style/Widget.Neumorph.CardView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:neumorph_shadowColorDark="#77999999"
+            app:neumorph_shadowColorLight="#77FFFFFF">
+
+            <LinearLayout
+                android:layout_width="240dp"
+                android:layout_height="144dp"
+                android:background="@drawable/mainbg_03"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.5"
+                    android:text="직접입력"
+                    android:textSize="20sp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_weight="1.5">
+
+                    <EditText
+                        android:id="@+id/et_nicknamedialog_directlyinput"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/bg_edit"
+                        android:hint="입력해주세요"
+                        android:textSize="16sp"
+                        android:textColorHint="#FF999999"
+                        android:inputType="text"
+                        android:maxLength="8"
+                        android:layout_weight="1"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@drawable/mainbg_02"/>
+
+                </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_weight="1.5">
+
+                    <TextView
+                        android:id="@+id/tv_nicknamedialog_directlyinput_cancel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="취소"
+                        android:textSize="16sp"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:clickable="true"/>
+
+                    <TextView
+                        android:id="@+id/tv_nicknamedialog_directlyinput_ok"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="확인"
+                        android:textSize="16sp"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:clickable="true"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </soup.neumorphism.NeumorphCardView>
 
     </RelativeLayout>
 
@@ -411,6 +718,11 @@
         android:layout_height="match_parent"
         android:background="#bbC7DDFF"
         android:visibility="invisible">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"/>
 
         <soup.neumorphism.NeumorphCardView
             style="@style/Widget.Neumorph.CardView"
@@ -625,16 +937,6 @@
                     android:layout_height="24dp"
                     android:orientation="horizontal"
                     android:layout_marginTop="8dp">
-                    <TextView
-                        android:id="@+id/tv_weeks_dialog_cancel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="취소"
-                        android:textSize="16sp"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:layout_weight="1"
-                        android:clickable="true"/>
 
                     <TextView
                         android:id="@+id/tv_weeks_dialog_success"
@@ -666,6 +968,30 @@
         android:visibility="invisible"
         android:background="#FFC7DDFF">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"/>
+
+        <soup.neumorphism.NeumorphCardView
+            style="@style/Widget.Neumorph.CardView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:neumorph_shadowColorDark="#77999999"
+            app:neumorph_shadowColorLight="#77FFFFFF">
+
+            <LinearLayout
+                android:layout_width="240dp"
+                android:layout_height="400dp"
+                android:background="@drawable/mainbg_03"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+            </LinearLayout>
+
+        </soup.neumorphism.NeumorphCardView>
+
 
     </RelativeLayout>
 
@@ -677,11 +1003,32 @@
         android:visibility="invisible"
         android:background="#FFC7DDFF">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"/>
+
+        <soup.neumorphism.NeumorphCardView
+            style="@style/Widget.Neumorph.CardView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:neumorph_shadowColorDark="#77999999"
+            app:neumorph_shadowColorLight="#77FFFFFF">
+
+            <LinearLayout
+                android:layout_width="240dp"
+                android:layout_height="400dp"
+                android:background="@drawable/mainbg_03"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+            </LinearLayout>
+
+        </soup.neumorphism.NeumorphCardView>
+
 
     </RelativeLayout>
-
-
-
 
 
 </RelativeLayout>

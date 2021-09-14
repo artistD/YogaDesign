@@ -48,6 +48,7 @@ public class WorkShopActivity extends AppCompatActivity {
     private View viewLine;
     private ImageView ivBnvBlur;
     private RelativeLayout toolbarBlur;
+    private ImageView meterialIvTodolistBlur;
 
     private int isNav;
 
@@ -55,6 +56,15 @@ public class WorkShopActivity extends AppCompatActivity {
 
 //    private NeumorphCardView cdAddBtnItem;
 //    private NeumorphCardView cdAddBtnSub;
+
+
+    public CardView getMeterialCdTodolist() {
+        return meterialCdTodolist;
+    }
+
+    public ImageView getMeterialIvTodolistBlur() {
+        return meterialIvTodolistBlur;
+    }
 
     public View getViewLine() {
         return viewLine;
@@ -89,6 +99,7 @@ public class WorkShopActivity extends AppCompatActivity {
 
         viewLine = findViewById(R.id.view_line);
         ivBnvBlur = findViewById(R.id.iv_bnvBlur);
+        meterialIvTodolistBlur = findViewById(R.id.meterial_iv_todolist_blur);
 
 
         manager = getSupportFragmentManager();

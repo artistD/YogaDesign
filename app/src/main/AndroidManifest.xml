@@ -3,6 +3,10 @@
     package="com.will_d.yogadesign">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 외장메모리 사용에 대한 퍼미션 : 동적퍼미션까지 필요   -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <!-- api29 버전 이상부터 미디어파일에 대한 위치접근 허용 퍼미션 추가   -->
+    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -11,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.YogaDesign"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        android:requestLegacyExternalStorage="true">
         <activity
             android:name=".IntroActivity"
             android:exported="true"
