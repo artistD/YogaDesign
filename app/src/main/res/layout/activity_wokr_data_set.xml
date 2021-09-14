@@ -261,6 +261,7 @@
                         android:layout_weight="1">
 
                         <TextView
+                            android:id="@+id/tv_goal"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
@@ -275,7 +276,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
-                            android:layout_marginRight="16dp"/>
+                            android:layout_marginRight="20dp"/>
 
 
                     </RelativeLayout>
@@ -291,13 +292,14 @@
                         android:layout_weight="1">
 
                         <TextView
+                            android:id="@+id/tv_preNotification"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="16dp"
                             android:text="미리알림"
                             android:textColor="#FF666666"
-                            android:textSize="20sp" />
+                            android:textSize="20sp"/>
 
                         <Switch
                             android:id="@+id/sw_preNotification"
@@ -305,7 +307,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
-                            android:layout_marginRight="16dp"/>
+                            android:layout_marginRight="20dp"/>
 
 
                     </RelativeLayout>
@@ -321,6 +323,7 @@
                         android:layout_weight="1">
 
                         <TextView
+                            android:id="@+id/tv_localNotification"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
@@ -335,7 +338,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
-                            android:layout_marginRight="16dp"/>
+                            android:layout_marginRight="20dp"/>
 
 
                     </RelativeLayout>
@@ -966,7 +969,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="invisible"
-        android:background="#FFC7DDFF">
+        android:background="#bbC7DDFF">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -982,11 +990,101 @@
             app:neumorph_shadowColorLight="#77FFFFFF">
 
             <LinearLayout
-                android:layout_width="240dp"
-                android:layout_height="400dp"
+                android:layout_width="300dp"
+                android:layout_height="216dp"
                 android:background="@drawable/mainbg_03"
                 android:orientation="vertical"
                 android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:text="목표설정"
+                    android:textSize="20sp"
+                    android:layout_gravity="center"
+                    android:gravity="center"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@drawable/mainbg_02"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="56dp"
+                            android:layout_height="wrap_content"
+                            android:text="하루에"
+                            android:textSize="16sp"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:layout_weight="1"/>
+
+                        <NumberPicker
+                            android:id="@+id/numberPicker_goal_number"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="16dp"/>
+
+                        <TextView
+                            android:layout_width="56dp"
+                            android:layout_height="wrap_content"
+                            android:text="번"
+                            android:textSize="16sp"
+                            android:layout_marginLeft="16dp"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:layout_weight="1"/>
+
+                    </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@drawable/mainbg_02"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_weight="6"
+                    android:layout_marginTop="8dp">
+
+                    <TextView
+                        android:id="@+id/tv_goal_cancel"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="취소"
+                        android:textSize="16sp"
+                        android:layout_gravity="center"
+                        android:gravity="center"/>
+
+                    <TextView
+                        android:id="@+id/tv_goal_ok"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="확인"
+                        android:textSize="16sp"
+                        android:layout_gravity="center"
+                        android:gravity="center"/>
+
+
+
+                </LinearLayout>
+
+
+
+
+
 
             </LinearLayout>
 
@@ -995,13 +1093,18 @@
 
     </RelativeLayout>
 
-    <!--    미리알림 선택 다이아로그-->
+    <!--    미리알림 선택 다이아로그 : 시간 선택 부분-->
     <RelativeLayout
         android:id="@+id/rl_prenotification_dialog"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="invisible"
-        android:background="#FFC7DDFF">
+        android:background="#bbC7DDFF">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -1017,11 +1120,69 @@
             app:neumorph_shadowColorLight="#77FFFFFF">
 
             <LinearLayout
-                android:layout_width="240dp"
-                android:layout_height="400dp"
+                android:layout_width="256dp"
+                android:layout_height="256dp"
                 android:background="@drawable/mainbg_03"
                 android:orientation="vertical"
                 android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:text="미리알림"
+                    android:textSize="20sp"
+                    android:layout_gravity="center"
+                    android:gravity="center"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@drawable/mainbg_02"/>
+
+                <TimePicker
+                    android:id="@+id/timepicker_prenotification"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:timePickerMode="spinner"
+                    android:layout_gravity="center"
+                    android:foregroundGravity="center"
+                    android:layout_weight="1"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@drawable/mainbg_02"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_weight="2.5"
+                    android:layout_marginTop="8dp">
+
+                    <TextView
+                        android:id="@+id/tv_preNotification_dialog_cancel"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="취소"
+                        android:textSize="16sp"
+                        android:layout_gravity="center"
+                        android:gravity="center"/>
+
+                    <TextView
+                        android:id="@+id/tv_preNotification_ok"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="확인"
+                        android:textSize="16sp"
+                        android:layout_gravity="center"
+                        android:gravity="center"/>
+
+
+
+                </LinearLayout>
 
             </LinearLayout>
 
