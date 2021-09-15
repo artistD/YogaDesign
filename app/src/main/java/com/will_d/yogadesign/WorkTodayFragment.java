@@ -51,6 +51,23 @@ public class WorkTodayFragment extends Fragment {
     private Animation ani3;
     private Animation ani4;
 
+//WorkItems data ****************************
+    private String name="";
+    private String nickName = "";
+    private String imgPath;
+    private boolean[] weeksData = new boolean[7];
+    private boolean isGoalChecked;
+    private String goalSet;
+    private boolean isPreNotificationChecked;
+    private String preNotificationTime;
+    private boolean isLocalNotificationChecked;
+    private String latitude = null;
+    private String longitude = null;
+    private String placeName = "";
+
+    //*************
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -61,28 +78,24 @@ public class WorkTodayFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        String imgUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjCjgVv-4Cl9Z-XQT3uCV_KKtjPzSNG-q2XA&usqp=CAU";
-        String imgUrl2 = "https://editorial.uefa.com/resources/026c-12f705c46a6c-9f2eb0579483-1000/messi_graphic.jpg";
-        boolean[] weeks = new boolean[]{true, true, true, true, true, false, false};
-        workItems.add(new WorkItem(imgUrl2, "도전", true, true, false, "dqwdqwdqwdwqqw", "dqwdqwdqwdq", weeks));
-        workItems.add(new WorkItem(imgUrl, "2", true, true, false, "dqwdqwdqwdwqqw", "dqwdqwdqwdq", weeks));
-        workItems.add(new WorkItem(imgUrl2, "3", true, true, false, "dqwdqwdqwdwqqw", "dqwdqwdqwdq", weeks));
-        workItems.add(new WorkItem(imgUrl, "4", true, true, false, "dqwdqwdqwdwqqw", "dqwdqwdqwdq", weeks));
-        workItems.add(new WorkItem(imgUrl2, "5", true, true, false, "dqwdqwdqwdwqqw", "dqwdqwdqwdq", weeks));
-        workItems.add(new WorkItem(imgUrl, "6", true, true, false, "dqwdqwdqwdwqqw", "dqwdqwdqwdq", weeks));
-        workItems.add(new WorkItem(imgUrl2, "7", true, true, false, "dqwdqwdqwdwqqw", "dqwdqwdqwdq", weeks));
+//        String imgUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjCjgVv-4Cl9Z-XQT3uCV_KKtjPzSNG-q2XA&usqp=CAU";
+//        String imgUrl2 = "https://editorial.uefa.com/resources/026c-12f705c46a6c-9f2eb0579483-1000/messi_graphic.jpg";
+//        boolean[] weeks = new boolean[]{true, true, true, true, true, false, false};
+//          workItems.add(new WorkItem(imgUrl, "1", true, true, false, "dddddqwdq", "dqwfwqfwqf", weeks));
+//        workItems.add(new WorkItem(imgUrl, "2", true, true, false, "dqwdqwdqwdwqqw", "dqwdqwdqwdq", weeks));
+//        workItems.add(new WorkItem(imgUrl2, "3", true, true, false, "dqwdqwdqwdwqqw", "dqwdqwdqwdq", weeks));
+//        workItems.add(new WorkItem(imgUrl, "4", true, true, false, "dqwdqwdqwdwqqw", "dqwdqwdqwdq", weeks));
+//        workItems.add(new WorkItem(imgUrl2, "5", true, true, false, "dqwdqwdqwdwqqw", "dqwdqwdqwdq", weeks));
+//        workItems.add(new WorkItem(imgUrl, "6", true, true, false, "dqwdqwdqwdwqqw", "dqwdqwdqwdq", weeks));
+//        workItems.add(new WorkItem(imgUrl2, "7", true, true, false, "dqwdqwdqwdwqqw", "dqwdqwdqwdq", weeks));
 
-
-
+//        workItems.add(new WorkItem(imgPath, nickName, isGoalChecked, isPreNotificationChecked, isLocalNotificationChecked, name, "", weeksData));
 
         recyclerView =view.findViewById(R.id.recycler);
         adapter = new WorkRecyclerAdapter(getActivity(), workItems);
         recyclerView.setAdapter(adapter);
         helper = new ItemTouchHelper(new ItemTouchHelperCallback(adapter));
-
         helper.attachToRecyclerView(recyclerView);
-
-
 
         cdAddBtn = view.findViewById(R.id.cd_addbtn);
         cdAddBtn2 = view.findViewById(R.id.cd_addbtn2);
@@ -161,6 +174,34 @@ public class WorkTodayFragment extends Fragment {
 
             if (result.getResultCode() == getActivity().RESULT_OK){
                 Intent intent = result.getData();
+
+                String name = intent.getStringExtra("name");
+                String nickName = intent.getStringExtra("nickName");
+                String imgPath = intent.getStringExtra("imgPath");
+                boolean[] weeksData = intent.getBooleanArrayExtra("weeksData");
+                boolean isGoalChecked = intent.getBooleanExtra("isGoalChecked", false);
+                String goalSet= intent.getStringExtra("goalSet");
+                boolean isPreNotificationChecked = intent.getBooleanExtra("isPreNotificationChecked", false);
+                String preNotificationTime = intent.getStringExtra("preNotificationTime");
+                boolean isLocalNotificationChecked = intent.getBooleanExtra("isLocalNotificationChecked", false);
+                String latitude = intent.getStringExtra("latitude");
+                String longitude = intent.getStringExtra("longitude");
+                String placeName = intent.getStringExtra("placeName");
+
+                //** 최종데이터 전송
+                Log.i("FinalChecked", "name : " + name);
+                Log.i("FinalChecked", "nickName : " + nickName);
+                Log.i("FinalChecked", "imgPath : " + imgPath);
+                Log.i("FinalChecked", "월 : " + weeksData[0] + ", " + "화 : " + weeksData[1] + ", " + "수 : " + weeksData[2] + ", " + "목 : " + weeksData[3] + ", " + "금 : " + weeksData[4] + ", " + "토 : " + weeksData[5] + ", " + "일 : " + weeksData[6]);
+                Log.i("FinalChecked", "isGoalChecked : " + isGoalChecked);
+                Log.i("FinalChecked", "goalSet : " + goalSet);
+                Log.i("FinalChecked", "isPreNotificationChecked : " + isPreNotificationChecked);
+                Log.i("FinalChecked", "preNotificationTime : " + preNotificationTime);
+                Log.i("FinalChecked", "isLocalNotificationChecked : " + isLocalNotificationChecked);
+                Log.i("FinalChecked", "preNotifiationTime : " + latitude);
+                Log.i("FinalChecked", "longitude : " + longitude);
+                Log.i("FinalChecked", "placeName : " + placeName);
+
             }
         }
     });

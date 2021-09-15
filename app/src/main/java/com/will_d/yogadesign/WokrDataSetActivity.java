@@ -83,7 +83,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
     private RelativeLayout weeksDialog;
     private RelativeLayout goalDialog;
     private RelativeLayout preNotificationDialog;
-    private RelativeLayout localNotificationDialog;
+    private LinearLayout localNotificationDialog;
 
 
     //nickName dialog
@@ -111,7 +111,13 @@ public class WokrDataSetActivity extends AppCompatActivity {
 
     //localNotification dialog
     private FragmentManager fragmentManager = getSupportFragmentManager();
-    private SupportMapFragment mapFragment = (SupportMapFragment) fragmentManager.findFragmentById(R.id.fragment_map);
+    private SupportMapFragment mapFragment;
+    private EditText etLocalNotificationSearch;
+    private NeumorphImageView nivLocalNotificationSearchComplete;
+    private TextView tvLocalNotificationOk;
+    private TextView tvLocalNotificationCancel;
+    private EditText etLocalNotificationPlaceName;
+
 
 
 
@@ -119,7 +125,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
 
     private ArrayList<WorkItem> workItems; //*********** 판별을 하기위한 아이템 객체
     //################################
-    private String name;
+    private String name="";
     private String nickName = "";
     private String imgPath;
     private boolean[] weeksData = new boolean[7];
@@ -127,6 +133,10 @@ public class WokrDataSetActivity extends AppCompatActivity {
     private String goalSet;
     private boolean isPreNotificationChecked;
     private String preNotificationTime;
+    private boolean isLocalNotificationChecked;
+    private String latitude = null;
+    private String longitude = null;
+    private String placeName = "";
     //##############################
 
 
@@ -163,15 +173,12 @@ public class WokrDataSetActivity extends AppCompatActivity {
         preNotificationDialog = findViewById(R.id.rl_prenotification_dialog);
         localNotificationDialog = findViewById(R.id.rl_localNotification_dialog);
 
-
-        //name dialog
-        WokrDataSetActivity.this.name = etName.getText().toString();
-
         //nickname dialog
         etNickNameDialogDirectlyInput = findViewById(R.id.et_nicknamedialog_directlyinput);
         tvNickNameDialogDirectlyInputOK = findViewById(R.id.tv_nicknamedialog_directlyinput_ok);
         tvNickNameDialogDirectlyInputCancel = findViewById(R.id.tv_nicknamedialog_directlyinput_cancel);
 
+        //Gson 작업
         Intent intent =getIntent();
         String jsonStr = intent.getStringExtra("Workitems");
         Gson gson = new Gson();
@@ -210,6 +217,12 @@ public class WokrDataSetActivity extends AppCompatActivity {
         tvPreNotificationCancel = findViewById(R.id.tv_preNotification_dialog_cancel);
 
         //localNotification dialog
+        mapFragment = (SupportMapFragment) fragmentManager.findFragmentById(R.id.fragment_map);
+        etLocalNotificationSearch = findViewById(R.id.et_localNotification_search);
+        nivLocalNotificationSearchComplete = findViewById(R.id.niv_localNotification_searchcomplete);
+        tvLocalNotificationOk = findViewById(R.id.tv_localNotification_ok);
+        tvLocalNotificationCancel = findViewById(R.id.tv_localNotification_cancel);
+        etLocalNotificationPlaceName = findViewById(R.id.et_LocalNotification_placename);
 
 
 
@@ -309,18 +322,21 @@ public class WokrDataSetActivity extends AppCompatActivity {
         swLocalNotification.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
                 if (isChecked){
+                    isLocalNotificationChecked = isChecked;
+                    mcdLocalNotificationFixed.setVisibility(View.VISIBLE);
                     localNotificationDialog.setVisibility(View.VISIBLE);
+                    Log.i("TAG", isLocalNotificationChecked+"");
+
                     mapFragment.getMapAsync(new OnMapReadyCallback() {
                         @Override
                         public void onMapReady(@NonNull GoogleMap googleMap) {
-                            LatLng mrhi = new LatLng(37.560955, 127.034721);
+                            LatLng userLocation = new LatLng(37.560955, 127.034721);
 
-                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mrhi, 20));
+                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 20));
 
                             MarkerOptions marker = new MarkerOptions();
-                            marker.position(mrhi);
+                            marker.position(userLocation);
                             marker.title("미래능력 개발 교육원");
                             marker.snippet("왕십리역에 있는 s/w교육원");
 
@@ -328,8 +344,29 @@ public class WokrDataSetActivity extends AppCompatActivity {
 
                         }
                     });
-                }else {
 
+                    tvLocalNotificationOk.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            localNotificationDialog.setVisibility(View.INVISIBLE);
+                            placeName = etLocalNotificationPlaceName.getText().toString();
+                        }
+                    });
+
+                    tvLocalNotificationCancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            isLocalNotificationChecked = false;
+                            swLocalNotification.setChecked(false);
+                            mcdLocalNotificationFixed.setVisibility(View.INVISIBLE);
+                            localNotificationDialog.setVisibility(View.INVISIBLE);
+                        }
+                    });
+
+
+                }else {
+                    isLocalNotificationChecked = isChecked;
+                    mcdLocalNotificationFixed.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -351,12 +388,64 @@ public class WokrDataSetActivity extends AppCompatActivity {
     }
 
     public void clickSave(View view) { //********************************
-        for (int i=0; i<workItems.size(); i++){
-             if (workItems.get(i).getNickName().equals(nickName)){
-                 Toast.makeText(this, "별명이 중복될 수는 없습니다!", Toast.LENGTH_SHORT).show();
-                 return;
-             }
-        }
+//        for (int i=0; i<workItems.size(); i++){
+//             if (workItems.get(i).getNickName().equals(nickName)){
+//                 Toast.makeText(this, "별명이 중복될 수는 없습니다!", Toast.LENGTH_SHORT).show();
+//                 return;
+//             }
+//        }
+//
+//        //name dialog
+//        WokrDataSetActivity.this.name = etName.getText().toString();
+
+//        private String name="";
+//        private String nickName = "";
+//        private String imgPath;
+//        private boolean[] weeksData = new boolean[7];
+//        private boolean isGoalChecked;
+//        private String goalSet;
+//        private boolean isPreNotificationChecked;
+//        private String preNotificationTime;
+//        private boolean isLocalNotificationChecked;
+//        private String latitude = null;
+//        private String longitude = null;
+//        private String placeName = "";
+
+        Intent intent = getIntent();
+        intent.putExtra("name", name);
+        intent.putExtra("nickName", nickName);
+        intent.putExtra("imgPath", imgPath);
+        intent.putExtra("weeksData", weeksData);
+        intent.putExtra("isGoalChecked", isGoalChecked);
+        intent.putExtra("goalSet", goalSet);
+        intent.putExtra("isPreNotificationChecked", isPreNotificationChecked);
+        intent.putExtra("preNotificationTime", preNotificationTime);
+        intent.putExtra("isLocalNotificationChecked", isLocalNotificationChecked);
+        intent.putExtra("latitude", latitude);
+        intent.putExtra("longitude", longitude);
+        intent.putExtra("placeName", placeName);
+
+        setResult(RESULT_OK, intent);
+
+
+        finish();
+        overridePendingTransition(R.anim.fragment_none, R.anim.activity_data_set_end);
+
+
+
+        //** 최종데이터 전송
+        Log.i("Final", "name : " + name);
+        Log.i("Final", "nickName : " + nickName);
+        Log.i("Final", "imgPath : " + imgPath);
+        Log.i("Final", "월 : " + weeksData[0] + ", " + "화 : " + weeksData[1] + ", " + "수 : " + weeksData[2] + ", " + "목 : " + weeksData[3] + ", " + "금 : " + weeksData[4] + ", " + "토 : " + weeksData[5] + ", " + "일 : " + weeksData[6]);
+        Log.i("Final", "isGoalChecked : " + isGoalChecked);
+        Log.i("Final", "goalSet : " + goalSet);
+        Log.i("Final", "isPreNotificationChecked : " + isPreNotificationChecked);
+        Log.i("Final", "preNotificationTime : " + preNotificationTime);
+        Log.i("Final", "isLocalNotificationChecked : " + isLocalNotificationChecked);
+        Log.i("Final", "preNotifiationTime : " + latitude);
+        Log.i("Final", "longitude : " + longitude);
+        Log.i("Final", "placename : " + placeName);
 
 
     }
@@ -593,6 +682,42 @@ public class WokrDataSetActivity extends AppCompatActivity {
     }
 
     public void clickLocalNotificationFixed(View view) {
+
+        mcdLocalNotificationFixed.setVisibility(View.VISIBLE);
+        localNotificationDialog.setVisibility(View.VISIBLE);
+        Log.i("TAG", isLocalNotificationChecked+"");
+
+        mapFragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(@NonNull GoogleMap googleMap) {
+                LatLng userLocation = new LatLng(37.560955, 127.034721);
+
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 20));
+
+                MarkerOptions marker = new MarkerOptions();
+                marker.position(userLocation);
+                marker.title("미래능력 개발 교육원");
+                marker.snippet("왕십리역에 있는 s/w교육원");
+
+                googleMap.addMarker(marker);
+
+            }
+        });
+
+        tvLocalNotificationOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                localNotificationDialog.setVisibility(View.INVISIBLE);
+                placeName = etLocalNotificationPlaceName.getText().toString();
+            }
+        });
+
+        tvLocalNotificationCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                localNotificationDialog.setVisibility(View.INVISIBLE);
+            }
+        });
 
 
     }
