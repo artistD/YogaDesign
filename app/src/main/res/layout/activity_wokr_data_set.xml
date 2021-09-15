@@ -270,6 +270,28 @@
                             android:textColor="#FF666666"
                             android:textSize="20sp" />
 
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/mcd_goal_fixed"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@id/tv_goal"
+                            android:layout_centerVertical="true"
+                            app:cardCornerRadius="8dp"
+                            android:layout_marginLeft="8dp"
+                            android:visibility="invisible"
+                            android:clickable="true"
+                            android:onClick="clickGoalFixed">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="수정"
+                                android:textColor="#FFFFFFFF"
+                                android:background="#FF9999FF"
+                                android:padding="8dp"/>
+
+                        </androidx.cardview.widget.CardView>
+
                         <Switch
                             android:id="@+id/sw_goal"
                             android:layout_width="wrap_content"
@@ -301,6 +323,28 @@
                             android:textColor="#FF666666"
                             android:textSize="20sp"/>
 
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/mcd_preNotification_fixed"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@id/tv_preNotification"
+                            android:layout_centerVertical="true"
+                            app:cardCornerRadius="8dp"
+                            android:layout_marginLeft="8dp"
+                            android:visibility="invisible"
+                            android:clickable="true"
+                            android:onClick="clickPreNotificationFixed">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="수정"
+                                android:textColor="#FFFFFFFF"
+                                android:background="#FF9999FF"
+                                android:padding="8dp"/>
+
+                        </androidx.cardview.widget.CardView>
+
                         <Switch
                             android:id="@+id/sw_preNotification"
                             android:layout_width="wrap_content"
@@ -331,6 +375,28 @@
                             android:text="위치알림"
                             android:textColor="#FF666666"
                             android:textSize="20sp" />
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/mcd_locaNotification_fixed"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@id/tv_localNotification"
+                            android:layout_centerVertical="true"
+                            app:cardCornerRadius="8dp"
+                            android:layout_marginLeft="8dp"
+                            android:visibility="invisible"
+                            android:clickable="true"
+                            android:onClick="clickLocalNotificationFixed">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="수정"
+                                android:textColor="#FFFFFFFF"
+                                android:background="#FF9999FF"
+                                android:padding="8dp"/>
+
+                        </androidx.cardview.widget.CardView>
 
                         <Switch
                             android:id="@+id/sw_localNotification"
@@ -1188,6 +1254,22 @@
 
         </soup.neumorphism.NeumorphCardView>
 
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_localNotification_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        android:background="#bbC7DDFF"
+        android:padding="16dp">
+
+        <fragment
+            android:id="@+id/fragment_map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="com.google.android.gms.maps.SupportMapFragment"/>
 
     </RelativeLayout>
 

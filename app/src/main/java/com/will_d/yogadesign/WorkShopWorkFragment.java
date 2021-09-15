@@ -107,6 +107,8 @@ public class WorkShopWorkFragment extends Fragment {
         tvMonth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 tvToday.setTextColor(0xFF999999);
                 tvMonth.setTextColor(0xFF999999);
                 viewLineToday.setVisibility(View.INVISIBLE);
@@ -122,7 +124,6 @@ public class WorkShopWorkFragment extends Fragment {
                     fragments[1] = new WorkMonthFragment();
                     tran.add(R.id.container3, fragments[1]);
                 }
-
                 tran.setCustomAnimations(R.anim.fragment_actionbar_translate_alarm_end, R.anim.fragment_actionbar_translate_alarm);
                 tran.replace(R.id.container3, fragments[1]);
                 tran.show(fragments[1]);

@@ -5,7 +5,10 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.MainThread;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.FragmentManager;
 import androidx.loader.content.CursorLoader;
 
 import android.app.AlertDialog;
@@ -20,6 +23,8 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -32,11 +37,22 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 
 import java.lang.reflect.Array;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import soup.neumorphism.NeumorphImageView;
@@ -53,17 +69,22 @@ public class WokrDataSetActivity extends AppCompatActivity {
     private NeumorphImageView nivWeeks;
 
     private TextView tvGoal;
+    private CardView mcdGoalFixed;
     private Switch swGoal;
     private TextView tvPreNotification;
+    private CardView mcdPreNotificationFixed;
     private Switch swPreNotification;
     private TextView tvLocalNotifiacation;
+    private CardView mcdLocalNotificationFixed;
     private Switch swLocalNotification;
 
     private RelativeLayout nicknameDialog;
-    private RelativeLayout nicknameDialogdirectlyinput; //
+    private RelativeLayout nicknameDialogdirectlyinput;
     private RelativeLayout weeksDialog;
     private RelativeLayout goalDialog;
     private RelativeLayout preNotificationDialog;
+    private RelativeLayout localNotificationDialog;
+
 
     //nickName dialog
     TextView[] nickNames = new TextView[15];
@@ -89,6 +110,11 @@ public class WokrDataSetActivity extends AppCompatActivity {
 
 
     //localNotification dialog
+    private FragmentManager fragmentManager = getSupportFragmentManager();
+    private SupportMapFragment mapFragment = (SupportMapFragment) fragmentManager.findFragmentById(R.id.fragment_map);
+
+
+
 
 
     private ArrayList<WorkItem> workItems; //*********** 판별을 하기위한 아이템 객체
@@ -121,10 +147,13 @@ public class WokrDataSetActivity extends AppCompatActivity {
         nivWeeks = findViewById(R.id.niv_weeks);
 
         tvGoal = findViewById(R.id.tv_goal);
+        mcdGoalFixed =findViewById(R.id.mcd_goal_fixed);
         swGoal = findViewById(R.id.sw_goal);
         tvPreNotification = findViewById(R.id.tv_preNotification);
+        mcdPreNotificationFixed = findViewById(R.id.mcd_preNotification_fixed);
         swPreNotification = findViewById(R.id.sw_preNotification);
         tvLocalNotifiacation = findViewById(R.id.tv_localNotification);
+        mcdLocalNotificationFixed = findViewById(R.id.mcd_locaNotification_fixed);
         swLocalNotification = findViewById(R.id.sw_localNotification);
 
         nicknameDialog = findViewById(R.id.rl_nickname_dialog);
@@ -132,6 +161,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
         weeksDialog = findViewById(R.id.rl_weeks_dialog);
         goalDialog = findViewById(R.id.rl_goal_dialog);
         preNotificationDialog = findViewById(R.id.rl_prenotification_dialog);
+        localNotificationDialog = findViewById(R.id.rl_localNotification_dialog);
 
 
         //name dialog
@@ -182,6 +212,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
         //localNotification dialog
 
 
+
         swGoal.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -190,43 +221,43 @@ public class WokrDataSetActivity extends AppCompatActivity {
                     Log.i("TAG", isGoalChecked+"");
                     goalDialog.setVisibility(View.VISIBLE);
 
-                    numberPickerGoalNumber.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+                    tvGoalOk.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                            String valStr = "하루에 " + newVal + "번";
-                            tvGoalOk.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    tvGoal.setText(valStr+"");
-                                    tvGoal.setTextColor(0xFF9999FF);
-                                    goalSet = valStr;
-                                    Log.i("TAG", goalSet);
-                                    goalDialog.setVisibility(View.INVISIBLE);
-                                }
-                            });
-
-                            tvGoalCancel.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    goalDialog.setVisibility(View.INVISIBLE);
-                                    swGoal.setChecked(false);
-                                    isGoalChecked = false;
-                                    Log.i("TAG", isGoalChecked + "");
-                                }
-                            });
+                        public void onClick(View v) {
+                            String valStr = "하루에 " + numberPickerGoalNumber.getValue() + "번";
+                            tvGoal.setText(valStr+"");
+                            tvGoal.setTextColor(0xFF9999FF);
+                            goalSet = valStr;
+                            Log.i("TAG", goalSet);
+                            goalDialog.setVisibility(View.INVISIBLE);
+                            mcdGoalFixed.setVisibility(View.VISIBLE);
                         }
                     });
+
+                    tvGoalCancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            goalDialog.setVisibility(View.INVISIBLE);
+                            mcdGoalFixed.setVisibility(View.INVISIBLE);
+                            swGoal.setChecked(false);
+                            isGoalChecked = false;
+                            Log.i("TAG", isGoalChecked + "");
+                        }
+                    });
+                    Log.i("TAG", numberPickerGoalNumber.getValue() + "");
 
                 }else {
                     tvGoal.setText("목표");
                     tvGoal.setTextColor(0xFF666666);
                     isGoalChecked = isChecked;
+                    mcdGoalFixed.setVisibility(View.INVISIBLE);
                     Log.i("TAG", isGoalChecked + "");
                 }
 
 
             }
         });
+
 
         swPreNotification.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -235,34 +266,31 @@ public class WokrDataSetActivity extends AppCompatActivity {
                     isPreNotificationChecked = isChecked;
                     preNotificationDialog.setVisibility(View.VISIBLE);
                     Log.i("TAG", isPreNotificationChecked + "");
-                    timePickerPreNotification.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+
+
+
+                    tvPreNotificationOk.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                            String strTime = hourOfDay + " : " + minute;
+                        public void onClick(View v) {
+                            String strTime = String.format("%02d:%02d", timePickerPreNotification.getHour(), timePickerPreNotification.getMinute());
+                            tvPreNotification.setText(strTime);
+                            tvPreNotification.setTextColor(0xFF9999FF);
+                            preNotificationTime = strTime;
+                            Log.i("TAG", preNotificationTime + "");
+                            preNotificationDialog.setVisibility(View.INVISIBLE);
+                            mcdPreNotificationFixed.setVisibility(View.VISIBLE);
 
-                            tvPreNotificationOk.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    tvPreNotification.setText(strTime);
-                                    tvPreNotification.setTextColor(0xFF9999FF);
-                                    preNotificationTime = strTime;
-                                    Log.i("TAG", preNotificationTime + "");
-                                    preNotificationDialog.setVisibility(View.INVISIBLE);
+                        }
+                    });
 
-                                }
-                            });
-
-                            tvPreNotificationCancel.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    swPreNotification.setChecked(false);
-                                    isPreNotificationChecked = false;
-                                    Log.i("TAG", isPreNotificationChecked + "");
-                                    preNotificationDialog.setVisibility(View.INVISIBLE);
-
-                                }
-                            });
-
+                    tvPreNotificationCancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            swPreNotification.setChecked(false);
+                            isPreNotificationChecked = false;
+                            Log.i("TAG", isPreNotificationChecked + "");
+                            preNotificationDialog.setVisibility(View.INVISIBLE);
+                            mcdPreNotificationFixed.setVisibility(View.INVISIBLE);
                         }
                     });
 
@@ -271,6 +299,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
                     tvPreNotification.setText("미리알림");
                     tvPreNotification.setTextColor(0xFF666666);
                     isPreNotificationChecked = isChecked;
+                    mcdPreNotificationFixed.setVisibility(View.INVISIBLE);
                     Log.i("TAG", isPreNotificationChecked + "");
                 }
 
@@ -281,6 +310,27 @@ public class WokrDataSetActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
+                if (isChecked){
+                    localNotificationDialog.setVisibility(View.VISIBLE);
+                    mapFragment.getMapAsync(new OnMapReadyCallback() {
+                        @Override
+                        public void onMapReady(@NonNull GoogleMap googleMap) {
+                            LatLng mrhi = new LatLng(37.560955, 127.034721);
+
+                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mrhi, 20));
+
+                            MarkerOptions marker = new MarkerOptions();
+                            marker.position(mrhi);
+                            marker.title("미래능력 개발 교육원");
+                            marker.snippet("왕십리역에 있는 s/w교육원");
+
+                            googleMap.addMarker(marker);
+
+                        }
+                    });
+                }else {
+
+                }
             }
         });
 
@@ -484,4 +534,66 @@ public class WokrDataSetActivity extends AppCompatActivity {
         return  result;
     }
 
+    public void clickGoalFixed(View view) {
+
+        Log.i("TAG", isGoalChecked+"");
+        goalDialog.setVisibility(View.VISIBLE);
+
+        tvGoalOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String valStr = "하루에 " + numberPickerGoalNumber.getValue() + "번";
+                tvGoal.setText(valStr+"");
+                tvGoal.setTextColor(0xFF9999FF);
+                goalSet = valStr;
+                Log.i("TAG", goalSet);
+                goalDialog.setVisibility(View.INVISIBLE);
+                mcdGoalFixed.setVisibility(View.VISIBLE);
+            }
+        });
+
+        tvGoalCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goalDialog.setVisibility(View.INVISIBLE);
+                Log.i("TAG", isGoalChecked + "");
+            }
+        });
+        Log.i("TAG", numberPickerGoalNumber.getValue() + "");
+
+    }
+
+
+    //dialog 부분임
+    public void clickPreNotificationFixed(View view) {
+        preNotificationDialog.setVisibility(View.VISIBLE);
+        Log.i("TAG", isPreNotificationChecked + "");
+
+        tvPreNotificationOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String strTime = String.format("%02d:%02d", timePickerPreNotification.getHour(), timePickerPreNotification.getMinute());
+                tvPreNotification.setText(strTime);
+                tvPreNotification.setTextColor(0xFF9999FF);
+                preNotificationTime = strTime;
+                Log.i("TAG", preNotificationTime + "");
+                preNotificationDialog.setVisibility(View.INVISIBLE);
+                mcdPreNotificationFixed.setVisibility(View.VISIBLE);
+
+            }
+        });
+
+        tvPreNotificationCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                preNotificationDialog.setVisibility(View.INVISIBLE);
+            }
+        });
+
+    }
+
+    public void clickLocalNotificationFixed(View view) {
+
+
+    }
 }//WorkDataSetActivity class....
