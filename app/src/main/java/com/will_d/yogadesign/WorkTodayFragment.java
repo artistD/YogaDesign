@@ -27,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -71,7 +72,7 @@ public class WorkTodayFragment extends Fragment {
     private boolean isPreNotificationChecked = false;
     private String preNotificationTime = "";
     private boolean isLocalNotificationChecked = false;
-    private String placeName = "";
+    private String placeName = "서울";
     private double latitude = 0.0;
     private double longitude = 0.0;
 //********************************************
@@ -285,38 +286,77 @@ public class WorkTodayFragment extends Fragment {
                 String jsonStr = response.body();
                Log.i("loadWorkTodayData", response.body());
 
-
                 try {
                     JSONArray jsonArray = new JSONArray(jsonStr);
-                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+                    for (int i=0; i<jsonArray.length(); i++){
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                    String no = jsonObject.getString("no");
-                    String name = jsonObject.getString("name");
-                    String nickName = jsonObject.getString("nickName");
-                    String weeksDataJsonStr = jsonObject.getString("weeksDataJsonStr");
-                    String isGoalChecked = jsonObject.getString("isGoalChecked");
-                    String goalSet = jsonObject.getString("goalSet");
-                    String isPreNotificationChecked = jsonObject.getString("isPreNotificationChecked");
-                    String preNotificationTime = jsonObject.getString("preNotificationTime");
-                    String isLocalNotificationChecked = jsonObject.getString("isLocalNotificationChecked");
-                    String placeName = jsonObject.getString("placeName");
-                    String latitude = jsonObject.getString("latitude");
-                    String longitude = jsonObject.getString("longitude");
-                    String dstName = jsonObject.getString("dstName");
+                        String no = jsonObject.getString("no");
+                        String name = jsonObject.getString("name");
+                        String nickName = jsonObject.getString("nickName");
+                        String weeksDataJsonStr = jsonObject.getString("weeksDataJsonStr");
+                        Gson gson = new Gson();
+                        boolean[] weeksDatad = gson.fromJson(weeksDataJsonStr, boolean[].class);
 
-                    Log.i("TAG1", no);
-                    Log.i("TAG2", name);
-                    Log.i("TAG3", nickName);
-                    Log.i("TAG4", weeksDataJsonStr);
-                    Log.i("TAG5", isGoalChecked);
-                    Log.i("TAG6", goalSet);
-                    Log.i("TAG7", isPreNotificationChecked);
-                    Log.i("TAG8", preNotificationTime);
-                    Log.i("TAG9", isLocalNotificationChecked);
-                    Log.i("TAG10", placeName);
-                    Log.i("TAG11", latitude);
-                    Log.i("TAG12", longitude);
-                    Log.i("TAG13", dstName);
+
+                        String isGoalChecked = jsonObject.getString("isGoalChecked");
+                        boolean isgoal = false;
+                        if (isGoalChecked.equals("1")){
+                            isgoal = true;
+                        }else if (isGoalChecked.equals("0")){
+                            isgoal = false;
+                        }
+                        String goalSet = jsonObject.getString("goalSet");
+
+                        String isPreNotificationChecked = jsonObject.getString("isPreNotificationChecked");
+                        boolean isprenoti = false;
+                        if (isPreNotificationChecked.equals("1")){
+                            isprenoti = true;
+                        }else if(isPreNotificationChecked.equals("0")){
+                            isprenoti = false;
+                        }
+
+                        String preNotificationTime = jsonObject.getString("preNotificationTime");
+                        String isLocalNotificationChecked = jsonObject.getString("isLocalNotificationChecked");
+                        boolean isLocal = false;
+                        if (isLocalNotificationChecked.equals("1")){
+                            isLocal = true;
+                        }else if(isLocalNotificationChecked.equals("0")){
+                            isLocal = false;
+                        }
+
+                        String placeName = jsonObject.getString("placeName");
+
+                        String latitude = jsonObject.getString("latitude");
+                        double lati = Double.parseDouble(latitude);
+
+                        String longitude = jsonObject.getString("longitude");
+                        double longi = Double.parseDouble(longitude);
+
+                        String dstName = jsonObject.getString("dstName");
+                        String path = "http://willd88.dothome.co.kr/YogaDesign/" + dstName;
+
+
+                        workItems.add(0, new WorkItem(path, nickName, name, isgoal, goalSet, isprenoti, preNotificationTime, isLocal, placeName, weeksDatad));
+                        adapter.notifyItemChanged(0);
+
+                        Log.i("TAG1", no);
+                        Log.i("TAG2", name);
+                        Log.i("TAG3", nickName);
+                        Log.i("TAG4", weeksDatad[0]+"");
+                        Log.i("TAG5", isgoal+"");
+                        Log.i("TAG6", goalSet);
+                        Log.i("TAG7", isprenoti+"");
+                        Log.i("TAG8", preNotificationTime);
+                        Log.i("TAG9", isLocal+"");
+                        Log.i("TAG11", lati+"");
+                        Log.i("TAG12", longi+"");
+                        Log.i("TAG13", path);
+                        Log.i("TAG13", dstName);
+                        Log.i("TAG", WorkTodayFragment.this.placeName);
+                    }
+
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();

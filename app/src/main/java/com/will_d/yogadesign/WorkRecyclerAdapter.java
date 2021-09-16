@@ -59,8 +59,7 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
         WorkItem item = items.get(position);
 
         String imgUrl = item.getImgUrl();
-        Uri uri = Uri.parse(imgUrl);
-        Glide.with(context).load(uri).into(holder.civ);
+        Glide.with(context).load(imgUrl).into(holder.civ);
         holder.tvNickname.setText(item.getNickName());
         holder.tvName.setText(item.getName());
 
