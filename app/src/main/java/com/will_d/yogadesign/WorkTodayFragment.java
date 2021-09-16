@@ -62,21 +62,6 @@ public class WorkTodayFragment extends Fragment {
     private Animation ani3;
     private Animation ani4;
 
-//WorkItems data ****************************
-    private String name="";
-    private String nickName = "";
-    private String imgPath = "";
-    private boolean[] weeksData = new boolean[7];
-    private boolean isGoalChecked = false;
-    private String goalSet = "";
-    private boolean isPreNotificationChecked = false;
-    private String preNotificationTime = "";
-    private boolean isLocalNotificationChecked = false;
-    private String placeName = "서울";
-    private double latitude = 0.0;
-    private double longitude = 0.0;
-//********************************************
-
 
     @Nullable
     @Override
@@ -194,19 +179,6 @@ public class WorkTodayFragment extends Fragment {
 //                workItems.add(0, new WorkItem(imgPath, nickName, name, isGoalChecked, goalSet, isPreNotificationChecked, preNotificationTime, isLocalNotificationChecked, placeName, weeksData));
 //                adapter.notifyItemChanged(0);
 
-                //** 최종데이터 전송
-                Log.i("FinalChecked", "name : " + name);
-                Log.i("FinalChecked", "nickName : " + nickName);
-                Log.i("FinalChecked", "imgPath : " + imgPath);
-                Log.i("FinalChecked", "월 : " + weeksData[0] + ", " + "화 : " + weeksData[1] + ", " + "수 : " + weeksData[2] + ", " + "목 : " + weeksData[3] + ", " + "금 : " + weeksData[4] + ", " + "토 : " + weeksData[5] + ", " + "일 : " + weeksData[6]);
-                Log.i("FinalChecked", "isGoalChecked : " + isGoalChecked);
-                Log.i("FinalChecked", "goalSet : " + goalSet);
-                Log.i("FinalChecked", "isPreNotificationChecked : " + isPreNotificationChecked);
-                Log.i("FinalChecked", "preNotificationTime : " + preNotificationTime);
-                Log.i("FinalChecked", "isLocalNotificationChecked : " + isLocalNotificationChecked);
-                Log.i("FinalChecked", "preNotifiationTime : " + latitude);
-                Log.i("FinalChecked", "longitude : " + longitude);
-                Log.i("FinalChecked", "placeName : " + placeName);
 
 
 
@@ -285,7 +257,7 @@ public class WorkTodayFragment extends Fragment {
             public void onResponse(Call<String> call, Response<String> response) {
                 String jsonStr = response.body();
                Log.i("loadWorkTodayData", response.body());
-
+               workItems.clear();
                 try {
                     JSONArray jsonArray = new JSONArray(jsonStr);
                     for (int i=0; i<jsonArray.length(); i++){
@@ -296,64 +268,64 @@ public class WorkTodayFragment extends Fragment {
                         String nickName = jsonObject.getString("nickName");
                         String weeksDataJsonStr = jsonObject.getString("weeksDataJsonStr");
                         Gson gson = new Gson();
-                        boolean[] weeksDatad = gson.fromJson(weeksDataJsonStr, boolean[].class);
+                        boolean[] weeksData = gson.fromJson(weeksDataJsonStr, boolean[].class);
 
 
-                        String isGoalChecked = jsonObject.getString("isGoalChecked");
-                        boolean isgoal = false;
-                        if (isGoalChecked.equals("1")){
-                            isgoal = true;
-                        }else if (isGoalChecked.equals("0")){
-                            isgoal = false;
+                        String isg = jsonObject.getString("isGoalChecked");
+                        boolean isGoalChecked = false;
+                        if (isg.equals("1")){
+                            isGoalChecked = true;
+                        }else if (isg.equals("0")){
+                            isGoalChecked = false;
                         }
                         String goalSet = jsonObject.getString("goalSet");
 
-                        String isPreNotificationChecked = jsonObject.getString("isPreNotificationChecked");
-                        boolean isprenoti = false;
-                        if (isPreNotificationChecked.equals("1")){
-                            isprenoti = true;
-                        }else if(isPreNotificationChecked.equals("0")){
-                            isprenoti = false;
+                        String isPre = jsonObject.getString("isPreNotificationChecked");
+                        boolean isPreNotificationChecked = false;
+                        if (isPre.equals("1")){
+                            isPreNotificationChecked = true;
+                        }else if(isPre.equals("0")){
+                            isPreNotificationChecked = false;
                         }
 
                         String preNotificationTime = jsonObject.getString("preNotificationTime");
-                        String isLocalNotificationChecked = jsonObject.getString("isLocalNotificationChecked");
-                        boolean isLocal = false;
-                        if (isLocalNotificationChecked.equals("1")){
-                            isLocal = true;
-                        }else if(isLocalNotificationChecked.equals("0")){
-                            isLocal = false;
+                        String isLocal = jsonObject.getString("isLocalNotificationChecked");
+                        boolean isLocalNotificationChecked = false;
+                        if (isLocal.equals("1")){
+                            isLocalNotificationChecked = true;
+                        }else if(isLocal.equals("0")){
+                            isLocalNotificationChecked = false;
                         }
 
                         String placeName = jsonObject.getString("placeName");
 
-                        String latitude = jsonObject.getString("latitude");
-                        double lati = Double.parseDouble(latitude);
+                        String lati = jsonObject.getString("latitude");
+                        double latitude = Double.parseDouble(lati);
 
-                        String longitude = jsonObject.getString("longitude");
-                        double longi = Double.parseDouble(longitude);
+                        String longi = jsonObject.getString("longitude");
+                        double longitude = Double.parseDouble(longi);
 
                         String dstName = jsonObject.getString("dstName");
-                        String path = "http://willd88.dothome.co.kr/YogaDesign/" + dstName;
+                        String imgUrl = "http://willd88.dothome.co.kr/YogaDesign/" + dstName;
 
 
-                        workItems.add(0, new WorkItem(path, nickName, name, isgoal, goalSet, isprenoti, preNotificationTime, isLocal, placeName, weeksDatad));
+                        workItems.add(0, new WorkItem(imgUrl, nickName, name, isGoalChecked, goalSet, isPreNotificationChecked, preNotificationTime, isLocalNotificationChecked, placeName, weeksData));
                         adapter.notifyItemChanged(0);
 
                         Log.i("TAG1", no);
                         Log.i("TAG2", name);
                         Log.i("TAG3", nickName);
-                        Log.i("TAG4", weeksDatad[0]+"");
-                        Log.i("TAG5", isgoal+"");
+                        Log.i("TAG4", weeksData[0]+"");
+                        Log.i("TAG5", isGoalChecked+"");
                         Log.i("TAG6", goalSet);
-                        Log.i("TAG7", isprenoti+"");
+                        Log.i("TAG7", isPreNotificationChecked+"");
                         Log.i("TAG8", preNotificationTime);
-                        Log.i("TAG9", isLocal+"");
+                        Log.i("TAG9", isLocalNotificationChecked+"");
                         Log.i("TAG11", lati+"");
                         Log.i("TAG12", longi+"");
-                        Log.i("TAG13", path);
+                        Log.i("TAG13", imgUrl);
                         Log.i("TAG13", dstName);
-                        Log.i("TAG", WorkTodayFragment.this.placeName);
+                        Log.i("TAG", placeName);
                     }
 
 
