@@ -1,6 +1,7 @@
 package com.will_d.yogadesign;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -22,6 +23,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import org.w3c.dom.Text;
+
+import java.net.URI;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -45,7 +49,7 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
     @NonNull
     @Override
     public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.recycler_workitem, parent, false);
+        View itemView = LayoutInflater.from(context).inflate(R.layout.recycler_workitem2, parent, false);
         return new VH(itemView);
     }
 
@@ -55,26 +59,46 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
         WorkItem item = items.get(position);
 
         String imgUrl = item.getImgUrl();
-        Glide.with(context).load(imgUrl).into(holder.civ);
+        Uri uri = Uri.parse(imgUrl);
+        Glide.with(context).load(uri).into(holder.civ);
         holder.tvNickname.setText(item.getNickName());
-
-        if (item.getIsGoal()) holder.ivGaol.setBackgroundColor(0xFF9999FF);
-        else holder.ivGaol.setBackgroundColor(0xFF999999);
-
-        if (item.getIspreNotification()) holder.ivPreNotification.setBackgroundColor(0xFF9999FF);
-        else holder.ivPreNotification.setBackgroundColor(0xFF999999);
-
-        if (item.getIslocationNotification()) holder.ivLocationNotification.setBackgroundColor(0xFF9999FF);
-        else holder.ivLocationNotification.setBackgroundColor(0xFF999999);
-
         holder.tvName.setText(item.getName());
-        holder.tvAddexplanation.setText(item.getAddExplanation());
+
+        if (item.getIsGoal()) {
+            holder.ivGaol.setBackgroundColor(0xFF9999FF);
+            holder.tvGoal.setVisibility(View.VISIBLE);
+            holder.tvGoal.setText(item.getTvgoal());
+        }
+        else {
+            holder.ivGaol.setBackgroundColor(0xFFeeeeee);
+        }
+
+        if (item.getIspreNotification()) {
+            holder.ivPreNotification.setBackgroundColor(0xFF9999FF);
+            holder.tvPreNotification.setVisibility(View.VISIBLE);
+            holder.tvPreNotification.setText(item.getTvpreNotification());
+        }
+        else {
+            holder.ivPreNotification.setBackgroundColor(0xFFeeeeee);
+        }
+
+        if (item.getIslocationNotification()) {
+            holder.ivLocationNotification.setBackgroundColor(0xFF9999FF);
+            holder.tvLocalNotification.setVisibility(View.VISIBLE);
+            holder.tvLocalNotification.setText(item.getTvlocalNotification());
+        }
+        else {
+            holder.ivLocationNotification.setBackgroundColor(0xFFeeeeee);
+        }
+
 
         boolean[] weeks = item.getIsweeks();
         for (int i=0; i<weeks.length; i++){
             if (weeks[i]) holder.weeks[i].setTextColor(0xFF9999FF);
             else holder.weeks[i].setTextColor(0xFF999999);
         }
+
+        Log.i("TEST", imgUrl + item.getNickName() + item.getIsGoal() + item.getIspreNotification() + item.getIslocationNotification() + item.getName());
 
 
 
@@ -110,11 +134,15 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
         private CircleImageView civ;
         private TextView tvNickname;
-        private ImageView ivGaol;
-        private ImageView ivPreNotification;
-        private ImageView ivLocationNotification;
         private TextView tvName;
-        private TextView tvAddexplanation;
+
+        private ImageView ivGaol;
+        private TextView tvGoal;
+        private ImageView ivPreNotification;
+        private TextView tvPreNotification;
+        private ImageView ivLocationNotification;
+        private TextView tvLocalNotification;
+
         private TextView[] weeks = new TextView[7];
 
 
@@ -130,11 +158,15 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
             super(itemView);
             civ = itemView.findViewById(R.id.civ);
             tvNickname = itemView.findViewById(R.id.tv_nickname);
-            ivGaol = itemView.findViewById(R.id.iv_goal);
-            ivPreNotification = itemView.findViewById(R.id.iv_preNotification);
-            ivLocationNotification = itemView.findViewById(R.id.iv_locationNotification);
             tvName = itemView.findViewById(R.id.tv_name);
-            tvAddexplanation = itemView.findViewById(R.id.tv_addexplanation);
+
+            ivGaol = itemView.findViewById(R.id.iv_goal);
+            tvGoal = itemView.findViewById(R.id.tv_goal);
+            ivPreNotification = itemView.findViewById(R.id.iv_preNotification);
+            tvPreNotification = itemView.findViewById(R.id.tv_preNotification);
+            ivLocationNotification = itemView.findViewById(R.id.iv_locationNotification);
+            tvLocalNotification = itemView.findViewById(R.id.tv_localNotification);
+
             weeks[0] = itemView.findViewById(R.id.tv_week_mon);
             weeks[1] = itemView.findViewById(R.id.tv_week_tues);
             weeks[2] = itemView.findViewById(R.id.tv_week_wendnes);

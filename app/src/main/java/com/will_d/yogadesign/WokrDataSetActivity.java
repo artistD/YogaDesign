@@ -11,8 +11,10 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentManager;
 import androidx.loader.content.CursorLoader;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -46,6 +48,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 
+import java.io.File;
 import java.lang.reflect.Array;
 import java.sql.Date;
 import java.text.ParseException;
@@ -53,11 +56,24 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 import soup.neumorphism.NeumorphImageView;
 
 public class WokrDataSetActivity extends AppCompatActivity {
+
+    private final int PERMISSION_EX_PHOTO =100;
 
     private EditText etName;
     private TextView tvNickname;
@@ -127,16 +143,16 @@ public class WokrDataSetActivity extends AppCompatActivity {
     //################################
     private String name="";
     private String nickName = "";
-    private String imgPath;
+    private String imgPath="";
     private boolean[] weeksData = new boolean[7];
-    private boolean isGoalChecked;
-    private String goalSet;
-    private boolean isPreNotificationChecked;
-    private String preNotificationTime;
-    private boolean isLocalNotificationChecked;
-    private String latitude = null;
-    private String longitude = null;
+    private boolean isGoalChecked=false;
+    private String goalSet="";
+    private boolean isPreNotificationChecked=false;
+    private String preNotificationTime="";
+    private boolean isLocalNotificationChecked=false;
     private String placeName = "";
+    private double latitude=0.0;
+    private double longitude=0.0;
     //##############################
 
 
@@ -223,6 +239,13 @@ public class WokrDataSetActivity extends AppCompatActivity {
         tvLocalNotificationOk = findViewById(R.id.tv_localNotification_ok);
         tvLocalNotificationCancel = findViewById(R.id.tv_localNotification_cancel);
         etLocalNotificationPlaceName = findViewById(R.id.et_LocalNotification_placename);
+
+        //퍼미션 작업 수행
+        String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (checkSelfPermission(permissions[0]) == PackageManager.PERMISSION_DENIED){
+            requestPermissions(permissions, PERMISSION_EX_PHOTO);
+        }
+
 
 
 
@@ -376,6 +399,16 @@ public class WokrDataSetActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode==PERMISSION_EX_PHOTO && grantResults[0]==PackageManager.PERMISSION_GRANTED){
+            Toast.makeText(this, "외부버장소 접근 허용", Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(this, "이미지 업로드 불가", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
     public void onBackPressed() {
         super.onBackPressed();
         finish();
@@ -388,29 +421,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
     }
 
     public void clickSave(View view) { //********************************
-//        for (int i=0; i<workItems.size(); i++){
-//             if (workItems.get(i).getNickName().equals(nickName)){
-//                 Toast.makeText(this, "별명이 중복될 수는 없습니다!", Toast.LENGTH_SHORT).show();
-//                 return;
-//             }
-//        }
-//
-//        //name dialog
-//        WokrDataSetActivity.this.name = etName.getText().toString();
-
-//        private String name="";
-//        private String nickName = "";
-//        private String imgPath;
-//        private boolean[] weeksData = new boolean[7];
-//        private boolean isGoalChecked;
-//        private String goalSet;
-//        private boolean isPreNotificationChecked;
-//        private String preNotificationTime;
-//        private boolean isLocalNotificationChecked;
-//        private String latitude = null;
-//        private String longitude = null;
-//        private String placeName = "";
-
+        name = etName.getText().toString();
         Intent intent = getIntent();
         intent.putExtra("name", name);
         intent.putExtra("nickName", nickName);
@@ -428,8 +439,6 @@ public class WokrDataSetActivity extends AppCompatActivity {
         setResult(RESULT_OK, intent);
 
 
-        finish();
-        overridePendingTransition(R.anim.fragment_none, R.anim.activity_data_set_end);
 
 
 
@@ -447,6 +456,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
         Log.i("Final", "longitude : " + longitude);
         Log.i("Final", "placename : " + placeName);
 
+        WorkTodayDataToServer();
 
     }
 
@@ -592,37 +602,6 @@ public class WokrDataSetActivity extends AppCompatActivity {
         }
     }//clickWeeksChecked method....
 
-    ActivityResultLauncher<Intent> intentActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-        @Override
-        public void onActivityResult(ActivityResult result) {
-            if (result.getResultCode() == RESULT_OK){
-                Intent intent = result.getData();
-                Uri uri = intent.getData();
-                if (uri != null){
-                    tvPhoto.setVisibility(View.INVISIBLE);
-                    civPhoto.setVisibility(View.VISIBLE);
-                    Glide.with(WokrDataSetActivity.this).load(uri).into(civPhoto);
-                    WokrDataSetActivity.this.imgPath = getRealPathFromUri(uri); //절대경로 레트로핏 작업할때 전송해야함
-                    Log.i("TAG", imgPath);
-                }
-
-            }
-        }
-    });
-
-
-    //Uri -- > 절대경로로 바꿔서 리턴시켜주는 메소드
-    String getRealPathFromUri(Uri uri){
-        String[] proj= {MediaStore.Images.Media.DATA};
-        CursorLoader loader= new CursorLoader(this, uri, proj, null, null, null);
-        Cursor cursor= loader.loadInBackground();
-        int column_index= cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        String result= cursor.getString(column_index);
-        cursor.close();
-        return  result;
-    }
-
     public void clickGoalFixed(View view) {
 
         Log.i("TAG", isGoalChecked+"");
@@ -721,4 +700,91 @@ public class WokrDataSetActivity extends AppCompatActivity {
 
 
     }
+
+    public void WorkTodayDataToServer(){
+        String baseUrl = "http://willd88.dothome.co.kr/";
+        Retrofit.Builder builder = new Retrofit.Builder();
+        builder.baseUrl(baseUrl);
+        builder.addConverterFactory(ScalarsConverterFactory.create());
+        Retrofit retrofit = builder.build();
+
+        RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+
+        MultipartBody.Part filePart = null;
+        String realImgagePath = getRealPathFromUri(Uri.parse(imgPath));
+        if (realImgagePath!=null){
+            File file = new File(realImgagePath);
+            RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
+            filePart = MultipartBody.Part.createFormData("img", file.getName(), requestBody);
+
+            Map<String, String> dataPart = new HashMap<>();
+            dataPart.put("name", name);
+            dataPart.put("nickName", nickName);
+//          dataPart.put("imgPath", imgPath);  //이미지는 절대경로로 보내주는거니까 안줘도됨.
+            Gson gson = new Gson();
+            String weeksDataJsonStr = gson.toJson(weeksData);
+            dataPart.put("weeksDataJsonStr", weeksDataJsonStr);
+
+            dataPart.put("isGoalChecked", String.valueOf(isGoalChecked));
+            dataPart.put("goalSet", goalSet);
+            dataPart.put("isPreNotificationChecked", String.valueOf(isPreNotificationChecked));
+            dataPart.put("preNotificationTime", preNotificationTime);
+            dataPart.put("isLocalNotificationChecked", String.valueOf(isLocalNotificationChecked));
+            dataPart.put("latitude", String.valueOf(latitude));
+            dataPart.put("longitude", String.valueOf(longitude));
+            dataPart.put("placeName", placeName);
+
+            Call<String> call = retrofitService.postDataToServer(dataPart, filePart);
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    Log.i("retrofit", response.body());
+                    finish();
+                    overridePendingTransition(R.anim.fragment_none, R.anim.activity_data_set_end);
+                }
+
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Toast.makeText(WokrDataSetActivity.this, "네트워크 문제 발생", Toast.LENGTH_SHORT).show();
+                    Log.i("retrofit", "ERROR : " + t.getMessage());
+
+                }
+            });
+
+        }
+
+
+    }
+
+    ActivityResultLauncher<Intent> intentActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if (result.getResultCode() == RESULT_OK){
+                Intent intent = result.getData();
+                Uri uri = intent.getData();
+                if (uri != null){
+                    tvPhoto.setVisibility(View.INVISIBLE);
+                    civPhoto.setVisibility(View.VISIBLE);
+                    Glide.with(WokrDataSetActivity.this).load(uri).into(civPhoto);
+                    WokrDataSetActivity.this.imgPath = uri.toString(); //절대경로 레트로핏 작업할때 전송해야함
+                    Log.i("TAG", imgPath);
+                }
+
+            }
+        }
+    });
+
+
+    //Uri -- > 절대경로로 바꿔서 리턴시켜주는 메소드
+    String getRealPathFromUri(Uri uri){
+        String[] proj= {MediaStore.Images.Media.DATA};
+        CursorLoader loader= new CursorLoader(this, uri, proj, null, null, null);
+        Cursor cursor= loader.loadInBackground();
+        int column_index= cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String result= cursor.getString(column_index);
+        cursor.close();
+        return  result;
+    }
+
 }//WorkDataSetActivity class....

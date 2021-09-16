@@ -22,8 +22,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 import soup.neumorphism.NeumorphCardView;
 
 public class WorkTodayFragment extends Fragment {
@@ -54,18 +64,17 @@ public class WorkTodayFragment extends Fragment {
 //WorkItems data ****************************
     private String name="";
     private String nickName = "";
-    private String imgPath;
+    private String imgPath = "";
     private boolean[] weeksData = new boolean[7];
-    private boolean isGoalChecked;
-    private String goalSet;
-    private boolean isPreNotificationChecked;
-    private String preNotificationTime;
-    private boolean isLocalNotificationChecked;
-    private String latitude = null;
-    private String longitude = null;
+    private boolean isGoalChecked = false;
+    private String goalSet = "";
+    private boolean isPreNotificationChecked = false;
+    private String preNotificationTime = "";
+    private boolean isLocalNotificationChecked = false;
     private String placeName = "";
-
-    //*************
+    private double latitude = 0.0;
+    private double longitude = 0.0;
+//********************************************
 
 
     @Nullable
@@ -78,18 +87,11 @@ public class WorkTodayFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //리사이클러뷰 테스트
 //        String imgUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjCjgVv-4Cl9Z-XQT3uCV_KKtjPzSNG-q2XA&usqp=CAU";
-//        String imgUrl2 = "https://editorial.uefa.com/resources/026c-12f705c46a6c-9f2eb0579483-1000/messi_graphic.jpg";
 //        boolean[] weeks = new boolean[]{true, true, true, true, true, false, false};
 //          workItems.add(new WorkItem(imgUrl, "1", true, true, false, "dddddqwdq", "dqwfwqfwqf", weeks));
-//        workItems.add(new WorkItem(imgUrl, "2", true, true, false, "dqwdqwdqwdwqqw", "dqwdqwdqwdq", weeks));
-//        workItems.add(new WorkItem(imgUrl2, "3", true, true, false, "dqwdqwdqwdwqqw", "dqwdqwdqwdq", weeks));
-//        workItems.add(new WorkItem(imgUrl, "4", true, true, false, "dqwdqwdqwdwqqw", "dqwdqwdqwdq", weeks));
-//        workItems.add(new WorkItem(imgUrl2, "5", true, true, false, "dqwdqwdqwdwqqw", "dqwdqwdqwdq", weeks));
-//        workItems.add(new WorkItem(imgUrl, "6", true, true, false, "dqwdqwdqwdwqqw", "dqwdqwdqwdq", weeks));
-//        workItems.add(new WorkItem(imgUrl2, "7", true, true, false, "dqwdqwdqwdwqqw", "dqwdqwdqwdq", weeks));
-
-//        workItems.add(new WorkItem(imgPath, nickName, isGoalChecked, isPreNotificationChecked, isLocalNotificationChecked, name, "", weeksData));
+        
 
         recyclerView =view.findViewById(R.id.recycler);
         adapter = new WorkRecyclerAdapter(getActivity(), workItems);
@@ -175,18 +177,21 @@ public class WorkTodayFragment extends Fragment {
             if (result.getResultCode() == getActivity().RESULT_OK){
                 Intent intent = result.getData();
 
-                String name = intent.getStringExtra("name");
-                String nickName = intent.getStringExtra("nickName");
-                String imgPath = intent.getStringExtra("imgPath");
-                boolean[] weeksData = intent.getBooleanArrayExtra("weeksData");
-                boolean isGoalChecked = intent.getBooleanExtra("isGoalChecked", false);
-                String goalSet= intent.getStringExtra("goalSet");
-                boolean isPreNotificationChecked = intent.getBooleanExtra("isPreNotificationChecked", false);
-                String preNotificationTime = intent.getStringExtra("preNotificationTime");
-                boolean isLocalNotificationChecked = intent.getBooleanExtra("isLocalNotificationChecked", false);
-                String latitude = intent.getStringExtra("latitude");
-                String longitude = intent.getStringExtra("longitude");
-                String placeName = intent.getStringExtra("placeName");
+//                name = intent.getStringExtra("name");
+//                nickName = intent.getStringExtra("nickName");
+//                imgPath = intent.getStringExtra("imgPath");
+//                weeksData = intent.getBooleanArrayExtra("weeksData");
+//                isGoalChecked = intent.getBooleanExtra("isGoalChecked", false);
+//                goalSet= intent.getStringExtra("goalSet");
+//                isPreNotificationChecked = intent.getBooleanExtra("isPreNotificationChecked", false);
+//                preNotificationTime = intent.getStringExtra("preNotificationTime");
+//                isLocalNotificationChecked = intent.getBooleanExtra("isLocalNotificationChecked", false);
+//                latitude = intent.getDoubleExtra("latitude", 37.560955);
+//                longitude = intent.getDoubleExtra("longitude", 127.034721);
+//                placeName = intent.getStringExtra("placeName");
+
+//                workItems.add(0, new WorkItem(imgPath, nickName, name, isGoalChecked, goalSet, isPreNotificationChecked, preNotificationTime, isLocalNotificationChecked, placeName, weeksData));
+//                adapter.notifyItemChanged(0);
 
                 //** 최종데이터 전송
                 Log.i("FinalChecked", "name : " + name);
@@ -201,6 +206,8 @@ public class WorkTodayFragment extends Fragment {
                 Log.i("FinalChecked", "preNotifiationTime : " + latitude);
                 Log.i("FinalChecked", "longitude : " + longitude);
                 Log.i("FinalChecked", "placeName : " + placeName);
+
+
 
             }
         }
@@ -250,7 +257,7 @@ public class WorkTodayFragment extends Fragment {
 
     }
 
-    public void setcdAddBtnToPreventBlurring(){
+    public void setcdAddBtnToPreventBlurring() {
         cdAddBtn.setBackgroundColor(0xFFC7DDFF);
         cdAddBtn2.setBackgroundColor(0xFFC7DDFF);
 
@@ -262,4 +269,73 @@ public class WorkTodayFragment extends Fragment {
 
     }
 
+    void loadWorkTodayDataServer(){
+        String baseUrl = "http://willd88.dothome.co.kr/";
+        Retrofit.Builder builder = new Retrofit.Builder();
+        builder.baseUrl(baseUrl);
+        builder.addConverterFactory(ScalarsConverterFactory.create());
+        Retrofit retrofit = builder.build();
+
+        RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+        Call<String> call = retrofitService.loadDataFromServer();
+
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                String jsonStr = response.body();
+               Log.i("loadWorkTodayData", response.body());
+
+
+                try {
+                    JSONArray jsonArray = new JSONArray(jsonStr);
+                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+
+                    String no = jsonObject.getString("no");
+                    String name = jsonObject.getString("name");
+                    String nickName = jsonObject.getString("nickName");
+                    String weeksDataJsonStr = jsonObject.getString("weeksDataJsonStr");
+                    String isGoalChecked = jsonObject.getString("isGoalChecked");
+                    String goalSet = jsonObject.getString("goalSet");
+                    String isPreNotificationChecked = jsonObject.getString("isPreNotificationChecked");
+                    String preNotificationTime = jsonObject.getString("preNotificationTime");
+                    String isLocalNotificationChecked = jsonObject.getString("isLocalNotificationChecked");
+                    String placeName = jsonObject.getString("placeName");
+                    String latitude = jsonObject.getString("latitude");
+                    String longitude = jsonObject.getString("longitude");
+                    String dstName = jsonObject.getString("dstName");
+
+                    Log.i("TAG1", no);
+                    Log.i("TAG2", name);
+                    Log.i("TAG3", nickName);
+                    Log.i("TAG4", weeksDataJsonStr);
+                    Log.i("TAG5", isGoalChecked);
+                    Log.i("TAG6", goalSet);
+                    Log.i("TAG7", isPreNotificationChecked);
+                    Log.i("TAG8", preNotificationTime);
+                    Log.i("TAG9", isLocalNotificationChecked);
+                    Log.i("TAG10", placeName);
+                    Log.i("TAG11", latitude);
+                    Log.i("TAG12", longitude);
+                    Log.i("TAG13", dstName);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.i("loadWorkTodayData", t.getMessage());
+            }
+        });
+
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadWorkTodayDataServer();
+    }
 }

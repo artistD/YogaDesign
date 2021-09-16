@@ -2,32 +2,52 @@ package com.will_d.yogadesign;
 
 import androidx.dynamicanimation.animation.SpringAnimation;
 
+import com.google.gson.annotations.SerializedName;
+
 public class WorkItem {
 
+    @SerializedName("dstName")
     private String imgUrl;
-    private String nickName;
 
+    private String nickName;
+    private String name;
+
+    @SerializedName("isGoalChecked")
     private boolean isgoal;
+
+    @SerializedName("goalSet")
+    private String tvgoal;
+
+    @SerializedName("isPreNotificationChecked")
     private boolean ispreNotification;
+
+    @SerializedName("preNotificationTime")
+    private String tvpreNotification;
+
+    @SerializedName("isLocalNotificationChecked")
     private boolean islocationNotification;
 
-    private String name;
-    private String addExplanation;
+    @SerializedName("placeName")
+    private String tvlocalNotification;
 
+    @SerializedName("weeksDataJsonStr")
     private boolean[] isweeks = new boolean[7];
 
     public WorkItem() {
 
     }
 
-    public WorkItem(String imgUrl, String nickName, boolean isgoal, boolean ispreNotification, boolean islocationNotification, String name, String addExplanation, boolean[] isweeks) {
+
+    public WorkItem(String imgUrl, String nickName, String name, boolean isgoal, String tvgoal, boolean ispreNotification, String tvpreNotification, boolean islocationNotification, String tvlocalNotification, boolean[] isweeks) {
         this.imgUrl = imgUrl;
         this.nickName = nickName;
-        this.isgoal = isgoal;
-        this.ispreNotification = ispreNotification;
-        this.islocationNotification = islocationNotification;
         this.name = name;
-        this.addExplanation = addExplanation;
+        this.isgoal = isgoal;
+        this.tvgoal = tvgoal;
+        this.ispreNotification = ispreNotification;
+        this.tvpreNotification = tvpreNotification;
+        this.islocationNotification = islocationNotification;
+        this.tvlocalNotification = tvlocalNotification;
         this.isweeks = isweeks;
     }
 
@@ -39,24 +59,32 @@ public class WorkItem {
         return nickName;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public boolean getIsGoal() {
         return isgoal;
+    }
+
+    public String getTvgoal() {
+        return tvgoal;
     }
 
     public boolean getIspreNotification() {
         return ispreNotification;
     }
 
+    public String getTvpreNotification() {
+        return tvpreNotification;
+    }
+
     public boolean getIslocationNotification() {
         return islocationNotification;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getAddExplanation() {
-        return addExplanation;
+    public String getTvlocalNotification() {
+        return tvlocalNotification;
     }
 
     public boolean[] getIsweeks() {
