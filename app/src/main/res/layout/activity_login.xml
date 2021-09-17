@@ -8,6 +8,11 @@
     android:orientation="vertical"
     android:background="@drawable/mainbg_03">
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="clickDBLoad"/>
+
     <RelativeLayout
         android:id="@+id/container"
         android:layout_width="wrap_content"
@@ -21,16 +26,17 @@
             style="@style/Widget.Neumorph.CardView"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            app:neumorph_shadowColorDark="#aa999999"
-            app:neumorph_shadowColorLight="#aaFFFFFF"
-            android:layout_marginTop="8dp"
             android:layout_centerVertical="true"
-            android:onClick="clickFrofile">
+            android:layout_marginTop="8dp"
+            android:onClick="clickFrofile"
+            app:neumorph_shadowColorDark="#aa999999"
+            app:neumorph_shadowColorLight="#aaFFFFFF">
 
             <ImageView
+                android:id="@+id/iv_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:scaleType="centerCrop"/>
+                android:scaleType="centerCrop" />
 
         </soup.neumorphism.NeumorphCardView>
 
