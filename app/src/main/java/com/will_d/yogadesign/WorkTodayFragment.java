@@ -163,24 +163,6 @@ public class WorkTodayFragment extends Fragment {
             if (result.getResultCode() == getActivity().RESULT_OK){
                 Intent intent = result.getData();
 
-//                name = intent.getStringExtra("name");
-//                nickName = intent.getStringExtra("nickName");
-//                imgPath = intent.getStringExtra("imgPath");
-//                weeksData = intent.getBooleanArrayExtra("weeksData");
-//                isGoalChecked = intent.getBooleanExtra("isGoalChecked", false);
-//                goalSet= intent.getStringExtra("goalSet");
-//                isPreNotificationChecked = intent.getBooleanExtra("isPreNotificationChecked", false);
-//                preNotificationTime = intent.getStringExtra("preNotificationTime");
-//                isLocalNotificationChecked = intent.getBooleanExtra("isLocalNotificationChecked", false);
-//                latitude = intent.getDoubleExtra("latitude", 37.560955);
-//                longitude = intent.getDoubleExtra("longitude", 127.034721);
-//                placeName = intent.getStringExtra("placeName");
-
-//                workItems.add(0, new WorkItem(imgPath, nickName, name, isGoalChecked, goalSet, isPreNotificationChecked, preNotificationTime, isLocalNotificationChecked, placeName, weeksData));
-//                adapter.notifyItemChanged(0);
-
-
-
 
             }
         }
