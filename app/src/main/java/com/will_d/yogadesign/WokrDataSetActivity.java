@@ -421,40 +421,41 @@ public class WokrDataSetActivity extends AppCompatActivity {
     }
 
     public void clickSave(View view) { //********************************
+//        Intent intent = getIntent();
+//        intent.putExtra("name", name);
+//        intent.putExtra("nickName", nickName);
+//        intent.putExtra("imgPath", imgPath);
+//        intent.putExtra("weeksData", weeksData);
+//        intent.putExtra("isGoalChecked", isGoalChecked);
+//        intent.putExtra("goalSet", goalSet);
+//        intent.putExtra("isPreNotificationChecked", isPreNotificationChecked);
+//        intent.putExtra("preNotificationTime", preNotificationTime);
+//        intent.putExtra("isLocalNotificationChecked", isLocalNotificationChecked);
+//        intent.putExtra("latitude", latitude);
+//        intent.putExtra("longitude", longitude);
+//        intent.putExtra("placeName", placeName);
+//
+//        setResult(RESULT_OK, intent);
+//
+//
+//
+//
+//
+//        //** 최종데이터 전송
+//        Log.i("Final", "name : " + name);
+//        Log.i("Final", "nickName : " + nickName);
+//        Log.i("Final", "imgPath : " + imgPath);
+//        Log.i("Final", "월 : " + weeksData[0] + ", " + "화 : " + weeksData[1] + ", " + "수 : " + weeksData[2] + ", " + "목 : " + weeksData[3] + ", " + "금 : " + weeksData[4] + ", " + "토 : " + weeksData[5] + ", " + "일 : " + weeksData[6]);
+//        Log.i("Final", "isGoalChecked : " + isGoalChecked);
+//        Log.i("Final", "goalSet : " + goalSet);
+//        Log.i("Final", "isPreNotificationChecked : " + isPreNotificationChecked);
+//        Log.i("Final", "preNotificationTime : " + preNotificationTime);
+//        Log.i("Final", "isLocalNotificationChecked : " + isLocalNotificationChecked);
+//        Log.i("Final", "preNotifiationTime : " + latitude);
+//        Log.i("Final", "longitude : " + longitude);
+//        Log.i("Final", "placename : " + placeName);
+
         name = etName.getText().toString();
-        Intent intent = getIntent();
-        intent.putExtra("name", name);
-        intent.putExtra("nickName", nickName);
-        intent.putExtra("imgPath", imgPath);
-        intent.putExtra("weeksData", weeksData);
-        intent.putExtra("isGoalChecked", isGoalChecked);
-        intent.putExtra("goalSet", goalSet);
-        intent.putExtra("isPreNotificationChecked", isPreNotificationChecked);
-        intent.putExtra("preNotificationTime", preNotificationTime);
-        intent.putExtra("isLocalNotificationChecked", isLocalNotificationChecked);
-        intent.putExtra("latitude", latitude);
-        intent.putExtra("longitude", longitude);
-        intent.putExtra("placeName", placeName);
-
-        setResult(RESULT_OK, intent);
-
-
-
-
-
-        //** 최종데이터 전송
-        Log.i("Final", "name : " + name);
-        Log.i("Final", "nickName : " + nickName);
-        Log.i("Final", "imgPath : " + imgPath);
-        Log.i("Final", "월 : " + weeksData[0] + ", " + "화 : " + weeksData[1] + ", " + "수 : " + weeksData[2] + ", " + "목 : " + weeksData[3] + ", " + "금 : " + weeksData[4] + ", " + "토 : " + weeksData[5] + ", " + "일 : " + weeksData[6]);
-        Log.i("Final", "isGoalChecked : " + isGoalChecked);
-        Log.i("Final", "goalSet : " + goalSet);
-        Log.i("Final", "isPreNotificationChecked : " + isPreNotificationChecked);
-        Log.i("Final", "preNotificationTime : " + preNotificationTime);
-        Log.i("Final", "isLocalNotificationChecked : " + isLocalNotificationChecked);
-        Log.i("Final", "preNotifiationTime : " + latitude);
-        Log.i("Final", "longitude : " + longitude);
-        Log.i("Final", "placename : " + placeName);
 
         WorkTodayDataToServer();
 
@@ -719,6 +720,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
 
             Map<String, String> dataPart = new HashMap<>();
             dataPart.put("name", name);
+
             dataPart.put("nickName", nickName);
 //          dataPart.put("imgPath", imgPath);  //이미지는 절대경로로 보내주는거니까 안줘도됨.
             Gson gson = new Gson();

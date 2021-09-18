@@ -9,11 +9,13 @@ import androidx.loader.content.CursorLoader;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -21,7 +23,13 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -42,10 +50,11 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etId;
     private EditText etName;
     private ImageView ivProfile;
-
     private String imgpath;
-
     private boolean isLogin = false;
+    ArrayList<String> datas = new ArrayList<>();
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,23 +65,48 @@ public class LoginActivity extends AppCompatActivity {
         etName = findViewById(R.id.et_name);
         ivProfile = findViewById(R.id.iv_profile);
 
+        SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
+        isLogin = pref.getBoolean("isLogin", false);
+
+
+
         //퍼미션 작업 수행
         String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (checkSelfPermission(permissions[0]) == PackageManager.PERMISSION_DENIED){
             requestPermissions(permissions, PERMISSION_EX_PHOTO);
         }
 
+        memberLoadDb();
+
+        Log.i("Login", isLogin+"");
+        if(isLogin) {
+            startActivity(new Intent(this, WorkShopActivity.class));
+            finish();
+        }
+
     }
+
 
     public void clickLogin(View view) {
 
-        if (isLogin){
-            startActivity(new Intent(this, WorkShopActivity.class));
+        for (int i=0; i<datas.size(); i++){
+            if(!datas.get(i).equals(etId.getText().toString())){
+                continue;
+            }else {
+                isLogin=true;
+                SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putBoolean("isLogin", isLogin);
+                editor.commit();
+                //TODO: 여기서부터는 작업해야함 아이디를 글로벌로 만들어야함.
+                Intent intent = new Intent(this, WorkShopActivity.class);
 
-        }else{
-            Toast.makeText(LoginActivity.this, "일치하지 않는 아이디입니다.", Toast.LENGTH_SHORT).show();
-            return;
+                startActivity(intent);
+                LoginActivity.this.finish();
+                break;
+            }
         }
+
 
     }
 
@@ -82,23 +116,11 @@ public class LoginActivity extends AppCompatActivity {
         startActivityForResult(intent, 100);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode==100 && resultCode == RESULT_OK){
-            Uri uri = data.getData();
-            if (uri != null){
-                Glide.with(this).load(uri).into(ivProfile);
-                imgpath = getRealPathFromUri(uri);
-
-            }
-        }
-    }
 
     public void clickDBLoad(View view) { //**암시로 사용할 버튼
         String id = etId.getText().toString();
         String name = etName.getText().toString();
+        boolean isUserPublic = true;
 
         Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
         RetrofitService retrofitService = retrofit.create(RetrofitService.class);
@@ -114,6 +136,7 @@ public class LoginActivity extends AppCompatActivity {
         Map<String, String> dataPart = new HashMap<>();
         dataPart.put("id", id);
         dataPart.put("name", name);
+        dataPart.put("isUserPublic", String.valueOf(isUserPublic));
 
         Call<String> call = retrofitService.memberPostDataToServer(dataPart, filePart);
         call.enqueue(new Callback<String>() {
@@ -130,6 +153,64 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+
+    void memberLoadDb(){
+        Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
+        RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+
+
+        Call<String> call = retrofitService.memberLoadDataFromServer();
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                String jsonStr = response.body();
+                Log.i("TAG", jsonStr);
+                try {
+                    JSONArray jsonArray = new JSONArray(jsonStr);
+                    datas.clear();
+                    for (int i =0; i<jsonArray.length(); i++){
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                       String no = jsonObject.getString("no");
+                       String id = jsonObject.getString("id");
+                       String name = jsonObject.getString("name");
+                       String a = jsonObject.getString("isUserPublic");
+                       boolean isUserPublic = Boolean.parseBoolean(a);
+
+                       String profile = jsonObject.getString("frofile");
+                       String date = jsonObject.getString("date");
+
+                        Log.i("TAG", no);
+                        Log.i("TAG", id);
+                        Log.i("TAG", name);
+                        Log.i("TAG", isUserPublic+"");
+                        Log.i("TAG", profile);
+                        Log.i("TAG", date);
+
+                        datas.add(id);
+
+                        Log.i("Datas", datas.get(i));
+                    }
+
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.i("TAG", "Error : " + t.getMessage());
+            }
+        });
+
+
+    }
+
     //Uri -- > 절대경로로 바꿔서 리턴시켜주는 메소드
     String getRealPathFromUri(Uri uri){
         String[] proj= {MediaStore.Images.Media.DATA};
@@ -141,6 +222,21 @@ public class LoginActivity extends AppCompatActivity {
         cursor.close();
         return  result;
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode==100 && resultCode == RESULT_OK){
+            Uri uri = data.getData();
+            if (uri != null){
+                Glide.with(this).load(uri).into(ivProfile);
+                imgpath = getRealPathFromUri(uri);
+
+            }
+        }
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

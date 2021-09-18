@@ -38,16 +38,19 @@
             android:name=".IntroActivity"
             android:exported="true"
             android:theme="@style/IntroActivity">
+        </activity>
+
+
+        <activity
+            android:name=".LoginActivity"
+            android:exported="true"
+            android:theme="@style/LoginActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".LoginActivity"
-            android:exported="true"
-            android:theme="@style/LoginActivity" />
         <activity
             android:name=".WokrDataSetActivity"
             android:exported="true"
