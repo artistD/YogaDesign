@@ -1,10 +1,7 @@
 package com.will_d.yogadesign;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -14,6 +11,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+import com.will_d.yogadesign.set.WorkShopStatisticsFragment;
+import com.will_d.yogadesign.square.WorkShopSquareFragment;
+import com.will_d.yogadesign.worktoday.WorkShopTimeFragment;
+import com.will_d.yogadesign.worktoday.WorkShopTodolistFragment;
 
 import soup.neumorphism.NeumorphCardView;
 import soup.neumorphism.ShapeType;
@@ -186,6 +188,7 @@ public class WorkShopActivity extends AppCompatActivity {
 
 
     public void clickNabWork(View view) {
+        fragments[0].onResume();
         BnvFragmentChange(BNV_WORK, new WorkShopWorkFragment());
         BnvRevertState();
         BnvChangeState(cdNabWork, ivNabWork, R.drawable.ic_fragment_work2_push);

@@ -1,4 +1,4 @@
-package com.will_d.yogadesign;
+package com.will_d.yogadesign.set;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +16,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.will_d.yogadesign.LoginActivity;
+import com.will_d.yogadesign.R;
 
 public class WorkShopStatisticsFragment extends Fragment {
     Button btn;

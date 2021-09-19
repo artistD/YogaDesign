@@ -1,9 +1,4 @@
-package com.will_d.yogadesign;
-
-import android.app.PendingIntent;
-import android.util.Log;
-import android.util.Printer;
-import android.widget.Toast;
+package com.will_d.yogadesign.worktoday;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -27,7 +22,7 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     }
 
-    
+
     @Override
     public boolean isItemViewSwipeEnabled() {
         return true;

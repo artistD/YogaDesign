@@ -5,21 +5,25 @@ import java.util.Map;
 
 import okhttp3.MultipartBody;
 import retrofit2.Call;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.PartMap;
+import retrofit2.http.Query;
 
 public interface RetrofitService {
 
     @Multipart
-    @POST("/YogaDesign/insertDB.php")
-    Call<String> postDataToServer(@PartMap Map<String, String> dataPart, @Part MultipartBody.Part filePart);
+    @POST("/YogaDesign2/workitem/WorkItemInsertDB.php")
+    Call<String> WorkItemPostDataToServer(@PartMap Map<String, String> dataPart, @Part MultipartBody.Part filePart);
 
     //서버에서 데이터를 json으로 받아 자동 파싱해서 ArrayList에 바로 넣어주는 기능 메소드
-    @GET("/YogaDesign/loadDB.php")
-    Call<String> loadDataFromServer();
+    @FormUrlEncoded
+    @POST("/YogaDesign2/workitem/WorkItemLoadDB.php")
+    Call<String> WorkItemLoadDataFromServer(@Field("id") String id);
 
     //서버에서 데이터를
     @Multipart
@@ -29,4 +33,12 @@ public interface RetrofitService {
     //서버에서 데이터를 json으로 받아 자동 파싱해서 ArrayList에 바로 넣어주는 기능 메소드
     @GET("/YogaDesign2/member/memberLoadDB.php")
     Call<String> memberLoadDataFromServer();
+
+    @FormUrlEncoded
+    @POST("/YogaDesign2/todolist/TodolistLoadDB.php")
+    Call<String> TodolistLoadDataFromServer(@Field("id") String id);
+
+    //스위치 끄는 기능임
+    @GET("/YogaDesign2/workitem/WorkItemSwitchInsertDB.php")
+    Call<String> WorkItemSwitchOnOffGetDataDB(@Query("isItemOnOff") boolean isItemOnOff, @Query("no") String no);
 }

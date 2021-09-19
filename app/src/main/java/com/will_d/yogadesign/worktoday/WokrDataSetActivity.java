@@ -1,10 +1,9 @@
-package com.will_d.yogadesign;
+package com.will_d.yogadesign.worktoday;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -12,21 +11,17 @@ import androidx.fragment.app.FragmentManager;
 import androidx.loader.content.CursorLoader;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -44,19 +39,18 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
+import com.will_d.yogadesign.R;
+import com.will_d.yogadesign.RetrofitService;
 
 import java.io.File;
-import java.lang.reflect.Array;
-import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -67,7 +61,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import soup.neumorphism.NeumorphImageView;
 
@@ -141,6 +134,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
 
     private ArrayList<WorkItem> workItems; //*********** 판별을 하기위한 아이템 객체
     //################################
+    private String id;
     private String name="";
     private String nickName = "";
     private String imgPath="";
@@ -151,9 +145,16 @@ public class WokrDataSetActivity extends AppCompatActivity {
     private String preNotificationTime="";
     private boolean isLocalNotificationChecked=false;
     private String placeName = "";
-    private double latitude=0.0;
-    private double longitude=0.0;
+    private double latitude=37.560955;
+    private double longitude=127.034721;
+    private boolean isItemOnOff = true;
+    private boolean isItemPublic =true;
+    private int completeNum = 0;
+
     //##############################
+
+    double isoriginalLatitude;
+    double isoriginalLongitude;
 
 
 
@@ -162,6 +163,11 @@ public class WokrDataSetActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wokr_data_set);
+
+        SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
+        id = pref.getString("id", "");
+
+
 
         etName = findViewById(R.id.et_name);
         tvNickname = findViewById(R.id.tv_nickname);
@@ -354,16 +360,69 @@ public class WokrDataSetActivity extends AppCompatActivity {
                     mapFragment.getMapAsync(new OnMapReadyCallback() {
                         @Override
                         public void onMapReady(@NonNull GoogleMap googleMap) {
+                            googleMap.clear();
                             LatLng userLocation = new LatLng(37.560955, 127.034721);
-
-                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 20));
-
+                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 18));
                             MarkerOptions marker = new MarkerOptions();
                             marker.position(userLocation);
-                            marker.title("미래능력 개발 교육원");
-                            marker.snippet("왕십리역에 있는 s/w교육원");
+                            marker.title("나의 위치");
+                            marker.snippet("알림받고 싶은 위치를 지정해주세요!");
+                            marker.isVisible();
 
                             googleMap.addMarker(marker);
+
+
+                            googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                                @Override
+                                public void onMapClick(@NonNull LatLng latLng) {
+                                    googleMap.clear();
+                                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
+                                    MarkerOptions marker = new MarkerOptions();
+                                    marker.position(latLng);
+                                    marker.title("나의 위치");
+                                    marker.snippet("이곳으로 알림을 보내드릴게요!");
+                                    marker.isVisible();
+
+                                    googleMap.addMarker(marker);
+
+                                    latitude = latLng.latitude;
+                                    longitude = latLng.longitude;
+                                }
+                            });
+
+                            nivLocalNotificationSearchComplete.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    String addr = etLocalNotificationSearch.getText().toString();
+                                    Geocoder geocoder = new Geocoder(WokrDataSetActivity.this, Locale.KOREA);
+                                    try {
+                                        googleMap.clear();
+                                        List<Address> address  = geocoder.getFromLocationName(addr, 3);
+
+                                        double lat = address.get(0).getLatitude();
+                                        double lon = address.get(0).getLongitude();
+
+                                        LatLng userLocation = new LatLng(lat, lon);
+                                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 18));
+
+                                        MarkerOptions marker = new MarkerOptions();
+                                        marker.position(userLocation);
+                                        marker.title("검색한 나의 위치");
+                                        marker.snippet("알림을 받고싶은 위치를 지정해주세요!");
+                                        marker.isVisible();
+
+                                        googleMap.addMarker(marker);
+
+                                        latitude = lat;
+                                        longitude = lon;
+
+                                    } catch (IOException e) {
+                                        Toast.makeText(WokrDataSetActivity.this, "검색 실패", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+
+
 
                         }
                     });
@@ -371,16 +430,25 @@ public class WokrDataSetActivity extends AppCompatActivity {
                     tvLocalNotificationOk.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            localNotificationDialog.setVisibility(View.INVISIBLE);
+                            isoriginalLatitude  =latitude;
+                            isoriginalLongitude = longitude;
+
                             placeName = etLocalNotificationPlaceName.getText().toString();
+                            tvLocalNotifiacation.setText(placeName);
+                            tvLocalNotifiacation.setTextColor(0xFF9999FF);
+                            localNotificationDialog.setVisibility(View.INVISIBLE);
                         }
                     });
 
                     tvLocalNotificationCancel.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            latitude = 37.560955;
+                            longitude = 127.034721;
                             isLocalNotificationChecked = false;
                             swLocalNotification.setChecked(false);
+                            tvLocalNotifiacation.setText("위치알림");
+                            tvLocalNotifiacation.setTextColor(0xFF666666);
                             mcdLocalNotificationFixed.setVisibility(View.INVISIBLE);
                             localNotificationDialog.setVisibility(View.INVISIBLE);
                         }
@@ -388,6 +456,8 @@ public class WokrDataSetActivity extends AppCompatActivity {
 
 
                 }else {
+                    latitude = 37.560955;
+                    longitude = 127.034721;
                     isLocalNotificationChecked = isChecked;
                     mcdLocalNotificationFixed.setVisibility(View.INVISIBLE);
                 }
@@ -663,6 +733,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
 
     public void clickLocalNotificationFixed(View view) {
 
+        etLocalNotificationPlaceName.setText(placeName);
         mcdLocalNotificationFixed.setVisibility(View.VISIBLE);
         localNotificationDialog.setVisibility(View.VISIBLE);
         Log.i("TAG", isLocalNotificationChecked+"");
@@ -670,16 +741,69 @@ public class WokrDataSetActivity extends AppCompatActivity {
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(@NonNull GoogleMap googleMap) {
-                LatLng userLocation = new LatLng(37.560955, 127.034721);
-
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 20));
-
+                googleMap.clear();
+                LatLng userLocation = new LatLng(latitude, longitude);
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 18));
                 MarkerOptions marker = new MarkerOptions();
                 marker.position(userLocation);
-                marker.title("미래능력 개발 교육원");
-                marker.snippet("왕십리역에 있는 s/w교육원");
+                marker.title("나의 위치");
+                marker.snippet("알림받고 싶은 위치를 지정해주세요!");
+                marker.isVisible();
 
                 googleMap.addMarker(marker);
+
+
+                googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                    @Override
+                    public void onMapClick(@NonNull LatLng latLng) {
+                        googleMap.clear();
+                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
+                        MarkerOptions marker = new MarkerOptions();
+                        marker.position(latLng);
+                        marker.title("나의 위치");
+                        marker.snippet("이곳으로 알림을 보내드릴게요!");
+                        marker.isVisible();
+
+                        googleMap.addMarker(marker);
+
+                        latitude = latLng.latitude;
+                        longitude = latLng.longitude;
+                    }
+                });
+
+                nivLocalNotificationSearchComplete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String addr = etLocalNotificationSearch.getText().toString();
+                        Geocoder geocoder = new Geocoder(WokrDataSetActivity.this, Locale.KOREA);
+                        try {
+                            googleMap.clear();
+                            List<Address> address  = geocoder.getFromLocationName(addr, 3);
+
+                            double lat = address.get(0).getLatitude();
+                            double lon = address.get(0).getLongitude();
+
+                            LatLng userLocation = new LatLng(lat, lon);
+                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 18));
+
+                            MarkerOptions marker = new MarkerOptions();
+                            marker.position(userLocation);
+                            marker.title("검색한 나의 위치");
+                            marker.snippet("알림을 받고싶은 위치를 지정해주세요!");
+                            marker.isVisible();
+
+                            googleMap.addMarker(marker);
+
+                            latitude = lat;
+                            longitude = lon;
+
+                        } catch (IOException e) {
+                            Toast.makeText(WokrDataSetActivity.this, "검색 실패", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+
 
             }
         });
@@ -687,14 +811,18 @@ public class WokrDataSetActivity extends AppCompatActivity {
         tvLocalNotificationOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                localNotificationDialog.setVisibility(View.INVISIBLE);
                 placeName = etLocalNotificationPlaceName.getText().toString();
+                tvLocalNotifiacation.setText(placeName);
+                tvLocalNotifiacation.setTextColor(0xFF9999FF);
+                localNotificationDialog.setVisibility(View.INVISIBLE);
             }
         });
 
         tvLocalNotificationCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                latitude = isoriginalLatitude;
+                longitude = isoriginalLongitude;
                 localNotificationDialog.setVisibility(View.INVISIBLE);
             }
         });
@@ -719,8 +847,8 @@ public class WokrDataSetActivity extends AppCompatActivity {
             filePart = MultipartBody.Part.createFormData("img", file.getName(), requestBody);
 
             Map<String, String> dataPart = new HashMap<>();
+            dataPart.put("id", id);
             dataPart.put("name", name);
-
             dataPart.put("nickName", nickName);
 //          dataPart.put("imgPath", imgPath);  //이미지는 절대경로로 보내주는거니까 안줘도됨.
             Gson gson = new Gson();
@@ -732,11 +860,15 @@ public class WokrDataSetActivity extends AppCompatActivity {
             dataPart.put("isPreNotificationChecked", String.valueOf(isPreNotificationChecked));
             dataPart.put("preNotificationTime", preNotificationTime);
             dataPart.put("isLocalNotificationChecked", String.valueOf(isLocalNotificationChecked));
+
+            dataPart.put("placeName", placeName);
             dataPart.put("latitude", String.valueOf(latitude));
             dataPart.put("longitude", String.valueOf(longitude));
-            dataPart.put("placeName", placeName);
+            dataPart.put("isItemOnOff", String.valueOf(isItemOnOff));
+            dataPart.put("isItemPublic", String.valueOf(isItemPublic));
+            dataPart.put("completeNum", String.valueOf(completeNum));
 
-            Call<String> call = retrofitService.postDataToServer(dataPart, filePart);
+            Call<String> call = retrofitService.WorkItemPostDataToServer(dataPart, filePart);
             call.enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {

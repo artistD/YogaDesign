@@ -1,29 +1,21 @@
 package com.will_d.yogadesign;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-
-import soup.neumorphism.NeumorphCardView;
+import com.will_d.yogadesign.month.WorkMonthFragment;
+import com.will_d.yogadesign.worktoday.WorkTodayFragment;
 
 public class WorkShopWorkFragment extends Fragment {
 

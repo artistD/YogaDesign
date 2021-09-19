@@ -1,7 +1,6 @@
-package com.will_d.yogadesign;
+package com.will_d.yogadesign.worktoday;
 
 import android.content.Context;
-import android.net.Uri;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -18,19 +17,22 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.widget.PopupWindowCompat;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.will_d.yogadesign.R;
+import com.will_d.yogadesign.RetrofitHelper;
+import com.will_d.yogadesign.RetrofitService;
 
-import org.w3c.dom.Text;
-
-import java.net.URI;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
-public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapter.VH> implements ItemTouchHelperListener{
+public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapter.VH> implements ItemTouchHelperListener {
 
     private Context context;
     private ArrayList<WorkItem> items;
@@ -152,7 +154,9 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
         private RelativeLayout popupRlModify;
         private RelativeLayout popupRlDelete;
 
-
+        public Switch getSw() {//####################getter
+            return sw;
+        }
         public VH(@NonNull View itemView) {//#################################################################
             super(itemView);
             civ = itemView.findViewById(R.id.civ);
@@ -207,21 +211,24 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
 
 
+                sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        WorkItem item = items.get(getAdapterPosition());
+                        Log.i("asdf", item.getNo() + isChecked);
+
+                        if (isChecked) {
+                            llItenContainer.setBackgroundResource(R.drawable.mainbg_03);
+
+                        } else {
+                            llItenContainer.setBackgroundColor(0x33333333);
+                        }
+
+                        WorkitemSwitchOnOffLoadDB(isChecked, item.getNo());
 
 
-            sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        llItenContainer.setBackgroundResource(R.drawable.mainbg_03);
                     }
-                    else {
-                        llItenContainer.setBackgroundColor(0x33333333);
-                    }
-
-
-                }
-            });
+                });
 
         }//#################################################################
 
@@ -252,10 +259,29 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
         }
 
-        public Switch getSw() {//####################getter
-            return sw;
+
+        void WorkitemSwitchOnOffLoadDB(boolean isChecked, String no){
+
+            Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
+            RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+
+            Call<String> call = retrofitService.WorkItemSwitchOnOffGetDataDB(isChecked, no);
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    Log.i("asdf", response.body());
+                }
+
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Log.i("asdf", t.getMessage());
+                }
+            });
+
         }
+
     }
+
 
 
 

@@ -1,6 +1,8 @@
-package com.will_d.yogadesign;
+package com.will_d.yogadesign.worktoday;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -21,25 +24,27 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.will_d.yogadesign.R;
+import com.will_d.yogadesign.RetrofitService;
+import com.will_d.yogadesign.WorkShopActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import soup.neumorphism.NeumorphCardView;
 
 public class WorkTodayFragment extends Fragment {
 
     private ArrayList<WorkItem> workItems = new ArrayList<>();
+    //**********
     private RecyclerView recyclerView;
     private WorkRecyclerAdapter adapter;
     ItemTouchHelper helper;
@@ -225,6 +230,9 @@ public class WorkTodayFragment extends Fragment {
     }
 
     void loadWorkTodayDataServer(){
+        SharedPreferences pref = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
+        String id = pref.getString("id", "");
+        Log.i("확인!!제발", id);
         String baseUrl = "http://willd88.dothome.co.kr/";
         Retrofit.Builder builder = new Retrofit.Builder();
         builder.baseUrl(baseUrl);
@@ -232,26 +240,34 @@ public class WorkTodayFragment extends Fragment {
         Retrofit retrofit = builder.build();
 
         RetrofitService retrofitService = retrofit.create(RetrofitService.class);
-        Call<String> call = retrofitService.loadDataFromServer();
+        Call<String> call = retrofitService.WorkItemLoadDataFromServer(id);
 
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
+
                 String jsonStr = response.body();
-               Log.i("loadWorkTodayData", response.body());
+                Log.i("loadWorkTodayData2", response.body());
                workItems.clear();
                 try {
+
                     JSONArray jsonArray = new JSONArray(jsonStr);
                     for (int i=0; i<jsonArray.length(); i++){
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
 
                         String no = jsonObject.getString("no");
+                        String id =jsonObject.getString("id");
                         String name = jsonObject.getString("name");
+
+                        String dstName = jsonObject.getString("dstName");
+                        String imgUrl = "http://willd88.dothome.co.kr/YogaDesign2/workitem/" + dstName;
+
+
                         String nickName = jsonObject.getString("nickName");
-                        String weeksDataJsonStr = jsonObject.getString("weeksDataJsonStr");
+
+                        String weeksDataJsonStr = jsonObject.getString("weeksData");
                         Gson gson = new Gson();
                         boolean[] weeksData = gson.fromJson(weeksDataJsonStr, boolean[].class);
-
 
                         String isg = jsonObject.getString("isGoalChecked");
                         boolean isGoalChecked = false;
@@ -260,6 +276,7 @@ public class WorkTodayFragment extends Fragment {
                         }else if (isg.equals("0")){
                             isGoalChecked = false;
                         }
+
                         String goalSet = jsonObject.getString("goalSet");
 
                         String isPre = jsonObject.getString("isPreNotificationChecked");
@@ -269,8 +286,8 @@ public class WorkTodayFragment extends Fragment {
                         }else if(isPre.equals("0")){
                             isPreNotificationChecked = false;
                         }
-
                         String preNotificationTime = jsonObject.getString("preNotificationTime");
+
                         String isLocal = jsonObject.getString("isLocalNotificationChecked");
                         boolean isLocalNotificationChecked = false;
                         if (isLocal.equals("1")){
@@ -286,41 +303,46 @@ public class WorkTodayFragment extends Fragment {
 
                         String longi = jsonObject.getString("longitude");
                         double longitude = Double.parseDouble(longi);
+                        String isItem = jsonObject.getString("isItemOnOff");
+                        boolean isItemOnOff = false;
+                        if (isItem.equals("1")){
+                            isItemOnOff = true;
+                        }else if(isItem.equals("0")){
+                            isItemOnOff = false;
+                        }
 
-                        String dstName = jsonObject.getString("dstName");
-                        String imgUrl = "http://willd88.dothome.co.kr/YogaDesign/" + dstName;
+                        String isItemP = jsonObject.getString("isItemPublic");
+                        boolean isItemPublic = false;
+                        if (isItemP.equals("1")){
+                            isItemPublic = true;
+                        }else if(isItemP.equals("0")){
+                            isItemPublic = false;
+                        }
+
+                        String cNum = jsonObject.getString("Completenum");
+                        int completeNum = Integer.parseInt(cNum);
+                        Log.i("dddddd", "dqwqdw");
+
+                        String now = jsonObject.getString("now");
 
 
-                        workItems.add(0, new WorkItem(imgUrl, nickName, name, isGoalChecked, goalSet, isPreNotificationChecked, preNotificationTime, isLocalNotificationChecked, placeName, weeksData));
+
+
+                        workItems.add(0, new WorkItem(no, imgUrl, nickName, name, isGoalChecked, goalSet, isPreNotificationChecked, preNotificationTime, isLocalNotificationChecked, placeName, weeksData));
                         adapter.notifyItemChanged(0);
 
-                        Log.i("TAG1", no);
-                        Log.i("TAG2", name);
-                        Log.i("TAG3", nickName);
-                        Log.i("TAG4", weeksData[0]+"");
-                        Log.i("TAG5", isGoalChecked+"");
-                        Log.i("TAG6", goalSet);
-                        Log.i("TAG7", isPreNotificationChecked+"");
-                        Log.i("TAG8", preNotificationTime);
-                        Log.i("TAG9", isLocalNotificationChecked+"");
-                        Log.i("TAG11", lati+"");
-                        Log.i("TAG12", longi+"");
-                        Log.i("TAG13", imgUrl);
-                        Log.i("TAG13", dstName);
-                        Log.i("TAG", placeName);
                     }
 
 
-
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    Log.i("왜 와이", e.getMessage());
                 }
 
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                Log.i("loadWorkTodayData", t.getMessage());
+                Log.i("왜 와이", t.getMessage());
             }
         });
 
@@ -332,4 +354,5 @@ public class WorkTodayFragment extends Fragment {
         super.onResume();
         loadWorkTodayDataServer();
     }
+
 }

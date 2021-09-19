@@ -52,7 +52,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".WokrDataSetActivity"
+            android:name=".worktoday.WokrDataSetActivity"
             android:exported="true"
             android:theme="@style/WorkSDataSetActivity" />
         <activity

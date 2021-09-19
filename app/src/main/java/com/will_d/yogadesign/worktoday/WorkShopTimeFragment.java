@@ -1,4 +1,4 @@
-package com.will_d.yogadesign;
+package com.will_d.yogadesign.worktoday;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,6 +11,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import com.will_d.yogadesign.R;
+import com.will_d.yogadesign.time.TimeAlarmFragment;
+import com.will_d.yogadesign.time.TimeTimerFragment;
 
 public class WorkShopTimeFragment extends Fragment {
 

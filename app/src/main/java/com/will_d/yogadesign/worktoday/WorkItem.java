@@ -1,10 +1,12 @@
-package com.will_d.yogadesign;
+package com.will_d.yogadesign.worktoday;
 
 import androidx.dynamicanimation.animation.SpringAnimation;
 
 import com.google.gson.annotations.SerializedName;
 
 public class WorkItem {
+
+    private String no;
 
     @SerializedName("dstName")
     private String imgUrl;
@@ -38,7 +40,8 @@ public class WorkItem {
     }
 
 
-    public WorkItem(String imgUrl, String nickName, String name, boolean isgoal, String tvgoal, boolean ispreNotification, String tvpreNotification, boolean islocationNotification, String tvlocalNotification, boolean[] isweeks) {
+    public WorkItem(String no, String imgUrl, String nickName, String name, boolean isgoal, String tvgoal, boolean ispreNotification, String tvpreNotification, boolean islocationNotification, String tvlocalNotification, boolean[] isweeks) {
+        this.no = no;
         this.imgUrl = imgUrl;
         this.nickName = nickName;
         this.name = name;
@@ -49,6 +52,10 @@ public class WorkItem {
         this.islocationNotification = islocationNotification;
         this.tvlocalNotification = tvlocalNotification;
         this.isweeks = isweeks;
+    }
+
+    public String getNo() {
+        return no;
     }
 
     public String getImgUrl() {

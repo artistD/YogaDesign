@@ -1,7 +1,5 @@
 package com.will_d.yogadesign;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.ActivityResultRegistry;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,10 +26,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import okhttp3.MediaType;
@@ -41,7 +37,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import soup.neumorphism.NeumorphCardView;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -97,10 +92,10 @@ public class LoginActivity extends AppCompatActivity {
                 SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
                 SharedPreferences.Editor editor = pref.edit();
                 editor.putBoolean("isLogin", isLogin);
+                editor.putString("id", datas.get(i));
                 editor.commit();
-                //TODO: 여기서부터는 작업해야함 아이디를 글로벌로 만들어야함.
+                Log.i("Global", datas.get(i));
                 Intent intent = new Intent(this, WorkShopActivity.class);
-
                 startActivity(intent);
                 LoginActivity.this.finish();
                 break;
