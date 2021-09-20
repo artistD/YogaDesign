@@ -35,6 +35,7 @@
 
 
         <activity
+            android:windowSoftInputMode="adjustUnspecified"
             android:name=".IntroActivity"
             android:exported="true"
             android:theme="@style/IntroActivity">
@@ -42,6 +43,7 @@
 
 
         <activity
+            android:windowSoftInputMode="adjustUnspecified"
             android:name=".LoginActivity"
             android:exported="true"
             android:theme="@style/LoginActivity" >
@@ -52,6 +54,7 @@
             </intent-filter>
         </activity>
         <activity
+            android:windowSoftInputMode="adjustUnspecified"
             android:name=".worktoday.WokrDataSetActivity"
             android:exported="true"
             android:theme="@style/WorkSDataSetActivity" />

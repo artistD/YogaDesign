@@ -35,12 +35,14 @@ public class WorkItem {
     @SerializedName("weeksDataJsonStr")
     private boolean[] isweeks = new boolean[7];
 
+    private boolean isItemInOff;
+
     public WorkItem() {
 
     }
 
 
-    public WorkItem(String no, String imgUrl, String nickName, String name, boolean isgoal, String tvgoal, boolean ispreNotification, String tvpreNotification, boolean islocationNotification, String tvlocalNotification, boolean[] isweeks) {
+    public WorkItem(String no, String imgUrl, String nickName, String name, boolean isgoal, String tvgoal, boolean ispreNotification, String tvpreNotification, boolean islocationNotification, String tvlocalNotification, boolean[] isweeks, boolean isItemInOff) {
         this.no = no;
         this.imgUrl = imgUrl;
         this.nickName = nickName;
@@ -52,6 +54,7 @@ public class WorkItem {
         this.islocationNotification = islocationNotification;
         this.tvlocalNotification = tvlocalNotification;
         this.isweeks = isweeks;
+        this.isItemInOff = isItemInOff;
     }
 
     public String getNo() {
@@ -97,6 +100,8 @@ public class WorkItem {
     public boolean[] getIsweeks() {
         return isweeks;
     }
+
+    public boolean getIsItemInOff() { return isItemInOff; }
 }
 
 

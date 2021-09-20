@@ -224,16 +224,23 @@ public class WorkShopActivity extends AppCompatActivity {
 
     public void BnvFragmentChange(int BNV_ARRAYNUM, Fragment bnVFragment){
         tran = manager.beginTransaction();
-        tran.hide(fragments[0]);
-        if(fragments[1]!=null) tran.hide(fragments[1]);
-        if(fragments[2]!=null) tran.hide(fragments[2]);
-        if(fragments[3]!=null) tran.hide(fragments[3]);
-        if(fragments[4]!=null) tran.hide(fragments[4]);
+//        tran.hide(fragments[0]);
+//        if(fragments[1]!=null) tran.hide(fragments[1]);
+//        if(fragments[2]!=null) tran.hide(fragments[2]);
+//        if(fragments[3]!=null) tran.hide(fragments[3]);
+//        if(fragments[4]!=null) tran.hide(fragments[4]);
+        tran.remove(fragments[0]);
+        if (fragments[1]!=null) tran.remove(fragments[1]);
+        if (fragments[2]!=null) tran.remove(fragments[2]);
+        if (fragments[3]!=null) tran.remove(fragments[3]);
+        if (fragments[4]!=null) tran.remove(fragments[4]);
+
         if (fragments[BNV_ARRAYNUM] == null) {
             fragments[BNV_ARRAYNUM] = bnVFragment;
             Log.i("TAG", "Fragment");
-            tran.add(R.id.container, fragments[BNV_ARRAYNUM]);
+
         }
+        tran.add(R.id.container, fragments[BNV_ARRAYNUM]);
         tran.setCustomAnimations(R.anim.fragment_fade, R.anim.fragment_none);
         tran.show(fragments[BNV_ARRAYNUM]);
         tran.commit();

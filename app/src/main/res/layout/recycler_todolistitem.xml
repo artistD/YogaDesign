@@ -2,9 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="112dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginBottom="20dp">
 
     <soup.neumorphism.NeumorphCardView
+        android:id="@+id/ncd"
         style="@style/Widget.Neumorph.CardView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -77,9 +79,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_centerVertical="true"
                     android:layout_alignParentRight="true">
-
 
                     <ImageView
                         android:id="@+id/checked_1"
@@ -88,7 +88,8 @@
                         android:layout_centerVertical="true"
                         android:layout_alignParentRight="true"
                         android:src="@drawable/ic_todolit_unchecked"
-                        android:visibility="visible"/>
+                        android:visibility="visible"
+                        android:clickable="true"/>
 
                     <ImageView
                         android:id="@+id/checked_2"
@@ -98,7 +99,8 @@
                         android:layout_alignParentRight="true"
                         android:src="@drawable/ic_todolit_unchecked"
                         android:layout_marginLeft="8dp"
-                        android:visibility="visible"/>
+                        android:visibility="visible"
+                        android:clickable="true"/>
 
                     <ImageView
                         android:id="@+id/checked_3"
@@ -108,9 +110,12 @@
                         android:layout_alignParentRight="true"
                         android:src="@drawable/ic_todolit_unchecked"
                         android:layout_marginLeft="8dp"
-                        android:visibility="visible"/>
+                        android:visibility="visible"
+                        android:clickable="true"/>
 
                 </LinearLayout>
+
+
 
 
             </RelativeLayout>
@@ -131,31 +136,6 @@
                     android:textSize="16sp"
                     android:layout_marginLeft="4dp"/>
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cd_log"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="8dp"
-                    android:backgroundTint="#FF9999FF"
-                    android:layout_toRightOf="@id/name"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="8dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Log"
-                        android:textColor="#FFeeeeee"
-                        android:textSize="12sp"
-                        android:paddingBottom="4dp"
-                        android:paddingTop="4dp"
-                        android:paddingRight="8dp"
-                        android:paddingLeft="8dp"
-                        android:layout_gravity="center"
-                        android:gravity="center"/>
-
-                </androidx.cardview.widget.CardView>
-
 
 
             </RelativeLayout>
@@ -164,7 +144,57 @@
 
         </LinearLayout>
 
+        <RelativeLayout
+            android:id="@+id/rl_todolist_mission_complete"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/mainbg_01"
+            android:padding="12dp"
+            android:visibility="invisible">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mission Complete!!"
+                android:textSize="16sp"/>
+
+        </RelativeLayout>
+
 
     </soup.neumorphism.NeumorphCardView>
+
+
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cd_log"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="8dp"
+        android:backgroundTint="#FF9999FF"
+        android:clickable="true"
+        android:layout_marginRight="4dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Log"
+            android:textColor="#FFeeeeee"
+            android:textSize="16sp"
+            android:paddingRight="12dp"
+            android:paddingLeft="12dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:layout_gravity="center"
+            android:gravity="center" />
+
+
+
+    </androidx.cardview.widget.CardView>
+
+
 
 </RelativeLayout>

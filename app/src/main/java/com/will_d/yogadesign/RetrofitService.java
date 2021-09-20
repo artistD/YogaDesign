@@ -35,10 +35,14 @@ public interface RetrofitService {
     Call<String> memberLoadDataFromServer();
 
     @FormUrlEncoded
-    @POST("/YogaDesign2/todolist/TodolistLoadDB.php")
+    @POST("/YogaDesign2/todolist/TodolistLoadDB.php") //사실은 인설트 디비
     Call<String> TodolistLoadDataFromServer(@Field("id") String id);
 
     //스위치 끄는 기능임
     @GET("/YogaDesign2/workitem/WorkItemSwitchInsertDB.php")
     Call<String> WorkItemSwitchOnOffGetDataDB(@Query("isItemOnOff") boolean isItemOnOff, @Query("no") String no);
+
+    @GET("/YogaDesign2/workitem/WorkItemCounterInsertDB.php")
+    Call<String> WorkItemCounterInsertDataDB(@Query("Completenum") String counterNum, @Query("no") String no);
+
 }

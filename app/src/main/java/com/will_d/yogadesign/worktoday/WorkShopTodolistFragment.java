@@ -7,6 +7,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,8 +23,12 @@ import com.will_d.yogadesign.RetrofitService;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,9 +38,16 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class WorkShopTodolistFragment extends Fragment {
 
+    TextView tvTodolistCurrentTime;
+
     ArrayList<TodolistItem> todolistItems = new ArrayList<>();
     TodolistAdapter adapter;
     RecyclerView recyclerView;
+
+    RelativeLayout rlTodolistLogDialog;
+    EditText etTodolistLog;
+    TextView tvTodolistLogCancel;
+    TextView tvTodolistLogOk;
 
     @Nullable
     @Override
@@ -46,7 +60,7 @@ public class WorkShopTodolistFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 //        todolistItems.add(new TodolistItem("ddd", "dqwdqw", false, false, false));
-//        todolistItems.add(new TodolistItem("ddd", "dqwdqw", false, false, false));
+//        todolistItems.add(new TodolistItem("ddd", "ddd", false, "fff"));
 //        todolistItems.add(new TodolistItem("ddd", "dqwdqw", false, false, false));
 //        todolistItems.add(new TodolistItem("ddd", "dqwdqw", false, false, false));
 //        todolistItems.add(new TodolistItem("ddd", "dqwdqw", false, false, false));
@@ -56,10 +70,61 @@ public class WorkShopTodolistFragment extends Fragment {
 //        todolistItems.add(new TodolistItem("ddd", "dqwdqw", false, false, false));
 
 
+        tvTodolistCurrentTime = view.findViewById(R.id.tv_todolist_current_time);
+        rlTodolistLogDialog = view.findViewById(R.id.rl_todolist_log_dialog);
+        etTodolistLog = view.findViewById(R.id.et_todolist_log);
+        tvTodolistLogCancel = view.findViewById(R.id.tv_todolist_log_cancel);
+        tvTodolistLogOk = view.findViewById(R.id.tv_todolist_log_ok);
 
         adapter = new TodolistAdapter(getActivity(), todolistItems);
         recyclerView = view.findViewById(R.id.todolist_recycler);
         recyclerView.setAdapter(adapter);
+
+        //현재시간 구하기
+
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+        String getTime = sdf.format(date);
+
+        Calendar calendar = Calendar.getInstance();
+        int day_of_week = calendar.get(Calendar.DAY_OF_WEEK);
+        String dayStr = "";
+        switch (day_of_week){
+            case 1: //일
+                dayStr = "일";
+                break;
+
+            case 2: //일
+                dayStr = "월";
+                break;
+
+            case 3: //일
+                dayStr = "화";
+                break;
+
+            case 4: //일
+                dayStr = "수";
+                break;
+
+            case 5: //일
+                dayStr = "목";
+                break;
+
+            case 6: //일
+                dayStr = "금";
+                break;
+
+            case 7: //일
+                dayStr = "토";
+                break;
+        }
+
+        tvTodolistCurrentTime.setText(getTime + ".(" + dayStr + ")");
+
+
+
 
 
 
@@ -71,7 +136,7 @@ public class WorkShopTodolistFragment extends Fragment {
         loadWorkTodayDataServer();
     }
 
-    void loadWorkTodayDataServer(){
+    public void loadWorkTodayDataServer(){
         SharedPreferences pref = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
         String id = pref.getString("id", "");
         Log.i("eee", id);
@@ -96,6 +161,8 @@ public class WorkShopTodolistFragment extends Fragment {
                     for (int i=0; i<jsonArray.length(); i++){
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
 
+                        String no = jsonObject.getString("no");
+
                         String name = jsonObject.getString("name");
 
                         String nickName = jsonObject.getString("nickName");
@@ -118,10 +185,61 @@ public class WorkShopTodolistFragment extends Fragment {
                         String cNum = jsonObject.getString("Completenum");
                         int completeNum = Integer.parseInt(cNum);
 
+                        Calendar cal = Calendar.getInstance();
+                        int day_of_week = cal.get(Calendar.DAY_OF_WEEK);
+                        switch (day_of_week){
+                            case 1://일
+                                if (weeksData[6]){
+                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk));
+                                    adapter.notifyItemChanged(0);
+                                }
+                                break;
+
+                            case 2://월
+                                if (weeksData[0]){
+                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk));
+                                    adapter.notifyItemChanged(0);
+                                }
+                                break;
+
+                            case 3://화
+                                if (weeksData[1]){
+                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk));
+                                    adapter.notifyItemChanged(0);
+                                }
+                                break;
+
+                            case 4://수
+                                if (weeksData[2]){
+                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk));
+                                    adapter.notifyItemChanged(0);
+                                }
+                                break;
+
+                            case 5://목
+                                if (weeksData[3]){
+                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk));
+                                    adapter.notifyItemChanged(0);
+                                }
+                                break;
+
+                            case 6://금
+                                if (weeksData[4]){
+                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk));
+                                    adapter.notifyItemChanged(0);
+                                }
+                                break;
+
+                            case 7://토
+                                if (weeksData[5]){
+                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk));
+                                    adapter.notifyItemChanged(0);
+                                }
+                                break;
+                        }
 
 
-                        todolistItems.add(0,new TodolistItem(name, nickName, false, false, false));
-                        adapter.notifyItemChanged(0);
+
 
                     }
 

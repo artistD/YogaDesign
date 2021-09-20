@@ -37,16 +37,14 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
     private Context context;
     private ArrayList<WorkItem> items;
 
-    private VH holder;
-
-    public VH getHolder() {
-        return holder;
-    }
 
     public WorkRecyclerAdapter(Context context, ArrayList<WorkItem> items) {
         this.context = context;
         this.items = items;
     }
+
+
+
 
     @NonNull
     @Override
@@ -57,7 +55,6 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
-        this.holder=holder;
         WorkItem item = items.get(position);
 
         String imgUrl = item.getImgUrl();
@@ -100,6 +97,14 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
         }
 
         Log.i("TEST", imgUrl + item.getNickName() + item.getIsGoal() + item.getIspreNotification() + item.getIslocationNotification() + item.getName());
+
+        if (item.getIsItemInOff()){
+            holder.sw.setChecked(true);
+            holder.llItenContainer.setBackgroundResource(R.drawable.mainbg_03);
+        }else {
+            holder.sw.setChecked(false);
+            holder.llItenContainer.setBackgroundColor(0x33333333);
+        }
 
 
 
@@ -154,9 +159,13 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
         private RelativeLayout popupRlModify;
         private RelativeLayout popupRlDelete;
 
+         private TextView tvWorkItemCounter;
+
+
         public Switch getSw() {//####################getter
             return sw;
         }
+
         public VH(@NonNull View itemView) {//#################################################################
             super(itemView);
             civ = itemView.findViewById(R.id.civ);
@@ -182,6 +191,12 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
             sw = itemView.findViewById(R.id.sw);
             llItenContainer = itemView.findViewById(R.id.ll_itemcontainer);
             ivItemSet = itemView.findViewById(R.id.iv_itemSet);
+
+            tvWorkItemCounter = itemView.findViewById(R.id.tv_workitem_counter);
+
+
+
+
 
 
             ivItemSet.setOnClickListener(new View.OnClickListener() {
@@ -210,27 +225,26 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
             });//#######
 
 
-
-                sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        WorkItem item = items.get(getAdapterPosition());
-                        Log.i("asdf", item.getNo() + isChecked);
-
-                        if (isChecked) {
-                            llItenContainer.setBackgroundResource(R.drawable.mainbg_03);
-
-                        } else {
-                            llItenContainer.setBackgroundColor(0x33333333);
-                        }
-
-                        WorkitemSwitchOnOffLoadDB(isChecked, item.getNo());
-
-
+            //Todo: 여기서 에러가 나는데 해결해야함
+            sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    WorkItem item = items.get(getAdapterPosition());
+                    Log.i("asdf", item.getNo() + isChecked);
+                    if (isChecked) {
+                        llItenContainer.setBackgroundResource(R.drawable.mainbg_03);
+                    } else {
+                        llItenContainer.setBackgroundColor(0x33333333);
                     }
-                });
+                    WorkitemSwitchOnOffLoadDB(isChecked, item.getNo());
+                }
+            });
+
+
+
 
         }//#################################################################
+
 
 
 
@@ -260,7 +274,7 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
         }
 
 
-        void WorkitemSwitchOnOffLoadDB(boolean isChecked, String no){
+        void WorkitemSwitchOnOffLoadDB(boolean isChecked, String no){ //사실은 인설트인데 지금 수정하기 빡셈 일단 넘겨!
 
             Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
             RetrofitService retrofitService = retrofit.create(RetrofitService.class);
@@ -281,7 +295,6 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
         }
 
     }
-
 
 
 
