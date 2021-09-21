@@ -18,11 +18,13 @@ public class TodolistItem {
     private TextView tvTodolistLogCancel;
     private TextView tvTodolistLogOk;
 
+    private boolean[] todolistBooleanState;
+
     public TodolistItem() {
 
     }
 
-    public TodolistItem(String no, int completeNum, String name, String nickName, boolean isGoalChecked, String goalSet, RelativeLayout rlTodolistLogDialog, EditText etTodolistLog, TextView tvTodolistLogCancel, TextView tvTodolistLogOk) {
+    public TodolistItem(String no, int completeNum, String name, String nickName, boolean isGoalChecked, String goalSet, RelativeLayout rlTodolistLogDialog, EditText etTodolistLog, TextView tvTodolistLogCancel, TextView tvTodolistLogOk, boolean[] todolistBooleanState) {
         this.no = no;
         this.completeNum = completeNum;
         this.name = name;
@@ -33,6 +35,7 @@ public class TodolistItem {
         this.etTodolistLog = etTodolistLog;
         this.tvTodolistLogCancel = tvTodolistLogCancel;
         this.tvTodolistLogOk = tvTodolistLogOk;
+        this.todolistBooleanState = todolistBooleanState;
     }
 
     public String getNo() {
@@ -41,6 +44,10 @@ public class TodolistItem {
 
     public int getCompleteNum() {
         return completeNum;
+    }
+
+    public void setCompleteNum(int completeNum) {
+        this.completeNum = completeNum;
     }
 
     public String getName() {
@@ -73,6 +80,10 @@ public class TodolistItem {
 
     public TextView getTvTodolistLogOk() {
         return tvTodolistLogOk;
+    }
+
+    public boolean[] getTodolistBooleanState() {
+        return todolistBooleanState;
     }
 }
 

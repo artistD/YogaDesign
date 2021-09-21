@@ -277,4 +277,98 @@
 
     </soup.neumorphism.NeumorphCardView>
 
+    <RelativeLayout
+        android:id="@+id/rl_workitem_delete_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#bbC7DDFF"
+        android:visibility="invisible">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"/>
+
+        <soup.neumorphism.NeumorphCardView
+            style="@style/Widget.Neumorph.CardView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:neumorph_shadowColorDark="#77999999"
+            app:neumorph_shadowColorLight="#77FFFFFF">
+
+            <LinearLayout
+                android:layout_width="240dp"
+                android:layout_height="160dp"
+                android:background="@drawable/mainbg_03"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="아이템 삭제"
+                    android:textSize="20sp"
+                    android:layout_gravity="center"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@drawable/mainbg_02"
+                    android:layout_marginTop="8dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:layout_weight="1"
+                    android:text="이 항목을 삭제하시겠습니까?"
+                    android:layout_gravity="center"
+                    android:gravity="center"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@drawable/mainbg_02" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="24dp"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp">
+
+                    <TextView
+                        android:id="@+id/tv_workitem_delete_cancel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="취소"
+                        android:textSize="16sp"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:clickable="true"/>
+
+
+                    <TextView
+                        android:id="@+id/tv_workitem_delete_ok"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="확인"
+                        android:textSize="16sp"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:clickable="true"/>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+        </soup.neumorphism.NeumorphCardView>
+
+
+
+    </RelativeLayout>
+
 </RelativeLayout>

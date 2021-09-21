@@ -1,5 +1,8 @@
 package com.will_d.yogadesign.worktoday;
 
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import androidx.dynamicanimation.animation.SpringAnimation;
 
 import com.google.gson.annotations.SerializedName;
@@ -37,12 +40,19 @@ public class WorkItem {
 
     private boolean isItemInOff;
 
+    private int completeNum;
+
+    //이친구들은 팝업 설정을 위한친구들임
+    private RelativeLayout rlWorkitemDeleteDialog;
+    private TextView tvWorkitemDeleteOK;
+    private TextView tvWorkitemDeleteCancel;
+
+
     public WorkItem() {
 
     }
 
-
-    public WorkItem(String no, String imgUrl, String nickName, String name, boolean isgoal, String tvgoal, boolean ispreNotification, String tvpreNotification, boolean islocationNotification, String tvlocalNotification, boolean[] isweeks, boolean isItemInOff) {
+    public WorkItem(String no, String imgUrl, String nickName, String name, boolean isgoal, String tvgoal, boolean ispreNotification, String tvpreNotification, boolean islocationNotification, String tvlocalNotification, boolean[] isweeks, boolean isItemInOff, int completeNum, RelativeLayout rlWorkitemDeleteDialog, TextView tvWorkitemDeleteOK, TextView tvWorkitemDeleteCancel) {
         this.no = no;
         this.imgUrl = imgUrl;
         this.nickName = nickName;
@@ -55,6 +65,10 @@ public class WorkItem {
         this.tvlocalNotification = tvlocalNotification;
         this.isweeks = isweeks;
         this.isItemInOff = isItemInOff;
+        this.completeNum = completeNum;
+        this.rlWorkitemDeleteDialog = rlWorkitemDeleteDialog;
+        this.tvWorkitemDeleteOK = tvWorkitemDeleteOK;
+        this.tvWorkitemDeleteCancel = tvWorkitemDeleteCancel;
     }
 
     public String getNo() {
@@ -102,6 +116,14 @@ public class WorkItem {
     }
 
     public boolean getIsItemInOff() { return isItemInOff; }
+
+    public int getCompleteNum() { return completeNum; }
+
+    public RelativeLayout getRlWorkitemDeleteDialog() { return rlWorkitemDeleteDialog; }
+
+    public TextView getTvWorkitemDeleteOK() { return tvWorkitemDeleteOK; }
+
+    public TextView getTvWorkitemDeleteCancel() { return tvWorkitemDeleteCancel; }
 }
 
 

@@ -45,4 +45,20 @@ public interface RetrofitService {
     @GET("/YogaDesign2/workitem/WorkItemCounterInsertDB.php")
     Call<String> WorkItemCounterInsertDataDB(@Query("Completenum") String counterNum, @Query("no") String no);
 
+    @GET("/YogaDesign2/workitem/workitemTodolistBooleanStateInsertDB.php")
+    Call<String> WorkItemTodolistBooleanStateInsertDB(@Query("todoistBooleanState") String todoistBooleanState, @Query("no") String no);
+
+    @GET("/YogaDesign2/workitem/insertWorkitemTodolistBooleanStateInitDB.php")
+    Call<String> insertWorkitemTodolistBooleanStateInitDB(@Query("todoistBooleanStateInit") String todoistBooleanStateInit);
+
+    @GET("/YogaDesign2/workitem/workitemDeleteDB.php")
+    Call<String> workitemDeleteDB(@Query("no") String no);
+
+
+    @GET("/YogaDesign2/workitem/workItemFromPositionChangeDB.php")
+    Call<String> workItemFromPositionChangeDB(@Query("noFrom") String noFrom);
+
+    @GET("/YogaDesign2/workitem/workItemToPositionChangeDB.php")
+    Call<String> workItemToPositionChangeDB(@Query("noTo") String noTo);
+
 }

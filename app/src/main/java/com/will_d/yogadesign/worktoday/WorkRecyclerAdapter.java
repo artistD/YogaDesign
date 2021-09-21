@@ -106,6 +106,8 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
             holder.llItenContainer.setBackgroundColor(0x33333333);
         }
 
+        holder.tvWorkItemCounter.setText(item.getCompleteNum()+"");
+
 
 
 
@@ -118,9 +120,14 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
     @Override
     public boolean onItemMove(int from_position, int to_position) {
-        WorkItem workItem = items.get(from_position);
+        WorkItem workItem_from= items.get(from_position);
+        WorkItem workItem_to= items.get(to_position);
+
+        workItemFromPositionChangeDB(workItem_from);
+
+
         items.remove(from_position);
-        items.add(to_position, workItem);
+        items.add(to_position, workItem_from);
         notifyItemMoved(from_position,to_position);
         return true;
     }
@@ -159,7 +166,7 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
         private RelativeLayout popupRlModify;
         private RelativeLayout popupRlDelete;
 
-         private TextView tvWorkItemCounter;
+        private TextView tvWorkItemCounter;
 
 
         public Switch getSw() {//####################getter
@@ -202,19 +209,41 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
             ivItemSet.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showPopup();
+                   PopupWindow popupWindow =  showPopup();
 
                     popupRlModify.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(context, "Modify", Toast.LENGTH_SHORT).show();
+
                         }
                     });
 
+
+                    //todo: 쇼우 팝업 동작안함 한번하고나면.....왜 와이
                     popupRlDelete.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(context, "delete", Toast.LENGTH_SHORT).show();
+                          WorkItem item = items.get(getAdapterPosition());
+                          popupWindow.dismiss();
+                          item.getRlWorkitemDeleteDialog().setVisibility(View.VISIBLE);
+                          item.getTvWorkitemDeleteOK().setOnClickListener(new View.OnClickListener() {
+                              @Override
+                              public void onClick(View v) {
+                                  items.remove(getAdapterPosition());
+                                  notifyItemRemoved(getAdapterPosition());
+                                  workitemDeleteDB(item);
+                                  item.getRlWorkitemDeleteDialog().setVisibility(View.INVISIBLE);
+
+                              }
+                          });
+
+                          item.getTvWorkitemDeleteCancel().setOnClickListener(new View.OnClickListener() {
+                              @Override
+                              public void onClick(View v) {
+                                  item.getRlWorkitemDeleteDialog().setVisibility(View.INVISIBLE);
+
+                              }
+                          });
                         }
                     });
 
@@ -225,10 +254,13 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
             });//#######
 
 
+
+
             //Todo: 여기서 에러가 나는데 해결해야함
             sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
                     WorkItem item = items.get(getAdapterPosition());
                     Log.i("asdf", item.getNo() + isChecked);
                     if (isChecked) {
@@ -243,22 +275,21 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
 
 
+
         }//#################################################################
 
 
 
 
-        public void showPopup(){
+        public PopupWindow showPopup(){
             LayoutInflater inflater = LayoutInflater.from(context);
             View popupView = inflater.inflate(R.layout.workitem_popupmenu, null);
 
             if(popupRlModify==null) {
                 popupRlModify =  popupView.findViewById(R.id.rl_modify);
-                Toast.makeText(context, "qwfwfq", Toast.LENGTH_SHORT).show();
             }
             if(popupRlDelete==null){
                 popupRlDelete = popupView.findViewById(R.id.rl_delete);
-                Toast.makeText(context, "qwfwfq", Toast.LENGTH_SHORT).show();
             }
 
 
@@ -271,10 +302,12 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
             PopupWindowCompat.showAsDropDown(popupWindow, ivItemSet, 0, 0, Gravity.CENTER);
 
+            return popupWindow;
+
         }
 
 
-        void WorkitemSwitchOnOffLoadDB(boolean isChecked, String no){ //사실은 인설트인데 지금 수정하기 빡셈 일단 넘겨!
+        public void WorkitemSwitchOnOffLoadDB(boolean isChecked, String no){ //사실은 인설트인데 지금 수정하기 빡셈 일단 넘겨!
 
             Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
             RetrofitService retrofitService = retrofit.create(RetrofitService.class);
@@ -294,7 +327,69 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
         }
 
+        public void workitemDeleteDB(WorkItem item){
+            Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
+            RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+
+            Call<String> call = retrofitService.workitemDeleteDB(item.getNo());
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    Log.i("TAG", response.body());
+                }
+
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Log.i("TAG", t.getMessage());
+                }
+            });
+
+
+
+        }
+
+
+
     }
+
+    public void workItemFromPositionChangeDB(WorkItem workItem_from){
+        Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
+        RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+
+       Call<String> call = retrofitService.workItemFromPositionChangeDB(workItem_from.getNo());
+       call.enqueue(new Callback<String>() {
+           @Override
+           public void onResponse(Call<String> call, Response<String> response) {
+               Log.i("TAG", response.body());
+           }
+
+           @Override
+           public void onFailure(Call<String> call, Throwable t) {
+               Log.i("TAG", t.getMessage());
+           }
+       });
+
+    }
+
+    //todo:여기서부터 작업해야
+//    public void workItemFromPositionChangeDB(WorkItem workItem_from){
+//        Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
+//        RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+//
+//        Call<String> call = retrofitService.workItemFromPositionChangeDB(workItem_from.getNo());
+//        call.enqueue(new Callback<String>() {
+//            @Override
+//            public void onResponse(Call<String> call, Response<String> response) {
+//                Log.i("TAG", response.body());
+//            }
+//
+//            @Override
+//            public void onFailure(Call<String> call, Throwable t) {
+//                Log.i("TAG", t.getMessage());
+//            }
+//        });
+//
+//    }
 
 
 

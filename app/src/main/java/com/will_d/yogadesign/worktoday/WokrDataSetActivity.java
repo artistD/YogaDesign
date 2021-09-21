@@ -150,7 +150,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
     private boolean isItemOnOff = true;
     private boolean isItemPublic =true;
     private int completeNum = 0;
-
+    private boolean[] todolistBooleanState = new boolean[] {false,false,false};
     //##############################
 
     double isoriginalLatitude;
@@ -867,6 +867,9 @@ public class WokrDataSetActivity extends AppCompatActivity {
             dataPart.put("isItemOnOff", String.valueOf(isItemOnOff));
             dataPart.put("isItemPublic", String.valueOf(isItemPublic));
             dataPart.put("completeNum", String.valueOf(completeNum));
+            String todolistBooleanJsonStr = gson.toJson(todolistBooleanState);
+            Log.i("TAGBoolean", todolistBooleanJsonStr);
+            dataPart.put("todoistBooleanState", todolistBooleanJsonStr);
 
             Call<String> call = retrofitService.WorkItemPostDataToServer(dataPart, filePart);
             call.enqueue(new Callback<String>() {

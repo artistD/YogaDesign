@@ -19,15 +19,11 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
         int swipe_flags = ItemTouchHelper.END;
         return makeMovementFlags(draf_flafs, swipe_flags);
 
-
     }
 
 
     @Override
-    public boolean isItemViewSwipeEnabled() {
-        return true;
-
-    }
+    public boolean isItemViewSwipeEnabled() { return false; }
 
     @Override
     public boolean isLongPressDragEnabled() {
