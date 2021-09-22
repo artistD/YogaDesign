@@ -124,6 +124,11 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
             else holder.rltodolistMissionComplete.setVisibility(View.INVISIBLE);
         }
 
+        boolean[] isDayOrTodaySelected = item.getIsDayOrTodaySelected();
+        if (!isDayOrTodaySelected[0] && isDayOrTodaySelected[1]){
+            holder.cdTodayWork.setVisibility(View.VISIBLE);
+        }
+
 
     }
 
@@ -154,6 +159,8 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
 
         private RelativeLayout rltodolistMissionComplete;
 
+        private CardView cdTodayWork;
+
         public VH(@NonNull View itemView) {
             super(itemView);
 
@@ -171,6 +178,7 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
             rltodolistMissionComplete = itemView.findViewById(R.id.rl_todolist_mission_complete);
 
 
+            cdTodayWork = itemView.findViewById(R.id.cd_today_work);
 
 //            loadWorkTodayDataServer();
 

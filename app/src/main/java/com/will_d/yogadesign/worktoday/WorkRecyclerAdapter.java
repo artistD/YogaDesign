@@ -1,6 +1,7 @@
 package com.will_d.yogadesign.worktoday;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,13 +17,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.core.widget.PopupWindowCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.will_d.yogadesign.G;
 import com.will_d.yogadesign.R;
 import com.will_d.yogadesign.RetrofitHelper;
 import com.will_d.yogadesign.RetrofitService;
+import com.will_d.yogadesign.WorkShopActivity;
 
 import java.util.ArrayList;
 
@@ -108,6 +112,13 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
         holder.tvWorkItemCounter.setText(item.getCompleteNum()+"");
 
+        boolean[] isDayOrTodaySelected = item.getIsDayOrTodaySelected();
+
+
+        if (!isDayOrTodaySelected[0] && isDayOrTodaySelected[1]){
+            holder.cdTodayWork.setVisibility(View.VISIBLE);
+        }
+
 
 
 
@@ -122,10 +133,9 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
     public boolean onItemMove(int from_position, int to_position) {
         WorkItem workItem_from= items.get(from_position);
         WorkItem workItem_to= items.get(to_position);
-
-        workItemFromPositionChangeDB(workItem_from);
-
-
+//        workItemFromPositionChangeDB(workItem_from, workItem_to);
+//        workItemToPositionChangeDB(workItem_from, workItem_to);
+        Log.i("TAGKKK", from_position +  " : " + to_position + "");
         items.remove(from_position);
         items.add(to_position, workItem_from);
         notifyItemMoved(from_position,to_position);
@@ -168,6 +178,8 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
         private TextView tvWorkItemCounter;
 
+        private CardView cdTodayWork;
+
 
         public Switch getSw() {//####################getter
             return sw;
@@ -202,6 +214,9 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
             tvWorkItemCounter = itemView.findViewById(R.id.tv_workitem_counter);
 
 
+            cdTodayWork = itemView.findViewById(R.id.cd_today_work);
+
+
 
 
 
@@ -214,7 +229,16 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
                     popupRlModify.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            Intent intent = new Intent(context, WokrDataSetActivity.class);
+                            context.startActivity(intent);
+                            WorkItem item= items.get(getAdapterPosition());
+                            G.no = item.getNo();
+                            G.isworkitemModifyChcecked = true;
+                            G.isModifySave = true;
 
+//                            popupWindow.dismiss();
+                            WorkShopActivity workShopActivity = (WorkShopActivity) context;
+                            workShopActivity.overridePendingTransition(R.anim.activity_data_set, R.anim.fragment_none);
                         }
                     });
 
@@ -224,7 +248,7 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
                         @Override
                         public void onClick(View v) {
                           WorkItem item = items.get(getAdapterPosition());
-                          popupWindow.dismiss();
+//                          popupWindow.dismiss();
                           item.getRlWorkitemDeleteDialog().setVisibility(View.VISIBLE);
                           item.getTvWorkitemDeleteOK().setOnClickListener(new View.OnClickListener() {
                               @Override
@@ -352,45 +376,48 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
     }
 
-    public void workItemFromPositionChangeDB(WorkItem workItem_from){
+    public void workItemFromPositionChangeDB(WorkItem workItem_from, WorkItem workItem_to){
         Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
         RetrofitService retrofitService = retrofit.create(RetrofitService.class);
 
-       Call<String> call = retrofitService.workItemFromPositionChangeDB(workItem_from.getNo());
+       Call<String> call = retrofitService.workItemFromPositionChangeDB(workItem_from.getNo(), workItem_to.getNo());
        call.enqueue(new Callback<String>() {
            @Override
            public void onResponse(Call<String> call, Response<String> response) {
-               Log.i("TAG", response.body());
+               Log.i("TAGasdf", response.body());
            }
 
            @Override
            public void onFailure(Call<String> call, Throwable t) {
-               Log.i("TAG", t.getMessage());
+               Log.i("TAGasdf", "fff");
            }
        });
 
+
+
     }
 
-    //todo:여기서부터 작업해야
-//    public void workItemFromPositionChangeDB(WorkItem workItem_from){
-//        Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
-//        RetrofitService retrofitService = retrofit.create(RetrofitService.class);
-//
-//        Call<String> call = retrofitService.workItemFromPositionChangeDB(workItem_from.getNo());
-//        call.enqueue(new Callback<String>() {
-//            @Override
-//            public void onResponse(Call<String> call, Response<String> response) {
-//                Log.i("TAG", response.body());
-//            }
-//
-//            @Override
-//            public void onFailure(Call<String> call, Throwable t) {
-//                Log.i("TAG", t.getMessage());
-//            }
-//        });
-//
-//    }
 
+    public void workItemToPositionChangeDB(WorkItem workItem_from, WorkItem workItem_to){
+        Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
+        RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+
+        Call<String> call = retrofitService.workItemToPositionChangeDB(workItem_from.getNo(), workItem_to.getNo());
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                Log.i("TAGasdf", response.body());
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.i("TAGasdf", "fff");
+            }
+        });
+
+
+
+    }
 
 
 

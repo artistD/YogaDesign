@@ -42,6 +42,8 @@ public class WorkItem {
 
     private int completeNum;
 
+    private boolean[] isDayOrTodaySelected;
+
     //이친구들은 팝업 설정을 위한친구들임
     private RelativeLayout rlWorkitemDeleteDialog;
     private TextView tvWorkitemDeleteOK;
@@ -52,7 +54,7 @@ public class WorkItem {
 
     }
 
-    public WorkItem(String no, String imgUrl, String nickName, String name, boolean isgoal, String tvgoal, boolean ispreNotification, String tvpreNotification, boolean islocationNotification, String tvlocalNotification, boolean[] isweeks, boolean isItemInOff, int completeNum, RelativeLayout rlWorkitemDeleteDialog, TextView tvWorkitemDeleteOK, TextView tvWorkitemDeleteCancel) {
+    public WorkItem(String no, String imgUrl, String nickName, String name, boolean isgoal, String tvgoal, boolean ispreNotification, String tvpreNotification, boolean islocationNotification, String tvlocalNotification, boolean[] isweeks, boolean isItemInOff, int completeNum, boolean[] isDayOrTodaySelected, RelativeLayout rlWorkitemDeleteDialog, TextView tvWorkitemDeleteOK, TextView tvWorkitemDeleteCancel) {
         this.no = no;
         this.imgUrl = imgUrl;
         this.nickName = nickName;
@@ -66,6 +68,7 @@ public class WorkItem {
         this.isweeks = isweeks;
         this.isItemInOff = isItemInOff;
         this.completeNum = completeNum;
+        this.isDayOrTodaySelected = isDayOrTodaySelected;
         this.rlWorkitemDeleteDialog = rlWorkitemDeleteDialog;
         this.tvWorkitemDeleteOK = tvWorkitemDeleteOK;
         this.tvWorkitemDeleteCancel = tvWorkitemDeleteCancel;
@@ -118,6 +121,8 @@ public class WorkItem {
     public boolean getIsItemInOff() { return isItemInOff; }
 
     public int getCompleteNum() { return completeNum; }
+
+    public boolean[] getIsDayOrTodaySelected(){ return isDayOrTodaySelected; }
 
     public RelativeLayout getRlWorkitemDeleteDialog() { return rlWorkitemDeleteDialog; }
 

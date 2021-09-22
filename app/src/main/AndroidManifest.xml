@@ -21,6 +21,8 @@
         android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true">
 
+<!--        todo:이거 꼭질문-->
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDmmL_S0PLZfXQy_Qvna9F_uyQEMvFMRtA"/>

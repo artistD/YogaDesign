@@ -20,11 +20,13 @@ public class TodolistItem {
 
     private boolean[] todolistBooleanState;
 
+    private boolean[] isDayOrTodaySelected;
+
     public TodolistItem() {
 
     }
 
-    public TodolistItem(String no, int completeNum, String name, String nickName, boolean isGoalChecked, String goalSet, RelativeLayout rlTodolistLogDialog, EditText etTodolistLog, TextView tvTodolistLogCancel, TextView tvTodolistLogOk, boolean[] todolistBooleanState) {
+    public TodolistItem(String no, int completeNum, String name, String nickName, boolean isGoalChecked, String goalSet, RelativeLayout rlTodolistLogDialog, EditText etTodolistLog, TextView tvTodolistLogCancel, TextView tvTodolistLogOk, boolean[] todolistBooleanState, boolean[] isDayOrTodaySelected) {
         this.no = no;
         this.completeNum = completeNum;
         this.name = name;
@@ -36,6 +38,7 @@ public class TodolistItem {
         this.tvTodolistLogCancel = tvTodolistLogCancel;
         this.tvTodolistLogOk = tvTodolistLogOk;
         this.todolistBooleanState = todolistBooleanState;
+        this.isDayOrTodaySelected = isDayOrTodaySelected;
     }
 
     public String getNo() {
@@ -85,5 +88,7 @@ public class TodolistItem {
     public boolean[] getTodolistBooleanState() {
         return todolistBooleanState;
     }
+
+    public boolean[] getIsDayOrTodaySelected() { return isDayOrTodaySelected; }
 }
 

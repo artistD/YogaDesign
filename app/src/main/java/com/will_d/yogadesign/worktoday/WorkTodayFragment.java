@@ -25,7 +25,9 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.will_d.yogadesign.G;
 import com.will_d.yogadesign.R;
+import com.will_d.yogadesign.RetrofitHelper;
 import com.will_d.yogadesign.RetrofitService;
 import com.will_d.yogadesign.WorkShopActivity;
 
@@ -34,8 +36,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -58,7 +62,7 @@ public class WorkTodayFragment extends Fragment {
     private TextView tvWorkitemDeleteOK;
     private TextView tvWorkitemDeleteCancel;
 
-//    private NeumorphCardView cdAddBtn2;
+    private NeumorphCardView cdAddBtn2;
 //
 //    private NeumorphCardView cdAddBtnItem;
 //    private NeumorphCardView cdAddBtnItem2;
@@ -103,7 +107,7 @@ public class WorkTodayFragment extends Fragment {
         rlWorkitemDeleteDialog = view.findViewById(R.id.rl_workitem_delete_dialog);
         tvWorkitemDeleteOK = view.findViewById(R.id.tv_workitem_delete_ok);
         tvWorkitemDeleteCancel = view.findViewById(R.id.tv_workitem_delete_cancel);
-//        cdAddBtn2 = view.findViewById(R.id.cd_addbtn2);
+        cdAddBtn2 = view.findViewById(R.id.cd_addbtn2);
 //
 //        cdAddBtnItem = view.findViewById(R.id.cd_addbtn_item);
 //        cdAddBtnItem2 = view.findViewById(R.id.cd_addbtn_item2);
@@ -122,20 +126,22 @@ public class WorkTodayFragment extends Fragment {
 //        workShopActivity = (WorkShopActivity)getActivity();
 
 
+        setcdAddBtnToPreventBlurring();
+
         cdAddBtn.setOnClickListener(new View.OnClickListener() {
-            WorkShopActivity workShopActivity = (WorkShopActivity) getActivity();
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), WokrDataSetActivity.class);
-                Gson gson = new Gson();
-                String jsonstr = gson.toJson(workItems);
-                Log.i("TAG", jsonstr);
-                intent.putExtra("Workitems", jsonstr);
-                activityResultLauncher.launch(intent);
+                //todo:StackOverFlowError, OutOfMemory 에러
+//                Gson gson = new Gson();
+//                String jsonStr = gson.toJson(workItems);
+//                intent.putExtra("Workitems", jsonStr);
+                startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.activity_data_set, R.anim.fragment_none);
 
             }
         });
+
 
 
         //Todo: 나중에 버튼으로 더 추가적인 작업을 하기위한 주석임....... 필요하면 나중에 쓰라고
@@ -189,19 +195,6 @@ public class WorkTodayFragment extends Fragment {
 
     }
 
-
-    ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-        @Override
-        public void onActivityResult(ActivityResult result) {
-
-            if (result.getResultCode() == getActivity().RESULT_OK){
-                Intent intent = result.getData();
-
-
-            }
-        }
-    });
-
 //    public void cdAddBtnBeginning(){
 //        cdAddBtnItem.startAnimation(ani);
 //        cdAddBtnItem2.startAnimation(ani);
@@ -246,17 +239,17 @@ public class WorkTodayFragment extends Fragment {
 //
 //    }
 //
-//    public void setcdAddBtnToPreventBlurring() {
-//        cdAddBtn.setBackgroundColor(0xFFC7DDFF);
-//        cdAddBtn2.setBackgroundColor(0xFFC7DDFF);
-//
+    public void setcdAddBtnToPreventBlurring() {
+        cdAddBtn.setBackgroundColor(0xFFC7DDFF);
+        cdAddBtn2.setBackgroundColor(0xFFC7DDFF);
+
 //        cdAddBtnItem.setBackgroundColor(0xFFC7DDFF);
 //        cdAddBtnItem2.setBackgroundColor(0xFFC7DDFF);
 //
 //        cdAddBtnSub.setBackgroundColor(0xFFC7DDFF);
 //        cdAddBtnSub2.setBackgroundColor(0xFFC7DDFF);
-//
-//    }
+
+    }
 
     public void loadWorkTodayDataServer(){
         SharedPreferences pref = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
@@ -352,12 +345,19 @@ public class WorkTodayFragment extends Fragment {
                         int completeNum = Integer.parseInt(cNum);
                         Log.i("dddddd", "dqwqdw");
 
+                        String isDayOrToday = jsonObject.getString("isDayOrTodaySelected");
+                        boolean[] isDayOrTodaySelected = gson.fromJson(isDayOrToday, boolean[].class);
+
                         String now = jsonObject.getString("now");
 
-                        workItems.add(0, new WorkItem(no, imgUrl, nickName, name, isGoalChecked, goalSet, isPreNotificationChecked, preNotificationTime, isLocalNotificationChecked, placeName, weeksData, isItemOnOff, completeNum, rlWorkitemDeleteDialog, tvWorkitemDeleteOK, tvWorkitemDeleteCancel));
+//                        insertWorkitemSortationNumber(no);
+
+                        workItems.add(0, new WorkItem(no, imgUrl, nickName, name, isGoalChecked, goalSet, isPreNotificationChecked, preNotificationTime, isLocalNotificationChecked, placeName, weeksData, isItemOnOff, completeNum, isDayOrTodaySelected, rlWorkitemDeleteDialog, tvWorkitemDeleteOK, tvWorkitemDeleteCancel));
                         adapter.notifyItemChanged(0);
 
                     }
+
+                    G.workItems = workItems;
 
 
                 } catch (JSONException e) {
@@ -375,10 +375,34 @@ public class WorkTodayFragment extends Fragment {
 
     }
 
+
+    //todo: 하루전용 아이템은 그다음날이되면 자동으로 switch가 꺼져야함 그것을 레트로핏으로 구현해야......
+
+
+    //todo: 아이템 이동변
+    public void insertWorkitemSortationNumber(String no){
+        Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
+        RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+
+        Call<String> call = retrofitService.insertWorkitemSortationNumber(no);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                Log.i("TAGddd", response.body());
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.i("TAGddd", "Errror");
+            }
+        });
+    }
+
     @Override
     public void onResume() {
         super.onResume();
         loadWorkTodayDataServer();
+
     }
 
 }

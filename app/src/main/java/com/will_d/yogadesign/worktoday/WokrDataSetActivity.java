@@ -41,13 +41,20 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
+import com.will_d.yogadesign.G;
 import com.will_d.yogadesign.R;
+import com.will_d.yogadesign.RetrofitHelper;
 import com.will_d.yogadesign.RetrofitService;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -107,6 +114,17 @@ public class WokrDataSetActivity extends AppCompatActivity {
     private TextView tvWeeksDialogSuccess;
     private boolean isWeeksChecked= false;
 
+    private CardView cdWeeksDialogSelectedDays;
+    private CardView cdWeeksDialogSelectedToday;
+    private CardView cdWeeksDialogDaysBlur;
+
+    private TextView tvWeeksDialogSelectedDays;
+    private TextView tvWeeksDialogSelectedToday;
+
+    private boolean isSelectedDays = false;
+    private boolean isSelectedToday = false;
+
+
     //goal dialog
     private NumberPicker numberPickerGoalNumber;
     private TextView tvGoalOk;
@@ -151,6 +169,9 @@ public class WokrDataSetActivity extends AppCompatActivity {
     private boolean isItemPublic =true;
     private int completeNum = 0;
     private boolean[] todolistBooleanState = new boolean[] {false,false,false};
+    private boolean[] isDayOrTodaySelected = new boolean[2];
+
+    private String uriToString;
     //##############################
 
     double isoriginalLatitude;
@@ -163,6 +184,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wokr_data_set);
+
 
         SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
         id = pref.getString("id", "");
@@ -200,12 +222,13 @@ public class WokrDataSetActivity extends AppCompatActivity {
         tvNickNameDialogDirectlyInputOK = findViewById(R.id.tv_nicknamedialog_directlyinput_ok);
         tvNickNameDialogDirectlyInputCancel = findViewById(R.id.tv_nicknamedialog_directlyinput_cancel);
 
+        //todo:StackOverFlowError, OutOfMemory 에러
         //Gson 작업
-        Intent intent =getIntent();
-        String jsonStr = intent.getStringExtra("Workitems");
-        Gson gson = new Gson();
-        WorkItem[] workItem = gson.fromJson(jsonStr, WorkItem[].class);
-        workItems = new ArrayList<>(Arrays.asList(workItem));
+//        Intent intent =getIntent();
+//        String jsonStr = intent.getStringExtra("Workitems");
+//        Gson gson = new Gson();
+//        WorkItem[] workItem = gson.fromJson(jsonStr, WorkItem[].class);
+        workItems = G.workItems;
 
         //weeks dialog
         weeks[0] = findViewById(R.id.iv_weeks_mon);
@@ -223,6 +246,13 @@ public class WokrDataSetActivity extends AppCompatActivity {
             weeks[i].setTag(""+i);
             weeksData[i] = false;
         }
+
+        cdWeeksDialogSelectedDays = findViewById(R.id.cd_weeks_dialog_selected_days);
+        cdWeeksDialogSelectedToday = findViewById(R.id.cd_weeks_dialog_selected_today);
+        cdWeeksDialogDaysBlur = findViewById(R.id.cd_weeks_dialog_days_blur);
+
+        tvWeeksDialogSelectedDays = findViewById(R.id.tv_weeks_dialog_selected_days);
+        tvWeeksDialogSelectedToday = findViewById(R.id.tv_weeks_dialog_selected_today);
 
         //goal dialog
         numberPickerGoalNumber = findViewById(R.id.numberPicker_goal_number);
@@ -387,6 +417,8 @@ public class WokrDataSetActivity extends AppCompatActivity {
 
                                     latitude = latLng.latitude;
                                     longitude = latLng.longitude;
+
+                                    Log.i("TAG",   latitude + " : " + longitude + "");
                                 }
                             });
 
@@ -469,6 +501,16 @@ public class WokrDataSetActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        //수정을 위해 startActivity가 오면 어떻게 동작할건지 설정
+        if (G.isworkitemModifyChcecked){
+            WorkItemModifyDataLoadDB(G.no);
+        }
+
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(requestCode==PERMISSION_EX_PHOTO && grantResults[0]==PackageManager.PERMISSION_GRANTED){
@@ -481,53 +523,27 @@ public class WokrDataSetActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        G.isModifySave = false;
         finish();
         overridePendingTransition(R.anim.fragment_none, R.anim.activity_data_set_end);
     }
 
     public void clickClose(View view) {
+        G.isModifySave = false;
         finish();
         overridePendingTransition(R.anim.fragment_none, R.anim.activity_data_set_end);
     }
 
     public void clickSave(View view) { //********************************
-//        Intent intent = getIntent();
-//        intent.putExtra("name", name);
-//        intent.putExtra("nickName", nickName);
-//        intent.putExtra("imgPath", imgPath);
-//        intent.putExtra("weeksData", weeksData);
-//        intent.putExtra("isGoalChecked", isGoalChecked);
-//        intent.putExtra("goalSet", goalSet);
-//        intent.putExtra("isPreNotificationChecked", isPreNotificationChecked);
-//        intent.putExtra("preNotificationTime", preNotificationTime);
-//        intent.putExtra("isLocalNotificationChecked", isLocalNotificationChecked);
-//        intent.putExtra("latitude", latitude);
-//        intent.putExtra("longitude", longitude);
-//        intent.putExtra("placeName", placeName);
-//
-//        setResult(RESULT_OK, intent);
-//
-//
-//
-//
-//
-//        //** 최종데이터 전송
-//        Log.i("Final", "name : " + name);
-//        Log.i("Final", "nickName : " + nickName);
-//        Log.i("Final", "imgPath : " + imgPath);
-//        Log.i("Final", "월 : " + weeksData[0] + ", " + "화 : " + weeksData[1] + ", " + "수 : " + weeksData[2] + ", " + "목 : " + weeksData[3] + ", " + "금 : " + weeksData[4] + ", " + "토 : " + weeksData[5] + ", " + "일 : " + weeksData[6]);
-//        Log.i("Final", "isGoalChecked : " + isGoalChecked);
-//        Log.i("Final", "goalSet : " + goalSet);
-//        Log.i("Final", "isPreNotificationChecked : " + isPreNotificationChecked);
-//        Log.i("Final", "preNotificationTime : " + preNotificationTime);
-//        Log.i("Final", "isLocalNotificationChecked : " + isLocalNotificationChecked);
-//        Log.i("Final", "preNotifiationTime : " + latitude);
-//        Log.i("Final", "longitude : " + longitude);
-//        Log.i("Final", "placename : " + placeName);
+        if (G.isModifySave){
+            name = etName.getText().toString();
+            workModifyDeleteDB(G.no);
+            WorkTodayDataToServer();
+        }else {
+            name = etName.getText().toString();
+            WorkTodayDataToServer();
+        }
 
-        name = etName.getText().toString();
-
-        WorkTodayDataToServer();
 
     }
 
@@ -545,31 +561,142 @@ public class WokrDataSetActivity extends AppCompatActivity {
         Log.i("TAG", "월 : " + weeksData[0] + ", " + "화 : " + weeksData[1] + ", " + "수 : " + weeksData[2] + ", " + "목 : " + weeksData[3] + ", " + "금 : " + weeksData[4] + ", " + "토 : " + weeksData[5] + ", " + "일 : " + weeksData[6]);
         weeksDialog.setVisibility(View.VISIBLE);
 
+
+        cdWeeksDialogSelectedDays.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isSelectedDays = false;
+                isSelectedToday = false;
+
+                isSelectedDays = true;
+
+                tvWeeksDialogSelectedDays.setTextColor(0xff666666);
+                tvWeeksDialogSelectedToday.setTextColor(0xff666666);
+
+                tvWeeksDialogSelectedDays.setTextColor(0xff9999FF);
+               cdWeeksDialogDaysBlur.setVisibility(View.INVISIBLE);
+                for (int i=0; i<weeksData.length; i++){
+                    weeksData[i] =false;
+                }
+
+                if (!weeksData[0]) Glide.with(WokrDataSetActivity.this).load(R.drawable.ic_unchecked).into(weeks[0]);
+                if (!weeksData[1]) Glide.with(WokrDataSetActivity.this).load(R.drawable.ic_unchecked).into(weeks[1]);
+                if (!weeksData[2]) Glide.with(WokrDataSetActivity.this).load(R.drawable.ic_unchecked).into(weeks[2]);
+                if (!weeksData[3]) Glide.with(WokrDataSetActivity.this).load(R.drawable.ic_unchecked).into(weeks[3]);
+                if (!weeksData[4]) Glide.with(WokrDataSetActivity.this).load(R.drawable.ic_unchecked).into(weeks[4]);
+                if (!weeksData[5]) Glide.with(WokrDataSetActivity.this).load(R.drawable.ic_unchecked).into(weeks[5]);
+                if (!weeksData[6]) Glide.with(WokrDataSetActivity.this).load(R.drawable.ic_unchecked).into(weeks[6]);
+            }
+        });
+
+        cdWeeksDialogSelectedToday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isSelectedDays = false;
+                isSelectedToday = false;
+
+                isSelectedToday = true;
+
+
+                tvWeeksDialogSelectedDays.setTextColor(0xff666666);
+                tvWeeksDialogSelectedToday.setTextColor(0xff666666);
+
+                tvWeeksDialogSelectedToday.setTextColor(0xff9999FF);
+                cdWeeksDialogDaysBlur.setVisibility(View.VISIBLE);
+                for (int i=0; i<weeksData.length; i++){
+                    weeksData[i] =false;
+                }
+
+                if (!weeksData[0]) Glide.with(WokrDataSetActivity.this).load(R.drawable.ic_unchecked).into(weeks[0]);
+                if (!weeksData[1]) Glide.with(WokrDataSetActivity.this).load(R.drawable.ic_unchecked).into(weeks[1]);
+                if (!weeksData[2]) Glide.with(WokrDataSetActivity.this).load(R.drawable.ic_unchecked).into(weeks[2]);
+                if (!weeksData[3]) Glide.with(WokrDataSetActivity.this).load(R.drawable.ic_unchecked).into(weeks[3]);
+                if (!weeksData[4]) Glide.with(WokrDataSetActivity.this).load(R.drawable.ic_unchecked).into(weeks[4]);
+                if (!weeksData[5]) Glide.with(WokrDataSetActivity.this).load(R.drawable.ic_unchecked).into(weeks[5]);
+                if (!weeksData[6]) Glide.with(WokrDataSetActivity.this).load(R.drawable.ic_unchecked).into(weeks[6]);
+
+
+            }
+        });
+
         tvWeeksDialogSuccess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("TAG", "월 : " + weeksData[0] + ", " + "화 : " + weeksData[1] + ", " + "수 : " + weeksData[2] + ", " + "목 : " + weeksData[3] + ", " + "금 : " + weeksData[4] + ", " + "토 : " + weeksData[5] + ", " + "일 : " + weeksData[6]);
+                if (isSelectedDays && !weeksData[0] && !weeksData[1] && !weeksData[2] && !weeksData[3] && !weeksData[4] && !weeksData[5] && !weeksData[6]){
+                    Toast.makeText(WokrDataSetActivity.this, "날짜를 선택해주세요!", Toast.LENGTH_SHORT).show();
+                }else if (!isSelectedDays && isSelectedToday){
 
-                weeksDialog.setVisibility(View.INVISIBLE);
+                    isDayOrTodaySelected[0] = isSelectedDays;
+                    isDayOrTodaySelected[1] = isSelectedToday;
 
-                StringBuffer buffer = new StringBuffer();
-                if (weeksData[0]) buffer.append(" 월 ");
-                if (weeksData[1]) buffer.append(" 화 ");
-                if (weeksData[2]) buffer.append(" 수 ");
-                if (weeksData[3]) buffer.append(" 목 ");
-                if (weeksData[4]) buffer.append(" 금 ");
-                if (weeksData[5]) buffer.append(" 토 ");
-                if (weeksData[6]) buffer.append(" 일 ");
+                    Log.i("TAG", "" + isDayOrTodaySelected[0] + isDayOrTodaySelected[1]);
 
-                String weeksStr = buffer.toString();
-                String replaceFirst = weeksStr.replaceFirst(" ", "");
-                if (replaceFirst.length()>0) {
-                    tvWeeks.setText(replaceFirst);
+                    Calendar calendar = Calendar.getInstance();
+                    int day_of_week = calendar.get(Calendar.DAY_OF_WEEK);
+
+                    switch (day_of_week){
+                        case 1: //일
+                            weeksData[6] = true;
+                            break;
+
+                        case 2: //월
+                            weeksData[0] = true;
+                            break;
+
+                        case 3: //화
+                            weeksData[1] = true;
+                            break;
+
+                        case 4: //수
+                            weeksData[2] = true;
+                            break;
+
+                        case 5: //목
+                            weeksData[3] = true;
+                            break;
+
+                        case 6: //금
+                            weeksData[4] = true;
+                            break;
+
+                        case 7: //토
+                            weeksData[5] = true;
+                            break;
+                    }
+
+                    weeksDialog.setVisibility(View.INVISIBLE);
+                    tvWeeks.setText("오늘 하루만");
                     tvWeeks.setTextColor(0xFF9999FF);
+                    Log.i("TAG", "월 : " + weeksData[0] + ", " + "화 : " + weeksData[1] + ", " + "수 : " + weeksData[2] + ", " + "목 : " + weeksData[3] + ", " + "금 : " + weeksData[4] + ", " + "토 : " + weeksData[5] + ", " + "일 : " + weeksData[6]);
+
                 }else {
-                    tvWeeks.setText("날짜 선택");
-                    tvWeeks.setTextColor(0xFF666666);
+
+                    isDayOrTodaySelected[0] = isSelectedDays;
+                    isDayOrTodaySelected[1] = isSelectedToday;
+
+                    Log.i("TAG", "" + isDayOrTodaySelected[0] + isDayOrTodaySelected[1]);
+
+                    weeksDialog.setVisibility(View.INVISIBLE);
+
+                    StringBuffer buffer = new StringBuffer();
+                    if (weeksData[0]) buffer.append(" 월 ");
+                    if (weeksData[1]) buffer.append(" 화 ");
+                    if (weeksData[2]) buffer.append(" 수 ");
+                    if (weeksData[3]) buffer.append(" 목 ");
+                    if (weeksData[4]) buffer.append(" 금 ");
+                    if (weeksData[5]) buffer.append(" 토 ");
+                    if (weeksData[6]) buffer.append(" 일 ");
+
+                    String weeksStr = buffer.toString();
+                    String replaceFirst = weeksStr.replaceFirst(" ", "");
+                    if (replaceFirst.length()>0) {
+                        tvWeeks.setText(replaceFirst);
+                        tvWeeks.setTextColor(0xFF9999FF);
+                    }
+                    Log.i("TAG", "월 : " + weeksData[0] + ", " + "화 : " + weeksData[1] + ", " + "수 : " + weeksData[2] + ", " + "목 : " + weeksData[3] + ", " + "금 : " + weeksData[4] + ", " + "토 : " + weeksData[5] + ", " + "일 : " + weeksData[6]);
                 }
+
+
 
             }
         });
@@ -866,10 +993,18 @@ public class WokrDataSetActivity extends AppCompatActivity {
             dataPart.put("longitude", String.valueOf(longitude));
             dataPart.put("isItemOnOff", String.valueOf(isItemOnOff));
             dataPart.put("isItemPublic", String.valueOf(isItemPublic));
-            dataPart.put("completeNum", String.valueOf(completeNum));
+
             String todolistBooleanJsonStr = gson.toJson(todolistBooleanState);
             Log.i("TAGBoolean", todolistBooleanJsonStr);
             dataPart.put("todoistBooleanState", todolistBooleanJsonStr);
+
+            dataPart.put("completeNum", String.valueOf(completeNum));
+
+            String jsonStr = gson.toJson(isDayOrTodaySelected);
+            dataPart.put("isDayOrTodaySelected", jsonStr);
+            Log.i("TAGadadad", jsonStr);
+
+            dataPart.put("uriToString", uriToString);
 
             Call<String> call = retrofitService.WorkItemPostDataToServer(dataPart, filePart);
             call.enqueue(new Callback<String>() {
@@ -893,6 +1028,211 @@ public class WokrDataSetActivity extends AppCompatActivity {
 
     }
 
+    public void WorkItemModifyDataLoadDB(String no){
+        Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
+        RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+
+        Call<String> call = retrofitService.WorkItemModifyDataLoadDB(no);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                G.isworkitemModifyChcecked = false;
+                String jsonStr = response.body();
+                try {
+                    JSONArray jsonArray = new JSONArray(jsonStr);
+                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+
+                    name = jsonObject.getString("name");
+                    nickName = jsonObject.getString("nickName");
+
+                    String dstName = jsonObject.getString("dstName");
+                    String httpPath = "http://willd88.dothome.co.kr/YogaDesign2/workitem/" + dstName;
+
+                    String weeksDataJsonStr = jsonObject.getString("weeksData");
+                    Gson gson = new Gson();
+                    weeksData = gson.fromJson(weeksDataJsonStr, boolean[].class);
+
+                    String isg = jsonObject.getString("isGoalChecked");
+                    if (isg.equals("1")){
+                        isGoalChecked = true;
+                    }else if (isg.equals("0")){
+                        isGoalChecked = false;
+                    }
+
+                    String goalSet = jsonObject.getString("goalSet");
+
+                    String isPre = jsonObject.getString("isPreNotificationChecked");
+
+                    if (isPre.equals("1")){
+                        isPreNotificationChecked = true;
+                    }else if(isPre.equals("0")){
+                        isPreNotificationChecked = false;
+                    }
+                    preNotificationTime = jsonObject.getString("preNotificationTime");
+
+
+                    String isLocal = jsonObject.getString("isLocalNotificationChecked");
+                    if (isLocal.equals("1")){
+                        isLocalNotificationChecked = true;
+                    }else if(isLocal.equals("0")){
+                        isLocalNotificationChecked = false;
+                    }
+
+                    placeName = jsonObject.getString("placeName");
+
+                    String lati = jsonObject.getString("latitude");
+                    latitude = Double.parseDouble(lati);
+
+                    String longi = jsonObject.getString("longitude");
+                    longitude = Double.parseDouble(longi);
+
+
+                    String isItem = jsonObject.getString("isItemOnOff");
+                    if (isItem.equals("1")){
+                        isItemOnOff = true;
+                    }else if(isItem.equals("0")){
+                        isItemOnOff = false;
+                    }
+
+                    String isItemP = jsonObject.getString("isItemPublic");
+                    if (isItemP.equals("1")){
+                        isItemPublic = true;
+                    }else if(isItemP.equals("0")){
+                        isItemPublic = false;
+                    }
+
+                    String cNum = jsonObject.getString("Completenum");
+                    completeNum = Integer.parseInt(cNum);
+
+                    String isDayOrToday = jsonObject.getString("isDayOrTodaySelected");
+                    isDayOrTodaySelected = gson.fromJson(isDayOrToday, boolean[].class);
+
+                    imgPath = jsonObject.getString("uriToString");
+                    Log.i("TAGasdfgh", imgPath);
+
+
+
+                        etName.setText(name);
+                        tvNickname.setText(nickName);
+                        tvNickname.setTextColor(0xFF9999FF);
+
+                        tvPhoto.setVisibility(View.INVISIBLE);
+                        civPhoto.setVisibility(View.VISIBLE);
+                        Glide.with(WokrDataSetActivity.this).load(httpPath).into(civPhoto);
+
+
+                        if (!weeksData[0]) weeks[0].setImageResource(R.drawable.ic_unchecked);
+                        else weeks[0].setImageResource(R.drawable.ic_checked);
+                        if (!weeksData[1]) weeks[1].setImageResource(R.drawable.ic_unchecked);
+                        else weeks[1].setImageResource(R.drawable.ic_checked);
+                        if (!weeksData[2]) weeks[2].setImageResource(R.drawable.ic_unchecked);
+                        else weeks[2].setImageResource(R.drawable.ic_checked);
+                        if (!weeksData[3]) weeks[3].setImageResource(R.drawable.ic_unchecked);
+                        else weeks[3].setImageResource(R.drawable.ic_checked);
+                        if (!weeksData[4]) weeks[4].setImageResource(R.drawable.ic_unchecked);
+                        else weeks[4].setImageResource(R.drawable.ic_checked);
+                        if (!weeksData[5]) weeks[5].setImageResource(R.drawable.ic_unchecked);
+                        else weeks[5].setImageResource(R.drawable.ic_checked);
+                        if (!weeksData[6]) weeks[6].setImageResource(R.drawable.ic_unchecked);
+                        else weeks[6].setImageResource(R.drawable.ic_checked);
+
+                        if (!isDayOrTodaySelected[0] && isDayOrTodaySelected[1]){
+                            cdWeeksDialogDaysBlur.setVisibility(View.VISIBLE);
+                            tvWeeksDialogSelectedToday.setTextColor(0xFF9999FF);
+                        }else if (isDayOrTodaySelected[0] && !isDayOrTodaySelected[1]){
+                            cdWeeksDialogDaysBlur.setVisibility(View.INVISIBLE);
+                            tvWeeksDialogSelectedDays.setTextColor(0xFF9999FF);
+                        }
+
+
+                        StringBuffer buffer = new StringBuffer();
+                        if (weeksData[0]) buffer.append(" 월 ");
+                        if (weeksData[1]) buffer.append(" 화 ");
+                        if (weeksData[2]) buffer.append(" 수 ");
+                        if (weeksData[3]) buffer.append(" 목 ");
+                        if (weeksData[4]) buffer.append(" 금 ");
+                        if (weeksData[5]) buffer.append(" 토 ");
+                        if (weeksData[6]) buffer.append(" 일 ");
+
+                        String weeksStr = buffer.toString();
+                        String replaceFirst = weeksStr.replaceFirst(" ", "");
+                        if (replaceFirst.length()>0) {
+                            tvWeeks.setText(replaceFirst);
+                            tvWeeks.setTextColor(0xFF9999FF);
+                        }
+
+                        if (isGoalChecked){
+                            swGoal.setChecked(true);
+                            goalDialog.setVisibility(View.INVISIBLE);
+                            mcdGoalFixed.setVisibility(View.VISIBLE);
+                            tvGoal.setText(goalSet);
+                            tvGoal.setTextColor(0xFF9999FF);
+                            String a = goalSet.charAt(4) + "";
+                            Log.i("TAGzxc", a);
+                            int num = Integer.parseInt(a);
+                            numberPickerGoalNumber.setValue(num);
+                        }
+
+                        if (isPreNotificationChecked){
+                            swPreNotification.setChecked(true);
+                            preNotificationDialog.setVisibility(View.INVISIBLE);
+                            mcdPreNotificationFixed.setVisibility(View.VISIBLE);
+                            tvPreNotification.setText(preNotificationTime);
+                            tvPreNotification.setTextColor(0xFF9999FF);
+                            String[] split = preNotificationTime.split(":");
+                            int hour = Integer.parseInt(split[0]);
+                            int min = Integer.parseInt(split[1]);
+                            timePickerPreNotification.setHour(hour);
+                            timePickerPreNotification.setMinute(min);
+                        }
+                        if (isLocalNotificationChecked){
+                            swLocalNotification.setChecked(true);
+                            localNotificationDialog.setVisibility(View.INVISIBLE);
+                            mcdLocalNotificationFixed.setVisibility(View.VISIBLE);
+                            tvLocalNotifiacation.setText(placeName);;
+                            tvLocalNotifiacation.setTextColor(0xFF9999FF);
+                        }
+
+
+
+
+
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void workModifyDeleteDB(String no){
+        Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
+        RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+
+        Call<String> call= retrofitService.workitemDeleteDB(no);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                G.isModifySave =false;
+                Log.i("TAG", response.body());
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.i("TAG", t.getMessage());
+            }
+        });
+    }
+
+    //todo:여기서도 에러남 ㅜㅜㅠㅠㅠㅠㅜㅜㅠㅠㅜ
     ActivityResultLauncher<Intent> intentActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
@@ -904,7 +1244,8 @@ public class WokrDataSetActivity extends AppCompatActivity {
                     civPhoto.setVisibility(View.VISIBLE);
                     Glide.with(WokrDataSetActivity.this).load(uri).into(civPhoto);
                     WokrDataSetActivity.this.imgPath = uri.toString(); //절대경로 레트로핏 작업할때 전송해야함
-                    Log.i("TAG", imgPath);
+                    uriToString  = uri.toString();
+                    Log.i("TAGzxcv", imgPath);
                 }
 
             }
