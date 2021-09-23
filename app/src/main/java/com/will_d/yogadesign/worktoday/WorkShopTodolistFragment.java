@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,19 +40,28 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class WorkShopTodolistFragment extends Fragment {
 
-    TextView tvTodolistCurrentTime;
+    private TextView tvTodolistCurrentTime;
 
-    ArrayList<TodolistItem> todolistItems = new ArrayList<>();
-    TodolistAdapter adapter;
-    RecyclerView recyclerView;
+    private ArrayList<TodolistItem> todolistItems = new ArrayList<>();
+    private TodolistAdapter adapter;
+    private RecyclerView recyclerView;
 
-    RelativeLayout rlTodolistLogDialog;
-    EditText etTodolistLog;
-    TextView tvTodolistLogCancel;
-    TextView tvTodolistLogOk;
-
+    private RelativeLayout rlTodolistLogDialog;
+    private EditText etTodolistLog;
+    private TextView tvTodolistLogCancel;
+    private TextView tvTodolistLogOk;
 
     private Boolean[] todolistBooleanStateInit = new Boolean[]{false, false, false};
+
+    private boolean isFirst = false;
+    static boolean isWorkItemAdd = false;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        isFirst = true;
+
+    }
 
     @Nullable
     @Override
@@ -84,9 +94,6 @@ public class WorkShopTodolistFragment extends Fragment {
         recyclerView = view.findViewById(R.id.todolist_recycler);
         recyclerView.setAdapter(adapter);
 
-        //Todo: 아이템 체크된 상태 날짜 구해서 초기화 해줘야하는데 어떻게 해줘야할지 모르겠다.
-
-
         //현재시간 구하기
         long now = System.currentTimeMillis();
         Date date = new Date(now);
@@ -94,50 +101,37 @@ public class WorkShopTodolistFragment extends Fragment {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
         String getTime = sdf.format(date);
 
-        SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm:ss");
-        String getTimeTime = sdf2.format(date);
-        Log.i("TAGG", getTimeTime);
-
         Calendar calendar = Calendar.getInstance();
         int day_of_week = calendar.get(Calendar.DAY_OF_WEEK);
         String dayStr = "";
 
-
-        //todo: 이거 논리가 잘못됨 시간의 차이로 구해야함 일단은 다른거하고 하자
         switch (day_of_week){
             case 1: //일
                 dayStr = "일";
-                if (getTimeTime.equals("23:59:00")) insertWorkitemTodolistBooleanStateInitDB();
                 break;
 
             case 2: //일
                 dayStr = "월";
-                if (getTimeTime.equals("23:59:00")) insertWorkitemTodolistBooleanStateInitDB();
                 break;
 
             case 3: //일
                 dayStr = "화";
-                if (getTimeTime.equals("23:59:00")) insertWorkitemTodolistBooleanStateInitDB();
                 break;
 
             case 4: //일
                 dayStr = "수";
-                if (getTimeTime.equals("23:59:00")) insertWorkitemTodolistBooleanStateInitDB();
                 break;
 
             case 5: //일
                 dayStr = "목";
-                if (getTimeTime.equals("23:59:00")) insertWorkitemTodolistBooleanStateInitDB();
                 break;
 
             case 6: //일
                 dayStr = "금";
-                if (getTimeTime.equals("23:59:00")) insertWorkitemTodolistBooleanStateInitDB();
                 break;
 
             case 7: //일
                 dayStr = "토";
-                if (getTimeTime.equals("23:59:00")) insertWorkitemTodolistBooleanStateInitDB();
                 break;
         }
 
@@ -151,9 +145,32 @@ public class WorkShopTodolistFragment extends Fragment {
     }
 
     @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
+
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        String s = sharedPreferences.getString("dayCompairison", "");
+
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+        String dayStr = sdf.format(date);
+
+        if (!dayStr.equals(s)){
+            insertWorkitemTodolistBooleanStateInitDB();
+            editor.putString("dayCompairison", dayStr);
+            editor.commit();
+        }
         loadWorkTodayDataServer();
+
+
     }
 
     public void insertWorkitemTodolistBooleanStateInitDB(){

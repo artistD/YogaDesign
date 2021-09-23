@@ -59,6 +59,7 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
+        final int filnalPosition = position;
         WorkItem item = items.get(position);
 
         String imgUrl = item.getImgUrl();
@@ -119,6 +120,78 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
             holder.cdTodayWork.setVisibility(View.VISIBLE);
         }
 
+
+        holder.sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                WorkItem item = items.get(filnalPosition);
+                Log.i("asdf", item.getNo() + isChecked);
+                if (isChecked) {
+                    holder.llItenContainer.setBackgroundResource(R.drawable.mainbg_03);
+                } else {
+                    holder.llItenContainer.setBackgroundColor(0x33333333);
+                }
+                holder.WorkitemSwitchOnOffLoadDB(isChecked, item.getNo());
+            }
+        });
+
+
+        holder.ivItemSet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupWindow popupWindow =  holder.showPopup();
+
+                holder.popupRlModify.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(context, WokrDataSetActivity.class);
+                        context.startActivity(intent);
+                        WorkItem item= items.get(filnalPosition);
+                        G.no = item.getNo();
+                        G.isworkitemModifyChcecked = true;
+                        G.isModifySave = true;
+
+//                            popupWindow.dismiss();
+                        WorkShopActivity workShopActivity = (WorkShopActivity) context;
+                        workShopActivity.overridePendingTransition(R.anim.activity_data_set, R.anim.fragment_none);
+                    }
+                });
+
+
+                //todo: 쇼우 팝업 동작안함 한번하고나면.....왜 와이
+                holder.popupRlDelete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        WorkItem item = items.get(filnalPosition);
+//                          popupWindow.dismiss();
+                        item.getRlWorkitemDeleteDialog().setVisibility(View.VISIBLE);
+                        item.getTvWorkitemDeleteOK().setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                items.remove(filnalPosition);
+                                notifyItemRemoved(filnalPosition);
+                                holder.workitemDeleteDB(item);
+                                item.getRlWorkitemDeleteDialog().setVisibility(View.INVISIBLE);
+
+                            }
+                        });
+
+                        item.getTvWorkitemDeleteCancel().setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                item.getRlWorkitemDeleteDialog().setVisibility(View.INVISIBLE);
+
+                            }
+                        });
+                    }
+                });
+
+
+
+
+            }
+        });//#######
 
 
 
@@ -215,86 +288,6 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
 
             cdTodayWork = itemView.findViewById(R.id.cd_today_work);
-
-
-
-
-
-
-            ivItemSet.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                   PopupWindow popupWindow =  showPopup();
-
-                    popupRlModify.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(context, WokrDataSetActivity.class);
-                            context.startActivity(intent);
-                            WorkItem item= items.get(getAdapterPosition());
-                            G.no = item.getNo();
-                            G.isworkitemModifyChcecked = true;
-                            G.isModifySave = true;
-
-//                            popupWindow.dismiss();
-                            WorkShopActivity workShopActivity = (WorkShopActivity) context;
-                            workShopActivity.overridePendingTransition(R.anim.activity_data_set, R.anim.fragment_none);
-                        }
-                    });
-
-
-                    //todo: 쇼우 팝업 동작안함 한번하고나면.....왜 와이
-                    popupRlDelete.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                          WorkItem item = items.get(getAdapterPosition());
-//                          popupWindow.dismiss();
-                          item.getRlWorkitemDeleteDialog().setVisibility(View.VISIBLE);
-                          item.getTvWorkitemDeleteOK().setOnClickListener(new View.OnClickListener() {
-                              @Override
-                              public void onClick(View v) {
-                                  items.remove(getAdapterPosition());
-                                  notifyItemRemoved(getAdapterPosition());
-                                  workitemDeleteDB(item);
-                                  item.getRlWorkitemDeleteDialog().setVisibility(View.INVISIBLE);
-
-                              }
-                          });
-
-                          item.getTvWorkitemDeleteCancel().setOnClickListener(new View.OnClickListener() {
-                              @Override
-                              public void onClick(View v) {
-                                  item.getRlWorkitemDeleteDialog().setVisibility(View.INVISIBLE);
-
-                              }
-                          });
-                        }
-                    });
-
-
-
-
-                }
-            });//#######
-
-
-
-
-            //Todo: 여기서 에러가 나는데 해결해야함
-            sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                    WorkItem item = items.get(getAdapterPosition());
-                    Log.i("asdf", item.getNo() + isChecked);
-                    if (isChecked) {
-                        llItenContainer.setBackgroundResource(R.drawable.mainbg_03);
-                    } else {
-                        llItenContainer.setBackgroundColor(0x33333333);
-                    }
-                    WorkitemSwitchOnOffLoadDB(isChecked, item.getNo());
-                }
-            });
 
 
 

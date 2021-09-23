@@ -57,6 +57,7 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
 
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
+        final int finalPosition = position;
 
         TodolistItem item = todolistItems.get(position);
         boolean[] todolistBooleanState = item.getTodolistBooleanState();
@@ -130,6 +131,10 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
         }
 
 
+
+
+
+
     }
 
     @Override
@@ -183,156 +188,150 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
 //            loadWorkTodayDataServer();
 
 
-                checked1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (!isChecked3){
-                            isChecked1=!isChecked1;
-                            TodolistItem item = todolistItems.get(getAdapterPosition());
-                            boolean[] todolistBooleanState = item.getTodolistBooleanState();
-                            todolistBooleanState[0] = isChecked1;
-                            Log.i("TAG2222", todolistBooleanState[0] + "");
-                            if (isChecked1) Glide.with(context).load(R.drawable.ic_todolist_checked).into(checked1);
-                            else Glide.with(context).load(R.drawable.ic_todolit_unchecked).into(checked1);
-                            workitemTodolistBooleanStateInsertDB(item);
-                            missionCompleteChecked();
-                        }else {
-                            return;
-                        }
-
-                    }
-                });
-
-
-                checked2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (!isChecked3){
-                            isChecked2=!isChecked2;
-                            TodolistItem item = todolistItems.get(getAdapterPosition());
-                            boolean[] todolistBooleanState = item.getTodolistBooleanState();
-                            todolistBooleanState[1] = isChecked2;
-                            if (isChecked2) Glide.with(context).load(R.drawable.ic_todolist_checked).into(checked2);
-                            else Glide.with(context).load(R.drawable.ic_todolit_unchecked).into(checked2);
-                            workitemTodolistBooleanStateInsertDB(item);
-                            missionCompleteChecked();
-                        }else {
-                            return;
-                        }
-                    }
-                });
-
-
-                checked3.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+            checked1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!isChecked3){
+                        isChecked1=!isChecked1;
                         TodolistItem item = todolistItems.get(getAdapterPosition());
-                        if (isChecked1 && isChecked2 && !isChecked3 && disdiction==3){
-                            isChecked3=!isChecked3;
-                            boolean[] todolistBooleanState = item.getTodolistBooleanState();
-                            todolistBooleanState[2] = isChecked3;
-                            if (isChecked3) Glide.with(context).load(R.drawable.ic_todolist_checked).into(checked3);
-                            else Glide.with(context).load(R.drawable.ic_todolit_unchecked).into(checked3);
-                            item.setCompleteNum(item.getCompleteNum()+1);
-                            countNum =item.getCompleteNum();
-                            workitemTodolistBooleanStateInsertDB(item);
-                            missionCompleteChecked();
-                            Log.i("TAG", countNum+"gggg");
-                        }else if (isChecked1 && isChecked2 && isChecked3 && disdiction==3){
-                            isChecked3=!isChecked3;
-                            boolean[] todolistBooleanState = item.getTodolistBooleanState();
-                            todolistBooleanState[2] = isChecked3;
-                            if (isChecked3) Glide.with(context).load(R.drawable.ic_todolist_checked).into(checked3);
-                            else Glide.with(context).load(R.drawable.ic_todolit_unchecked).into(checked3);
-                            item.setCompleteNum(item.getCompleteNum()-1);
-                            countNum =item.getCompleteNum();
-                            workitemTodolistBooleanStateInsertDB(item);
-                            missionCompleteChecked();
-                            Log.i("TAG", countNum+"ggg");
-                        }else if (isChecked2 && !isChecked3 && disdiction==2){
-                            isChecked3=!isChecked3;
-                            boolean[] todolistBooleanState = item.getTodolistBooleanState();
-                            todolistBooleanState[2] = isChecked3;
-                            if (isChecked3) Glide.with(context).load(R.drawable.ic_todolist_checked).into(checked3);
-                            else Glide.with(context).load(R.drawable.ic_todolit_unchecked).into(checked3);
-                            item.setCompleteNum(item.getCompleteNum()+1);
-                            countNum =item.getCompleteNum();
-                            workitemTodolistBooleanStateInsertDB(item);
-                            missionCompleteChecked();
-                            Log.i("TAG", countNum+"");
-                        }else if (isChecked2 && isChecked3 && disdiction==2){
-                            isChecked3=!isChecked3;
-                            boolean[] todolistBooleanState = item.getTodolistBooleanState();
-                            todolistBooleanState[2] = isChecked3;
-                            if (isChecked3) Glide.with(context).load(R.drawable.ic_todolist_checked).into(checked3);
-                            else Glide.with(context).load(R.drawable.ic_todolit_unchecked).into(checked3);
-                            item.setCompleteNum(item.getCompleteNum()-1);
-                            countNum =item.getCompleteNum();
-                            workitemTodolistBooleanStateInsertDB(item);
-                            missionCompleteChecked();
-                            Log.i("TAG", countNum+"qfqwf");
-                        } else if (isChecked3 && disdiction == 1){
-                            isChecked3=!isChecked3;
-                            boolean[] todolistBooleanState = item.getTodolistBooleanState();
-                            todolistBooleanState[2] = isChecked3;
-                            if (isChecked3) Glide.with(context).load(R.drawable.ic_todolist_checked).into(checked3);
-                            else Glide.with(context).load(R.drawable.ic_todolit_unchecked).into(checked3);
-                            item.setCompleteNum(item.getCompleteNum()-1);
-                            countNum =item.getCompleteNum();
-                            workitemTodolistBooleanStateInsertDB(item);
-                            missionCompleteChecked();
-                            Log.i("TAG", countNum+"ss");
-
-                        } else if (!isChecked3 && disdiction ==1){
-                            isChecked3=!isChecked3;
-                            boolean[] todolistBooleanState = item.getTodolistBooleanState();
-                            todolistBooleanState[2] = isChecked3;
-                            if (isChecked3) Glide.with(context).load(R.drawable.ic_todolist_checked).into(checked3);
-                            else Glide.with(context).load(R.drawable.ic_todolit_unchecked).into(checked3);
-                            item.setCompleteNum(item.getCompleteNum()+1);
-                            countNum =item.getCompleteNum();
-                            workitemTodolistBooleanStateInsertDB(item);
-                            missionCompleteChecked();
-                            Log.i("TAG", countNum+"ssss");
-
-                        }  else if (isChecked3 && disdiction == 0){
-                            isChecked3=!isChecked3;
-                            boolean[] todolistBooleanState = item.getTodolistBooleanState();
-                            todolistBooleanState[2] = isChecked3;
-                            if (isChecked3) Glide.with(context).load(R.drawable.ic_todolist_checked).into(checked3);
-                            else Glide.with(context).load(R.drawable.ic_todolit_unchecked).into(checked3);
-                            item.setCompleteNum(item.getCompleteNum()-1);
-                            countNum =item.getCompleteNum();
-                            workitemTodolistBooleanStateInsertDB(item);
-                            missionCompleteChecked();
-                            Log.i("TAG", countNum+"kk");
-
-                        } else if (!isChecked3 && disdiction == 0) {
-                            isChecked3 = !isChecked3;
-                            boolean[] todolistBooleanState = item.getTodolistBooleanState();
-                            todolistBooleanState[2] = isChecked3;
-                            if (isChecked3) Glide.with(context).load(R.drawable.ic_todolist_checked).into(checked3);
-                            else Glide.with(context).load(R.drawable.ic_todolit_unchecked).into(checked3);
-                            item.setCompleteNum(item.getCompleteNum() + 1);
-                            countNum = item.getCompleteNum();
-                            workitemTodolistBooleanStateInsertDB(item);
-                            missionCompleteChecked();
-                            Log.i("TAG", countNum + "kkkk");
-                        } else {
-                            Log.i("TAG", item.getCompleteNum()+"da");
-                            return;
-                        }
-
-
-
+                        boolean[] todolistBooleanState = item.getTodolistBooleanState();
+                        todolistBooleanState[0] = isChecked1;
+                        Log.i("TAG2222", todolistBooleanState[0] + "");
+                        if (isChecked1) Glide.with(context).load(R.drawable.ic_todolist_checked).into(checked1);
+                        else Glide.with(context).load(R.drawable.ic_todolit_unchecked).into(checked1);
+                        workitemTodolistBooleanStateInsertDB(item);
+                        missionCompleteChecked(getAdapterPosition());
+                    }else {
+                        return;
                     }
-                });
+
+                }
+            });
+
+
+            checked2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!isChecked3){
+                        isChecked2=!isChecked2;
+                        TodolistItem item = todolistItems.get(getAdapterPosition());
+                        boolean[] todolistBooleanState = item.getTodolistBooleanState();
+                        todolistBooleanState[1] = isChecked2;
+                        if (isChecked2) Glide.with(context).load(R.drawable.ic_todolist_checked).into(checked2);
+                        else Glide.with(context).load(R.drawable.ic_todolit_unchecked).into(checked2);
+                        workitemTodolistBooleanStateInsertDB(item);
+                        missionCompleteChecked(getAdapterPosition());
+                    }else {
+                        return;
+                    }
+                }
+            });
+
+
+            checked3.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    TodolistItem item = todolistItems.get(getAdapterPosition());
+                    if (isChecked1 && isChecked2 && !isChecked3 && disdiction==3){
+                        isChecked3=!isChecked3;
+                        boolean[] todolistBooleanState = item.getTodolistBooleanState();
+                        todolistBooleanState[2] = isChecked3;
+                        if (isChecked3) Glide.with(context).load(R.drawable.ic_todolist_checked).into(checked3);
+                        else Glide.with(context).load(R.drawable.ic_todolit_unchecked).into(checked3);
+                        item.setCompleteNum(item.getCompleteNum()+1);
+                        countNum =item.getCompleteNum();
+                        workitemTodolistBooleanStateInsertDB(item);
+                        missionCompleteChecked(getAdapterPosition());
+                        Log.i("TAG", countNum+"gggg");
+                    }else if (isChecked1 && isChecked2 && isChecked3 && disdiction==3){
+                        isChecked3=!isChecked3;
+                        boolean[] todolistBooleanState = item.getTodolistBooleanState();
+                        todolistBooleanState[2] = isChecked3;
+                        if (isChecked3) Glide.with(context).load(R.drawable.ic_todolist_checked).into(checked3);
+                        else Glide.with(context).load(R.drawable.ic_todolit_unchecked).into(checked3);
+                        item.setCompleteNum(item.getCompleteNum()-1);
+                        countNum =item.getCompleteNum();
+                        workitemTodolistBooleanStateInsertDB(item);
+                        missionCompleteChecked(getAdapterPosition());
+                        Log.i("TAG", countNum+"ggg");
+                    }else if (isChecked2 && !isChecked3 && disdiction==2){
+                        isChecked3=!isChecked3;
+                        boolean[] todolistBooleanState = item.getTodolistBooleanState();
+                        todolistBooleanState[2] = isChecked3;
+                        if (isChecked3) Glide.with(context).load(R.drawable.ic_todolist_checked).into(checked3);
+                        else Glide.with(context).load(R.drawable.ic_todolit_unchecked).into(checked3);
+                        item.setCompleteNum(item.getCompleteNum()+1);
+                        countNum =item.getCompleteNum();
+                        workitemTodolistBooleanStateInsertDB(item);
+                        missionCompleteChecked(getAdapterPosition());
+                        Log.i("TAG", countNum+"");
+                    }else if (isChecked2 && isChecked3 && disdiction==2){
+                        isChecked3=!isChecked3;
+                        boolean[] todolistBooleanState = item.getTodolistBooleanState();
+                        todolistBooleanState[2] = isChecked3;
+                        if (isChecked3) Glide.with(context).load(R.drawable.ic_todolist_checked).into(checked3);
+                        else Glide.with(context).load(R.drawable.ic_todolit_unchecked).into(checked3);
+                        item.setCompleteNum(item.getCompleteNum()-1);
+                        countNum =item.getCompleteNum();
+                        workitemTodolistBooleanStateInsertDB(item);
+                        missionCompleteChecked(getAdapterPosition());
+                        Log.i("TAG", countNum+"qfqwf");
+                    } else if (isChecked3 && disdiction == 1){
+                        isChecked3=!isChecked3;
+                        boolean[] todolistBooleanState = item.getTodolistBooleanState();
+                        todolistBooleanState[2] = isChecked3;
+                        if (isChecked3) Glide.with(context).load(R.drawable.ic_todolist_checked).into(checked3);
+                        else Glide.with(context).load(R.drawable.ic_todolit_unchecked).into(checked3);
+                        item.setCompleteNum(item.getCompleteNum()-1);
+                        countNum =item.getCompleteNum();
+                        workitemTodolistBooleanStateInsertDB(item);
+                        missionCompleteChecked(getAdapterPosition());
+                        Log.i("TAG", countNum+"ss");
+
+                    } else if (!isChecked3 && disdiction ==1){
+                        isChecked3=!isChecked3;
+                        boolean[] todolistBooleanState = item.getTodolistBooleanState();
+                        todolistBooleanState[2] = isChecked3;
+                        if (isChecked3) Glide.with(context).load(R.drawable.ic_todolist_checked).into(checked3);
+                        else Glide.with(context).load(R.drawable.ic_todolit_unchecked).into(checked3);
+                        item.setCompleteNum(item.getCompleteNum()+1);
+                        countNum =item.getCompleteNum();
+                        workitemTodolistBooleanStateInsertDB(item);
+                        missionCompleteChecked(getAdapterPosition());
+                        Log.i("TAG", countNum+"ssss");
+
+                    }  else if (isChecked3 && disdiction == 0){
+                        isChecked3=!isChecked3;
+                        boolean[] todolistBooleanState = item.getTodolistBooleanState();
+                        todolistBooleanState[2] = isChecked3;
+                        if (isChecked3) Glide.with(context).load(R.drawable.ic_todolist_checked).into(checked3);
+                        else Glide.with(context).load(R.drawable.ic_todolit_unchecked).into(checked3);
+                        item.setCompleteNum(item.getCompleteNum()-1);
+                        countNum =item.getCompleteNum();
+                        workitemTodolistBooleanStateInsertDB(item);
+                        missionCompleteChecked(getAdapterPosition());
+                        Log.i("TAG", countNum+"kk");
+
+                    } else if (!isChecked3 && disdiction == 0) {
+                        isChecked3 = !isChecked3;
+                        boolean[] todolistBooleanState = item.getTodolistBooleanState();
+                        todolistBooleanState[2] = isChecked3;
+                        if (isChecked3) Glide.with(context).load(R.drawable.ic_todolist_checked).into(checked3);
+                        else Glide.with(context).load(R.drawable.ic_todolit_unchecked).into(checked3);
+                        item.setCompleteNum(item.getCompleteNum() + 1);
+                        countNum = item.getCompleteNum();
+                        workitemTodolistBooleanStateInsertDB(item);
+                        missionCompleteChecked(getAdapterPosition());
+                        Log.i("TAG", countNum + "kkkk");
+                    } else {
+                        Log.i("TAG", item.getCompleteNum()+"da");
+                        return;
+                    }
 
 
 
-
-
-
+                }
+            });
 
 
             cdLog.setOnClickListener(new View.OnClickListener() {
@@ -352,17 +351,21 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
                     item.getTvTodolistLogOk().setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                          if (item.getEtTodolistLog().getText().toString().equals("")){
-                              item.getRlTodolistLogDialog().setVisibility(View.INVISIBLE);
-                              item.getEtTodolistLog().setText("");
-                          }else {
-                              String LogData = item.getEtTodolistLog().getText().toString();
-                          }
+                            if (item.getEtTodolistLog().getText().toString().equals("")){
+                                item.getRlTodolistLogDialog().setVisibility(View.INVISIBLE);
+                                item.getEtTodolistLog().setText("");
+                            }else {
+                                String LogData = item.getEtTodolistLog().getText().toString();
+                            }
 
                         }
                     });
                 }
             });
+
+
+
+
 
 
 
@@ -396,10 +399,10 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
             });
         }
 
-        public void WorkitemCounterLoadDB(){ //사실은 인설트임
+        public void WorkitemCounterLoadDB(int position){ //사실은 인설트임
             Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
             RetrofitService retrofitService = retrofit.create(RetrofitService.class);
-            TodolistItem item = todolistItems.get(getAdapterPosition());
+            TodolistItem item = todolistItems.get(position);
             Call<String> call = retrofitService.WorkItemCounterInsertDataDB(countNum+"", item.getNo());
             Log.i("TAG213", countNum+"");
             call.enqueue(new Callback<String>() {
@@ -418,40 +421,40 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
         }
 
 
-        public void missionCompleteChecked(){
-            TodolistItem item = todolistItems.get(getAdapterPosition());
+        public void missionCompleteChecked(int position){
+            TodolistItem item = todolistItems.get(position);
             if (item.getIsGoalChecked()){
                 if (item.getGoalSet().equals("하루에 1번")){
                     if (isChecked3) {
                         rltodolistMissionComplete.setVisibility(View.VISIBLE);
-                        WorkitemCounterLoadDB();
+                        WorkitemCounterLoadDB(position);
                         Log.i("asdf23", "ddd");
                     }
                     else {
                         rltodolistMissionComplete.setVisibility(View.INVISIBLE);
-                        WorkitemCounterLoadDB();
+                        WorkitemCounterLoadDB(position);
                         Log.i("asdf", "ddd");
                     }
                 }else if (item.getGoalSet().equals("하루에 2번")){
                     if (isChecked3 && isChecked2) {
                         rltodolistMissionComplete.setVisibility(View.VISIBLE);
-                        WorkitemCounterLoadDB();
+                        WorkitemCounterLoadDB(position);
                         Log.i("asdf23", "ddd");
                     }
                     else {
                         rltodolistMissionComplete.setVisibility(View.INVISIBLE);
-                        WorkitemCounterLoadDB();
+                        WorkitemCounterLoadDB(position);
                         Log.i("asdf", "ddd");
                     }
                 }else if (item.getGoalSet().equals("하루에 3번")){
                     if (isChecked3 && isChecked2 && isChecked1) {
                         rltodolistMissionComplete.setVisibility(View.VISIBLE);
-                        WorkitemCounterLoadDB();
+                        WorkitemCounterLoadDB(position);
                         Log.i("asdf23", "ddd");
                     }
                     else{
                         rltodolistMissionComplete.setVisibility(View.INVISIBLE);
-                        WorkitemCounterLoadDB();
+                        WorkitemCounterLoadDB(position);
                         Log.i("asdf", "ddd");
                     }
                 }
@@ -459,12 +462,12 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
             }else {
                 if (isChecked3) {
                     rltodolistMissionComplete.setVisibility(View.VISIBLE);
-                    WorkitemCounterLoadDB();
+                    WorkitemCounterLoadDB(position);
                     Log.i("asdf23", "ddd");
                 }
                 else {
                     rltodolistMissionComplete.setVisibility(View.INVISIBLE);
-                    WorkitemCounterLoadDB();
+                    WorkitemCounterLoadDB(position);
                     Log.i("asdf", "ddd");
                 }
             }

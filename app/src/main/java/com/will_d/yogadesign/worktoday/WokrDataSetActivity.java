@@ -535,6 +535,11 @@ public class WokrDataSetActivity extends AppCompatActivity {
     }
 
     public void clickSave(View view) { //********************************
+        Intent intent = getIntent();
+        intent.putExtra("isWorkItemAdd", true);
+
+        setResult(RESULT_OK, intent);
+
         if (G.isModifySave){
             name = etName.getText().toString();
             workModifyDeleteDB(G.no);
@@ -705,10 +710,12 @@ public class WokrDataSetActivity extends AppCompatActivity {
 
     public void clickNickNamePick(View view) {
         TextView tv = (TextView) view;
-        for (int i=0; i<workItems.size(); i++){
-            if (workItems.get(i).getNickName().equals(tv.getText().toString())){
-                Toast.makeText(this, "별명이 중복될수는 없습니다!", Toast.LENGTH_SHORT).show();
-                return;
+        if (workItems !=null){
+            for (int i=0; i<workItems.size(); i++){
+                if (workItems.get(i).getNickName().equals(tv.getText().toString())){
+                    Toast.makeText(this, "별명이 중복될수는 없습니다!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
             }
         }
         WokrDataSetActivity.this.nickName = tv.getText().toString();
@@ -726,13 +733,15 @@ public class WokrDataSetActivity extends AppCompatActivity {
         tvNickNameDialogDirectlyInputOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (etNickNameDialogDirectlyInput.getText().toString().length()>0){
-                    for (int i=0; i<workItems.size(); i++){
-                        if (workItems.get(i).getNickName().equals(etNickNameDialogDirectlyInput.getText().toString())){
-                            Toast.makeText(WokrDataSetActivity.this, "별명이 중복될수는 없습니다!", Toast.LENGTH_SHORT).show();
-                            return;
+                if (workItems != null ){
+                    if (etNickNameDialogDirectlyInput.getText().toString().length()>0){
+                        for (int i=0; i<workItems.size(); i++){
+                            if (workItems.get(i).getNickName().equals(etNickNameDialogDirectlyInput.getText().toString())){
+                                Toast.makeText(WokrDataSetActivity.this, "별명이 중복될수는 없습니다!", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
                         }
-                    }
+                }
                     nickName = etNickNameDialogDirectlyInput.getText().toString();
                     etNickNameDialogDirectlyInput.setText(nickName);
                     tvNickname.setText(nickName);

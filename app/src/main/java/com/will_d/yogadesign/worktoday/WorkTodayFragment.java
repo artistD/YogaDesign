@@ -48,6 +48,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import soup.neumorphism.NeumorphCardView;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class WorkTodayFragment extends Fragment {
 
     private ArrayList<WorkItem> workItems = new ArrayList<>();
@@ -79,6 +81,14 @@ public class WorkTodayFragment extends Fragment {
 //    private Animation ani3;
 //    private Animation ani4;
 
+    private boolean isFirst = false;
+    private boolean isWorkItemAdd = false;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        isFirst = true;
+    }
 
     @Nullable
     @Override
@@ -132,12 +142,15 @@ public class WorkTodayFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), WokrDataSetActivity.class);
+                activityResultLauncher.launch(intent);
+                getActivity().overridePendingTransition(R.anim.activity_data_set, R.anim.fragment_none);
+
+
+
                 //todo:StackOverFlowError, OutOfMemory 에러
 //                Gson gson = new Gson();
 //                String jsonStr = gson.toJson(workItems);
 //                intent.putExtra("Workitems", jsonStr);
-                startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.activity_data_set, R.anim.fragment_none);
 
             }
         });
@@ -252,7 +265,7 @@ public class WorkTodayFragment extends Fragment {
     }
 
     public void loadWorkTodayDataServer(){
-        SharedPreferences pref = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
+        SharedPreferences pref = getActivity().getSharedPreferences("Data", MODE_PRIVATE);
         String id = pref.getString("id", "");
         Log.i("확인!!제발", id);
         String baseUrl = "http://willd88.dothome.co.kr/";
@@ -376,33 +389,73 @@ public class WorkTodayFragment extends Fragment {
     }
 
 
-    //todo: 하루전용 아이템은 그다음날이되면 자동으로 switch가 꺼져야함 그것을 레트로핏으로 구현해야......
-
-
-    //todo: 아이템 이동변
-    public void insertWorkitemSortationNumber(String no){
+    public void workItemOnedayUpdateDB(){
         Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
         RetrofitService retrofitService = retrofit.create(RetrofitService.class);
 
-        Call<String> call = retrofitService.insertWorkitemSortationNumber(no);
+        Call<String> call = retrofitService.workItemOnedayUpdateDB(false);
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                Log.i("TAGddd", response.body());
+                Log.i("TAG", response.body());
+                for (int i=0; i<workItems.size(); i++){
+                    WorkItem workItem = workItems.get(i);
+                    if(workItem.getIsItemInOff()){
+
+                    }else {
+
+                    }
+
+
+
+
+                }
+
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                Log.i("TAGddd", "Errror");
+                Log.i("TAG", t.getMessage());
             }
         });
+
     }
+
 
     @Override
     public void onResume() {
         super.onResume();
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+        String dayStr = sdf.format(date);
+
+        SharedPreferences pref = getActivity().getSharedPreferences("Data", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        String str = pref.getString("dayCompairison", "");
+        if (!dayStr.equals(str)){
+            workItemOnedayUpdateDB();
+            editor.putString("dayCompairison", dayStr);
+            editor.commit();
+        }
+
         loadWorkTodayDataServer();
 
     }
+
+    ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if (result.getResultCode() == getActivity().RESULT_OK){
+                Intent intent = result.getData();
+
+                isWorkItemAdd = intent.getBooleanExtra("isWorkItemAdd", false);
+                WorkShopTodolistFragment.isWorkItemAdd = intent.getBooleanExtra("isWorkItemAdd", false);
+                Log.i("isworkItemAdd", isWorkItemAdd+":");
+
+            }
+        }
+    });
 
 }

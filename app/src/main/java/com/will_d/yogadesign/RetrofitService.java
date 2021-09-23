@@ -58,14 +58,16 @@ public interface RetrofitService {
     Call<String> WorkItemModifyDataLoadDB(@Query("no") String no);
 
 //***************
-    @GET("/YogaDesign2/workitem/insertWorkitemSortationNumber.php")
-    Call<String> insertWorkitemSortationNumber(@Query("no") String no);
-
     @GET("/YogaDesign2/workitem/workItemFromPositionChangeDB.php")
     Call<String> workItemFromPositionChangeDB(@Query("noFrom") String noFrom, @Query("noTo") String noTo);
 
     @GET("/YogaDesign2/workitem/workItemToPositionChangeDB.php")
     Call<String> workItemToPositionChangeDB(@Query("noFrom") String noFrom, @Query("noTo") String noTo);
     //********************** 이것들 일단보류
+
+    @GET("/YogaDesign2/workitem/workItemOnedayUpdateDB.php")
+    Call<String> workItemOnedayUpdateDB(@Query("off") boolean off);
+
+
 
 }

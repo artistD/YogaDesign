@@ -6,9 +6,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -16,6 +18,9 @@ import com.will_d.yogadesign.set.WorkShopStatisticsFragment;
 import com.will_d.yogadesign.square.WorkShopSquareFragment;
 import com.will_d.yogadesign.worktoday.WorkShopTimeFragment;
 import com.will_d.yogadesign.worktoday.WorkShopTodolistFragment;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import soup.neumorphism.NeumorphCardView;
 import soup.neumorphism.ShapeType;
@@ -84,6 +89,23 @@ public class WorkShopActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workshop);
+
+        SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+
+        boolean isFirstCompair = pref.getBoolean("isFirstCompair", false);
+        Log.i("First", isFirstCompair + "");
+        if (isFirstCompair){
+            long now = System.currentTimeMillis();
+            Date date = new Date(now);
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+            String dayStr = sdf.format(date);
+            editor.putString("dayCompairison", dayStr);
+            Log.i("First", dayStr);
+            editor.putBoolean("isFirstCompair", false);
+            editor.commit();
+        }
 
 
         cdNabWork = findViewById(R.id.cd_nab_work);
@@ -230,15 +252,14 @@ public class WorkShopActivity extends AppCompatActivity {
 //        if(fragments[3]!=null) tran.hide(fragments[3]);
 //        if(fragments[4]!=null) tran.hide(fragments[4]);
         tran.remove(fragments[0]);
-        if (fragments[1]!=null) tran.remove(fragments[1]);
-        if (fragments[2]!=null) tran.remove(fragments[2]);
-        if (fragments[3]!=null) tran.remove(fragments[3]);
-        if (fragments[4]!=null) tran.remove(fragments[4]);
+        if(fragments[1]!=null) tran.remove(fragments[1]);
+        if(fragments[2]!=null) tran.remove(fragments[2]);
+        if(fragments[3]!=null) tran.remove(fragments[3]);
+        if(fragments[4]!=null) tran.remove(fragments[4]);
 
         if (fragments[BNV_ARRAYNUM] == null) {
             fragments[BNV_ARRAYNUM] = bnVFragment;
             Log.i("TAG", "Fragment");
-
         }
         tran.add(R.id.container, fragments[BNV_ARRAYNUM]);
         tran.setCustomAnimations(R.anim.fragment_fade, R.anim.fragment_none);
@@ -264,9 +285,10 @@ public class WorkShopActivity extends AppCompatActivity {
         ivNabStatistics.setImageResource(R.drawable.ic_fragment_statistics);
     }
 
-    public void BnvChangeState(NeumorphCardView cdNab, ImageView ivNab, int nabRes){
+     public void BnvChangeState(NeumorphCardView cdNab, ImageView ivNab, int nabRes){
         cdNab.setShapeType(ShapeType.PRESSED);
         cdNab.setBackgroundColor(0xFF9999ff);
         ivNab.setImageResource(nabRes);
     }
+
 }

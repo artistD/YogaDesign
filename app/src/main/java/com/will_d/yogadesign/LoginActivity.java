@@ -81,7 +81,6 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-
     public void clickLogin(View view) {
 
         for (int i=0; i<datas.size(); i++){
@@ -93,6 +92,10 @@ public class LoginActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = pref.edit();
                 editor.putBoolean("isLogin", isLogin);
                 editor.putString("id", datas.get(i));
+
+                editor.putBoolean("isFirstCompair", true);
+
+
                 editor.commit();
                 Log.i("Global", datas.get(i));
                 Intent intent = new Intent(this, WorkShopActivity.class);
