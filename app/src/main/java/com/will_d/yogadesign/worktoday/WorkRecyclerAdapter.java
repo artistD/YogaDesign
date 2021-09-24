@@ -14,7 +14,6 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -22,7 +21,6 @@ import androidx.core.widget.PopupWindowCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.will_d.yogadesign.G;
 import com.will_d.yogadesign.R;
 import com.will_d.yogadesign.RetrofitHelper;
 import com.will_d.yogadesign.RetrofitService;
@@ -126,12 +124,14 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 WorkItem item = items.get(filnalPosition);
+                Log.i("TAG", filnalPosition + "");
                 Log.i("asdf", item.getNo() + isChecked);
                 if (isChecked) {
                     holder.llItenContainer.setBackgroundResource(R.drawable.mainbg_03);
                 } else {
                     holder.llItenContainer.setBackgroundColor(0x33333333);
                 }
+
                 holder.WorkitemSwitchOnOffLoadDB(isChecked, item.getNo());
             }
         });
@@ -148,9 +148,9 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
                         Intent intent = new Intent(context, WokrDataSetActivity.class);
                         context.startActivity(intent);
                         WorkItem item= items.get(filnalPosition);
-                        G.no = item.getNo();
-                        G.isworkitemModifyChcecked = true;
-                        G.isModifySave = true;
+                        GworkToday.no = item.getNo();
+                        GworkToday.isworkitemModifyChcecked = true;
+                        GworkToday.isModifySave = true;
 
 //                            popupWindow.dismiss();
                         WorkShopActivity workShopActivity = (WorkShopActivity) context;
@@ -334,6 +334,7 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
                     Log.i("asdf", response.body());
+//                    GworkToday.isSwitchEnd =true;
                 }
 
                 @Override
@@ -353,6 +354,7 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
                     Log.i("TAG", response.body());
+//                    GworkToday.isDeletEnd = true;
                 }
 
                 @Override

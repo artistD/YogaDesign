@@ -22,6 +22,7 @@ public class TodolistItem {
 
     private boolean[] isDayOrTodaySelected;
 
+
     public TodolistItem() {
 
     }
@@ -39,6 +40,7 @@ public class TodolistItem {
         this.tvTodolistLogOk = tvTodolistLogOk;
         this.todolistBooleanState = todolistBooleanState;
         this.isDayOrTodaySelected = isDayOrTodaySelected;
+
     }
 
     public String getNo() {
@@ -90,5 +92,6 @@ public class TodolistItem {
     }
 
     public boolean[] getIsDayOrTodaySelected() { return isDayOrTodaySelected; }
+
 }
 

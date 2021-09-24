@@ -41,7 +41,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
-import com.will_d.yogadesign.G;
 import com.will_d.yogadesign.R;
 import com.will_d.yogadesign.RetrofitHelper;
 import com.will_d.yogadesign.RetrofitService;
@@ -53,7 +52,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -228,7 +226,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
 //        String jsonStr = intent.getStringExtra("Workitems");
 //        Gson gson = new Gson();
 //        WorkItem[] workItem = gson.fromJson(jsonStr, WorkItem[].class);
-        workItems = G.workItems;
+        workItems = GworkToday.workItems;
 
         //weeks dialog
         weeks[0] = findViewById(R.id.iv_weeks_mon);
@@ -504,8 +502,8 @@ public class WokrDataSetActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         //수정을 위해 startActivity가 오면 어떻게 동작할건지 설정
-        if (G.isworkitemModifyChcecked){
-            WorkItemModifyDataLoadDB(G.no);
+        if (GworkToday.isworkitemModifyChcecked){
+            WorkItemModifyDataLoadDB(GworkToday.no);
         }
 
     }
@@ -523,13 +521,13 @@ public class WokrDataSetActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        G.isModifySave = false;
+        GworkToday.isModifySave = false;
         finish();
         overridePendingTransition(R.anim.fragment_none, R.anim.activity_data_set_end);
     }
 
     public void clickClose(View view) {
-        G.isModifySave = false;
+        GworkToday.isModifySave = false;
         finish();
         overridePendingTransition(R.anim.fragment_none, R.anim.activity_data_set_end);
     }
@@ -540,9 +538,9 @@ public class WokrDataSetActivity extends AppCompatActivity {
 
         setResult(RESULT_OK, intent);
 
-        if (G.isModifySave){
+        if (GworkToday.isModifySave){
             name = etName.getText().toString();
-            workModifyDeleteDB(G.no);
+            workModifyDeleteDB(GworkToday.no);
             WorkTodayDataToServer();
         }else {
             name = etName.getText().toString();
@@ -1045,7 +1043,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                G.isworkitemModifyChcecked = false;
+                GworkToday.isworkitemModifyChcecked = false;
                 String jsonStr = response.body();
                 try {
                     JSONArray jsonArray = new JSONArray(jsonStr);
@@ -1230,7 +1228,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                G.isModifySave =false;
+                GworkToday.isModifySave =false;
                 Log.i("TAG", response.body());
             }
 

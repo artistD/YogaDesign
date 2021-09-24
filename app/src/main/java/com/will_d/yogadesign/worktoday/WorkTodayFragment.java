@@ -1,6 +1,5 @@
 package com.will_d.yogadesign.worktoday;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -8,8 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,20 +22,16 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
-import com.will_d.yogadesign.G;
 import com.will_d.yogadesign.R;
 import com.will_d.yogadesign.RetrofitHelper;
 import com.will_d.yogadesign.RetrofitService;
-import com.will_d.yogadesign.WorkShopActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 import retrofit2.Call;
@@ -65,21 +58,6 @@ public class WorkTodayFragment extends Fragment {
     private TextView tvWorkitemDeleteCancel;
 
     private NeumorphCardView cdAddBtn2;
-//
-//    private NeumorphCardView cdAddBtnItem;
-//    private NeumorphCardView cdAddBtnItem2;
-//    private NeumorphCardView cdAddBtnSub;
-//    private NeumorphCardView cdAddBtnSub2;
-//
-//    private boolean isclick = false;
-//    private RelativeLayout rlBlur;
-//
-//    private WorkShopActivity workShopActivity;
-//
-//    private Animation ani;
-//    private Animation ani2;
-//    private Animation ani3;
-//    private Animation ani4;
 
     private boolean isFirst = false;
     private boolean isWorkItemAdd = false;
@@ -118,25 +96,28 @@ public class WorkTodayFragment extends Fragment {
         tvWorkitemDeleteOK = view.findViewById(R.id.tv_workitem_delete_ok);
         tvWorkitemDeleteCancel = view.findViewById(R.id.tv_workitem_delete_cancel);
         cdAddBtn2 = view.findViewById(R.id.cd_addbtn2);
-//
-//        cdAddBtnItem = view.findViewById(R.id.cd_addbtn_item);
-//        cdAddBtnItem2 = view.findViewById(R.id.cd_addbtn_item2);
-//
-//        cdAddBtnSub = view.findViewById(R.id.cd_addbtn_sub);
-//        cdAddBtnSub2 = view.findViewById(R.id.cd_addbtn_sub2);
-//
-//
-//
-//        ani = AnimationUtils.loadAnimation(getActivity(), R.anim.fab_fade);
-//        ani2 = AnimationUtils.loadAnimation(getActivity(), R.anim.fab_fade_end);
-//        ani3 = AnimationUtils.loadAnimation(getActivity(), R.anim.fab_layout_fade);
-//        ani4 = AnimationUtils.loadAnimation(getActivity(), R.anim.fab_layout_fade_end);
-//
-//        rlBlur = view.findViewById(R.id.rl_Blur);
-//        workShopActivity = (WorkShopActivity)getActivity();
 
 
         setcdAddBtnToPreventBlurring();
+
+
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+        String dayStr = sdf.format(date);
+
+        SharedPreferences pref = getActivity().getSharedPreferences("Data", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        String str = pref.getString("dayCompairison", "");
+        if (!dayStr.equals(str)){
+            workItemOnedayUpdateDB();
+            editor.putString("dayCompairison", dayStr);
+            editor.commit();
+        }
+
+        Log.i("asdfg", !dayStr.equals(str)+"");
+
 
         cdAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,113 +135,35 @@ public class WorkTodayFragment extends Fragment {
 
             }
         });
+    }
 
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (isFirst){
+            loadWorkTodayDataServer();
+            isFirst=false;
+        }
 
-        //Todo: 나중에 버튼으로 더 추가적인 작업을 하기위한 주석임....... 필요하면 나중에 쓰라고
-
-//        cdAddBtn.setOnClickListener(new View.OnClickListener() {
-//            WorkShopActivity workShopActivity = (WorkShopActivity) getActivity();
-//            @Override
-//            public void onClick(View v) {
-//                isclick=!isclick;
-//                if (isclick) {
-//                    cdAddBtnBeginning();
-//                    workShopActivity.getMeterialIvTodolistBlur().setVisibility(View.VISIBLE);
-//                    workShopActivity.getMeterialCdTodolist().setCardElevation(0);
-//                    cdAddBtnItem.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            Intent intent = new Intent(getActivity(), WokrDataSetActivity.class);
-//                            Gson gson = new Gson();
-//                            String jsonstr = gson.toJson(workItems);
-//                            Log.i("TAG", jsonstr);
-//                            intent.putExtra("Workitems", jsonstr);
-//
-//                            activityResultLauncher.launch(intent);
-//                            getActivity().overridePendingTransition(R.anim.activity_data_set, R.anim.fragment_none);
-//                            cdAddBtnEnd();
-//                            workShopActivity.getMeterialCdTodolist().setCardElevation(4);
-//                            workShopActivity.getMeterialIvTodolistBlur().setVisibility(View.INVISIBLE);
-//                            isclick=false;
-//                        }
-//                    });
-//
-//                    cdAddBtnSub.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//
-//                        }
-//                    });
-//
-//
-//                }
-//                else {
-//                    cdAddBtnEnd();
-//                    workShopActivity.getMeterialCdTodolist().setCardElevation(4);
-//                    workShopActivity.getMeterialIvTodolistBlur().setVisibility(View.INVISIBLE);
-//                }
-//
-//            }
-//        });
-//
-//        setcdAddBtnToPreventBlurring();
+        if (isWorkItemAdd){
+            loadWorkTodayDataServer();
+            isWorkItemAdd=false;
+        }
 
     }
 
-//    public void cdAddBtnBeginning(){
-//        cdAddBtnItem.startAnimation(ani);
-//        cdAddBtnItem2.startAnimation(ani);
-//        cdAddBtnSub.startAnimation(ani);
-//        cdAddBtnSub2.startAnimation(ani);
-//
-//        cdAddBtnItem.setVisibility(View.VISIBLE);
-//        cdAddBtnItem2.setVisibility(View.VISIBLE);
-//        cdAddBtnSub.setVisibility(View.VISIBLE);
-//        cdAddBtnSub2.setVisibility(View.VISIBLE);
-//
-//
-//        workShopActivity.getViewLine().startAnimation(ani3);
-//        workShopActivity.getIvBnvBlur().startAnimation(ani3);
-//        rlBlur.startAnimation(ani3);
-//        workShopActivity.getToolbarBlur().startAnimation(ani3);
-//
-//        workShopActivity.getToolbarBlur().setVisibility(View.VISIBLE);
-//        workShopActivity.getViewLine().setVisibility(View.INVISIBLE);
-//        workShopActivity.getIvBnvBlur().setVisibility(View.VISIBLE);
-//        rlBlur.setVisibility(View.VISIBLE);
-//    }
-//
-//    public void cdAddBtnEnd(){
-//        cdAddBtnItem.startAnimation(ani2);
-//        cdAddBtnSub.startAnimation(ani2);
-//
-//        cdAddBtnItem.setVisibility(View.INVISIBLE);
-//        cdAddBtnItem2.setVisibility(View.INVISIBLE);
-//        cdAddBtnSub.setVisibility(View.INVISIBLE);
-//        cdAddBtnSub2.setVisibility(View.INVISIBLE);
-//
-//        workShopActivity.getViewLine().startAnimation(ani4);
-//        workShopActivity.getIvBnvBlur().startAnimation(ani4);
-//        rlBlur.startAnimation(ani4);
-//        workShopActivity.getToolbarBlur().startAnimation(ani4);
-//
-//        workShopActivity.getToolbarBlur().setVisibility(View.INVISIBLE);
-//        rlBlur.setVisibility(View.INVISIBLE);
-//        workShopActivity.getViewLine().setVisibility(View.VISIBLE);
-//        workShopActivity.getIvBnvBlur().setVisibility(View.INVISIBLE);
-//
-//    }
-//
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        Toast.makeText(getActivity(), "ddd", Toast.LENGTH_SHORT).show();
+        loadWorkTodayDataServer();
+
+    }
+
     public void setcdAddBtnToPreventBlurring() {
         cdAddBtn.setBackgroundColor(0xFFC7DDFF);
         cdAddBtn2.setBackgroundColor(0xFFC7DDFF);
-
-//        cdAddBtnItem.setBackgroundColor(0xFFC7DDFF);
-//        cdAddBtnItem2.setBackgroundColor(0xFFC7DDFF);
-//
-//        cdAddBtnSub.setBackgroundColor(0xFFC7DDFF);
-//        cdAddBtnSub2.setBackgroundColor(0xFFC7DDFF);
 
     }
 
@@ -370,7 +273,7 @@ public class WorkTodayFragment extends Fragment {
 
                     }
 
-                    G.workItems = workItems;
+                    GworkToday.workItems = workItems;
 
 
                 } catch (JSONException e) {
@@ -384,7 +287,6 @@ public class WorkTodayFragment extends Fragment {
                 Log.i("왜 와이", t.getMessage());
             }
         });
-
 
     }
 
@@ -418,29 +320,6 @@ public class WorkTodayFragment extends Fragment {
                 Log.i("TAG", t.getMessage());
             }
         });
-
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        long now = System.currentTimeMillis();
-        Date date = new Date(now);
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
-        String dayStr = sdf.format(date);
-
-        SharedPreferences pref = getActivity().getSharedPreferences("Data", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        String str = pref.getString("dayCompairison", "");
-        if (!dayStr.equals(str)){
-            workItemOnedayUpdateDB();
-            editor.putString("dayCompairison", dayStr);
-            editor.commit();
-        }
-
-        loadWorkTodayDataServer();
 
     }
 

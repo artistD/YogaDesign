@@ -16,8 +16,10 @@ import android.widget.RelativeLayout;
 
 import com.will_d.yogadesign.set.WorkShopStatisticsFragment;
 import com.will_d.yogadesign.square.WorkShopSquareFragment;
+import com.will_d.yogadesign.worktoday.GworkToday;
 import com.will_d.yogadesign.worktoday.WorkShopTimeFragment;
 import com.will_d.yogadesign.worktoday.WorkShopTodolistFragment;
+import com.will_d.yogadesign.worktoday.WorkTodayFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -129,7 +131,7 @@ public class WorkShopActivity extends AppCompatActivity {
         manager = getSupportFragmentManager();
         tran = manager.beginTransaction();
         if (fragments[0] == null) {
-            fragments[0] = new WorkShopWorkFragment();
+            fragments[0] = new WorkTodayFragment();
             tran.add(R.id.container, fragments[0]);
         }
         tran.commit();
@@ -143,30 +145,34 @@ public class WorkShopActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        if (fragments[0] !=null){
-            Log.i("TAG", "aaa");
-            WorkShopWorkFragment workShopWorkFragment = (WorkShopWorkFragment) fragments[0];
-            toolbarBlur =  workShopWorkFragment.getToolbarBlur();
-        }
+//        if (fragments[0] !=null){
+//            Log.i("TAG", "aaa");
+//            WorkShopWorkFragment workShopWorkFragment = (WorkShopWorkFragment) fragments[0];
+//            toolbarBlur =  workShopWorkFragment.getToolbarBlur();
+//        }
     }
 
 
 
     public void clickTodolist(View view) {
-        BnvFragmentChange(TODOLIST, new WorkShopTodolistFragment());
 
-        meterialCdTodolist.setVisibility(View.INVISIBLE);
-        ivTodolistBack.setVisibility(View.VISIBLE);
-        ivBnvBlur.setVisibility(View.VISIBLE);
+            BnvFragmentChange(TODOLIST, new WorkShopTodolistFragment());
+
+            meterialCdTodolist.setVisibility(View.INVISIBLE);
+            ivTodolistBack.setVisibility(View.VISIBLE);
+            ivBnvBlur.setVisibility(View.VISIBLE);
+            GworkToday.isDeletEnd=false;
+            GworkToday.isSwitchEnd=false;
+
+
+
 
     }
 
     public void clickTodolistBack(View view) {
-
-
         switch (isNav){
             case 0:
-                BnvFragmentChange(BNV_WORK, new WorkShopWorkFragment());
+                BnvFragmentChange(BNV_WORK, new WorkTodayFragment());
                 BnvRevertState();
                 BnvChangeState(cdNabWork, ivNabWork, R.drawable.ic_fragment_work2_push);
 
@@ -210,8 +216,7 @@ public class WorkShopActivity extends AppCompatActivity {
 
 
     public void clickNabWork(View view) {
-        fragments[0].onResume();
-        BnvFragmentChange(BNV_WORK, new WorkShopWorkFragment());
+        BnvFragmentChange(BNV_WORK, new WorkTodayFragment());
         BnvRevertState();
         BnvChangeState(cdNabWork, ivNabWork, R.drawable.ic_fragment_work2_push);
 
@@ -246,26 +251,21 @@ public class WorkShopActivity extends AppCompatActivity {
 
     public void BnvFragmentChange(int BNV_ARRAYNUM, Fragment bnVFragment){
         tran = manager.beginTransaction();
-//        tran.hide(fragments[0]);
-//        if(fragments[1]!=null) tran.hide(fragments[1]);
-//        if(fragments[2]!=null) tran.hide(fragments[2]);
-//        if(fragments[3]!=null) tran.hide(fragments[3]);
-//        if(fragments[4]!=null) tran.hide(fragments[4]);
-        tran.remove(fragments[0]);
-        if(fragments[1]!=null) tran.remove(fragments[1]);
-        if(fragments[2]!=null) tran.remove(fragments[2]);
-        if(fragments[3]!=null) tran.remove(fragments[3]);
-        if(fragments[4]!=null) tran.remove(fragments[4]);
-
+        tran.hide(fragments[0]);
+        if(fragments[1]!=null) tran.hide(fragments[1]);
+        if(fragments[2]!=null) tran.hide(fragments[2]);
+        if(fragments[3]!=null) tran.hide(fragments[3]);
+        if(fragments[4]!=null) tran.hide(fragments[4]);
         if (fragments[BNV_ARRAYNUM] == null) {
             fragments[BNV_ARRAYNUM] = bnVFragment;
             Log.i("TAG", "Fragment");
+            tran.add(R.id.container, fragments[BNV_ARRAYNUM]);
         }
-        tran.add(R.id.container, fragments[BNV_ARRAYNUM]);
         tran.setCustomAnimations(R.anim.fragment_fade, R.anim.fragment_none);
         tran.show(fragments[BNV_ARRAYNUM]);
         tran.commit();
     }
+
 
     public void BnvRevertState(){
         cdNabWork.setShapeType(ShapeType.FLAT);
