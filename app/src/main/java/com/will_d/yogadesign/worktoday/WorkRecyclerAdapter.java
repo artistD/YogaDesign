@@ -14,7 +14,12 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.widget.PopupWindowCompat;
@@ -27,6 +32,7 @@ import com.will_d.yogadesign.RetrofitService;
 import com.will_d.yogadesign.WorkShopActivity;
 
 import java.util.ArrayList;
+import java.util.zip.CheckedOutputStream;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -39,6 +45,7 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
     private Context context;
     private ArrayList<WorkItem> items;
 
+    private String no;
 
     public WorkRecyclerAdapter(Context context, ArrayList<WorkItem> items) {
         this.context = context;
@@ -140,55 +147,9 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
         holder.ivItemSet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PopupWindow popupWindow =  holder.showPopup();
-
-                holder.popupRlModify.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(context, WokrDataSetActivity.class);
-                        context.startActivity(intent);
-                        WorkItem item= items.get(filnalPosition);
-                        GworkToday.no = item.getNo();
-                        GworkToday.isworkitemModifyChcecked = true;
-                        GworkToday.isModifySave = true;
-
-//                            popupWindow.dismiss();
-                        WorkShopActivity workShopActivity = (WorkShopActivity) context;
-                        workShopActivity.overridePendingTransition(R.anim.activity_data_set, R.anim.fragment_none);
-                    }
-                });
-
-
-                //todo: 쇼우 팝업 동작안함 한번하고나면.....왜 와이
-                holder.popupRlDelete.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        WorkItem item = items.get(filnalPosition);
-//                          popupWindow.dismiss();
-                        item.getRlWorkitemDeleteDialog().setVisibility(View.VISIBLE);
-                        item.getTvWorkitemDeleteOK().setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                items.remove(filnalPosition);
-                                notifyItemRemoved(filnalPosition);
-                                holder.workitemDeleteDB(item);
-                                item.getRlWorkitemDeleteDialog().setVisibility(View.INVISIBLE);
-
-                            }
-                        });
-
-                        item.getTvWorkitemDeleteCancel().setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                item.getRlWorkitemDeleteDialog().setVisibility(View.INVISIBLE);
-
-                            }
-                        });
-                    }
-                });
-
-
-
+                PopupWindow popupWindow =  holder.showPopup(filnalPosition);
+                Toast.makeText(context, "qwfqwfqwf", Toast.LENGTH_SHORT).show();
+                no = item.getNo();
 
             }
         });//#######
@@ -246,8 +207,6 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
         private LinearLayout llItenContainer;
         private ImageView ivItemSet;
 
-        private RelativeLayout popupRlModify;
-        private RelativeLayout popupRlDelete;
 
         private TextView tvWorkItemCounter;
 
@@ -298,16 +257,14 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
 
 
-        public PopupWindow showPopup(){
+        public PopupWindow showPopup(int finalPosition){
             LayoutInflater inflater = LayoutInflater.from(context);
             View popupView = inflater.inflate(R.layout.workitem_popupmenu, null);
 
-            if(popupRlModify==null) {
-                popupRlModify =  popupView.findViewById(R.id.rl_modify);
-            }
-            if(popupRlDelete==null){
-                popupRlDelete = popupView.findViewById(R.id.rl_delete);
-            }
+
+            RelativeLayout popupRlModify =  popupView.findViewById(R.id.rl_modify);
+            RelativeLayout popupRlDelete = popupView.findViewById(R.id.rl_delete);
+            RelativeLayout popupRlPublick = popupView.findViewById(R.id.rl_itempublic);
 
 
             int width = RelativeLayout.LayoutParams.WRAP_CONTENT;
@@ -318,6 +275,68 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
             popupWindow.setElevation(10f);
 
             PopupWindowCompat.showAsDropDown(popupWindow, ivItemSet, 0, 0, Gravity.CENTER);
+
+
+
+            popupRlModify.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, WokrDataSetActivity.class);
+                    intent.putExtra("no", no);
+
+                    Log.i("qaz", no);
+                    WorkItem item= items.get(finalPosition);
+                    GworkToday.no = item.getNo();
+                    GworkToday.isworkitemModifyChcecked = true;
+                    GworkToday.isModifySave = true;
+
+
+                    context.startActivity(intent);
+                    popupWindow.dismiss();
+
+                    WorkShopActivity workShopActivity = (WorkShopActivity) context;
+                    workShopActivity.overridePendingTransition(R.anim.activity_data_set, R.anim.fragment_none);
+                }
+            });
+
+
+            //todo: 쇼우 팝업 동작안함 한번하고나면.....왜 와이
+            popupRlDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    WorkItem item = items.get(finalPosition);
+                    popupWindow.dismiss();
+                    item.getRlWorkitemDeleteDialog().setVisibility(View.VISIBLE);
+                    item.getTvWorkitemDeleteOK().setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            items.remove(finalPosition);
+                            notifyDataSetChanged();
+                            workitemDeleteDB(item);
+                            item.getRlWorkitemDeleteDialog().setVisibility(View.INVISIBLE);
+
+                        }
+                    });
+
+                    item.getTvWorkitemDeleteCancel().setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            item.getRlWorkitemDeleteDialog().setVisibility(View.INVISIBLE);
+
+                        }
+                    });
+                }
+            });
+
+
+            popupRlPublick.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context, "qwfqwffqw", Toast.LENGTH_SHORT).show();
+                    popupWindow.dismiss();
+                }
+            });
+
 
             return popupWindow;
 
@@ -363,6 +382,13 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
                 }
             });
 
+
+
+        }
+
+        public void workItemPublicUpdate(String no){
+            Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
+            RetrofitService retrofitServic= retrofit.create(RetrofitService.class);
 
 
         }
@@ -413,6 +439,7 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
 
     }
+
 
 
 

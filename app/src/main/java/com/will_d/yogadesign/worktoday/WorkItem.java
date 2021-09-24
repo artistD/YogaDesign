@@ -50,6 +50,7 @@ public class WorkItem {
     private TextView tvWorkitemDeleteCancel;
 
 
+
     public WorkItem() {
 
     }
@@ -129,6 +130,8 @@ public class WorkItem {
     public TextView getTvWorkitemDeleteOK() { return tvWorkitemDeleteOK; }
 
     public TextView getTvWorkitemDeleteCancel() { return tvWorkitemDeleteCancel; }
+
+
 }
 
 

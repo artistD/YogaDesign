@@ -65,8 +65,16 @@ public interface RetrofitService {
     Call<String> workItemToPositionChangeDB(@Query("noFrom") String noFrom, @Query("noTo") String noTo);
     //********************** 이것들 일단보류
 
+
     @GET("/YogaDesign2/workitem/workItemOnedayUpdateDB.php")
     Call<String> workItemOnedayUpdateDB(@Query("off") boolean off);
+
+    @Multipart
+    @POST("/YogaDesign2/workitem/workTodayModifyUpdateToServer.php")
+    Call<String> workTodayModifyUpdateToServer(@PartMap Map<String, String> dataPart, @Part MultipartBody.Part filePart);
+
+    @GET("/YogaDesign2/workitem/workItemPublicUpdate.php")
+    Call<String> workItemPublicUpdate(@Query("isPublic") boolean isPublic);
 
 
 

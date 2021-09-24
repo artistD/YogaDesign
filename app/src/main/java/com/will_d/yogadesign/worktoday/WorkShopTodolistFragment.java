@@ -136,34 +136,29 @@ public class WorkShopTodolistFragment extends Fragment {
 
         tvTodolistCurrentTime.setText(getTime + ".(" + dayStr + ")");
 
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        String s = sharedPreferences.getString("dayCompairison", "");
-
-        final long now2 = System.currentTimeMillis();
-        final Date date2 = new Date(now2);
-
-        final SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy.MM.dd");
-        final String dayStr2 = sdf2.format(date2);
-
-        if (!dayStr2.equals(s)){
-            insertWorkitemTodolistBooleanStateInitDB();
-            editor.putString("dayCompairison", dayStr2);
-            editor.commit();
-        }
-        Log.i("asdfg", !dayStr.equals(s)+"");
-
-        if (isWorkItemAdd){
-            loadWorkTodayDataServer();
-        }
-
-
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        String s = sharedPreferences.getString("dayCompairison", "");
+
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+        String dayStr = sdf.format(date);
+
+        if (!(dayStr.equals(s))){
+            insertWorkitemTodolistBooleanStateInitDB();
+            editor.putString("dayCompairison", dayStr);
+            editor.commit();
+        }
+        Log.i("asdfgh", !(dayStr.equals(s))+"");
+
+
 
         if (isFirst){
             loadWorkTodayDataServer();
@@ -223,6 +218,7 @@ public class WorkShopTodolistFragment extends Fragment {
                 String jsonStr = response.body();
                 Log.i("loadTodolistData", response.body());
                 todolistItems.clear();
+                adapter.notifyDataSetChanged();
                 try {
                     JSONArray jsonArray = new JSONArray(jsonStr);
                     for (int i=0; i<jsonArray.length(); i++){

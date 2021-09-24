@@ -60,7 +60,7 @@ public class WorkTodayFragment extends Fragment {
     private NeumorphCardView cdAddBtn2;
 
     private boolean isFirst = false;
-    private boolean isWorkItemAdd = false;
+    static boolean isWorkItemAdd = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -101,24 +101,6 @@ public class WorkTodayFragment extends Fragment {
         setcdAddBtnToPreventBlurring();
 
 
-        long now = System.currentTimeMillis();
-        Date date = new Date(now);
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
-        String dayStr = sdf.format(date);
-
-        SharedPreferences pref = getActivity().getSharedPreferences("Data", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        String str = pref.getString("dayCompairison", "");
-        if (!dayStr.equals(str)){
-            workItemOnedayUpdateDB();
-            editor.putString("dayCompairison", dayStr);
-            editor.commit();
-        }
-
-        Log.i("asdfg", !dayStr.equals(str)+"");
-
-
         cdAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,11 +123,32 @@ public class WorkTodayFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+        String dayStr = sdf.format(date);
+
+        SharedPreferences pref = getActivity().getSharedPreferences("Data", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        String str = pref.getString("dayCompairison", "");
+        if (!(dayStr.equals(str))){
+            workItemOnedayUpdateDB();
+            editor.putString("dayCompairison", dayStr);
+            editor.commit();
+        }
+
+        Log.i("asdfg", !(dayStr.equals(str))+"");
+
+
         if (isFirst){
             loadWorkTodayDataServer();
             isFirst=false;
         }
 
+
+        Log.i("nmn", isWorkItemAdd + "");
         if (isWorkItemAdd){
             loadWorkTodayDataServer();
             isWorkItemAdd=false;
@@ -187,6 +190,7 @@ public class WorkTodayFragment extends Fragment {
                 String jsonStr = response.body();
                 Log.i("loadWorkTodayData2", response.body());
                workItems.clear();
+               adapter.notifyDataSetChanged();
                 try {
 
                     JSONArray jsonArray = new JSONArray(jsonStr);
@@ -300,21 +304,17 @@ public class WorkTodayFragment extends Fragment {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 Log.i("TAG", response.body());
-                for (int i=0; i<workItems.size(); i++){
-                    WorkItem workItem = workItems.get(i);
-                    if(workItem.getIsItemInOff()){
-
-                    }else {
-
-                    }
-
-
-
-
-                }
+//                for (int i=0; i<workItems.size(); i++){
+//                    WorkItem workItem = workItems.get(i);
+//                    if(workItem.getIsItemInOff()){
+//
+//                    }else {
+//
+//                    }
+//
+//                }
 
             }
-
             @Override
             public void onFailure(Call<String> call, Throwable t) {
                 Log.i("TAG", t.getMessage());
@@ -326,14 +326,9 @@ public class WorkTodayFragment extends Fragment {
     ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
-            if (result.getResultCode() == getActivity().RESULT_OK){
-                Intent intent = result.getData();
 
-                isWorkItemAdd = intent.getBooleanExtra("isWorkItemAdd", false);
-                WorkShopTodolistFragment.isWorkItemAdd = intent.getBooleanExtra("isWorkItemAdd", false);
-                Log.i("isworkItemAdd", isWorkItemAdd+":");
+                Log.i("mnm", isWorkItemAdd+"");
 
-            }
         }
     });
 

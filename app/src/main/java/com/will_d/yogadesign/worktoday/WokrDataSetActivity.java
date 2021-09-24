@@ -168,12 +168,14 @@ public class WokrDataSetActivity extends AppCompatActivity {
     private int completeNum = 0;
     private boolean[] todolistBooleanState = new boolean[] {false,false,false};
     private boolean[] isDayOrTodaySelected = new boolean[2];
-
-    private String uriToString;
     //##############################
 
-    double isoriginalLatitude;
-    double isoriginalLongitude;
+    private double originalLatitude;
+    private double originalLongitude;
+
+    private boolean isPhotoChecekd=false;
+
+
 
 
 
@@ -460,8 +462,8 @@ public class WokrDataSetActivity extends AppCompatActivity {
                     tvLocalNotificationOk.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            isoriginalLatitude  =latitude;
-                            isoriginalLongitude = longitude;
+                            originalLatitude  =latitude;
+                            originalLongitude = longitude;
 
                             placeName = etLocalNotificationPlaceName.getText().toString();
                             tvLocalNotifiacation.setText(placeName);
@@ -533,19 +535,29 @@ public class WokrDataSetActivity extends AppCompatActivity {
     }
 
     public void clickSave(View view) { //********************************
+
+        if (etName.getText().toString().equals("") || tvNickname.equals("별명") || imgPath.equals("") || (!weeksData[0]&&!weeksData[1]&&!weeksData[2]&&!weeksData[3]&&!weeksData[4]&&!weeksData[5]&&!weeksData[6])){
+            Toast.makeText(this, "이름, 별명, 사진, 반복 선택은 필수 입니다.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
         Intent intent = getIntent();
-        intent.putExtra("isWorkItemAdd", true);
-
-        setResult(RESULT_OK, intent);
-
         if (GworkToday.isModifySave){
             name = etName.getText().toString();
-            workModifyDeleteDB(GworkToday.no);
-            WorkTodayDataToServer();
+            String no = intent.getStringExtra("no");
+            Log.i("qazw", no);
+            workTodayModifyUpdateToServer(isPhotoChecekd, no);
+            GworkToday.isModifySave=false;
+
         }else {
             name = etName.getText().toString();
             WorkTodayDataToServer();
+
         }
+
+        WorkTodayFragment.isWorkItemAdd = true;
+        WorkShopTodolistFragment.isWorkItemAdd = true;
 
 
     }
@@ -625,8 +637,16 @@ public class WokrDataSetActivity extends AppCompatActivity {
         tvWeeksDialogSuccess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (!isSelectedToday && !isSelectedDays){
+                    Toast.makeText(WokrDataSetActivity.this, "날짜를 선택해주세요!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+
                 if (isSelectedDays && !weeksData[0] && !weeksData[1] && !weeksData[2] && !weeksData[3] && !weeksData[4] && !weeksData[5] && !weeksData[6]){
                     Toast.makeText(WokrDataSetActivity.this, "날짜를 선택해주세요!", Toast.LENGTH_SHORT).show();
+                    return;
                 }else if (!isSelectedDays && isSelectedToday){
 
                     isDayOrTodaySelected[0] = isSelectedDays;
@@ -955,8 +975,8 @@ public class WokrDataSetActivity extends AppCompatActivity {
         tvLocalNotificationCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                latitude = isoriginalLatitude;
-                longitude = isoriginalLongitude;
+                latitude = originalLatitude;
+                longitude = originalLongitude;
                 localNotificationDialog.setVisibility(View.INVISIBLE);
             }
         });
@@ -1011,8 +1031,6 @@ public class WokrDataSetActivity extends AppCompatActivity {
             dataPart.put("isDayOrTodaySelected", jsonStr);
             Log.i("TAGadadad", jsonStr);
 
-            dataPart.put("uriToString", uriToString);
-
             Call<String> call = retrofitService.WorkItemPostDataToServer(dataPart, filePart);
             call.enqueue(new Callback<String>() {
                 @Override
@@ -1035,6 +1053,88 @@ public class WokrDataSetActivity extends AppCompatActivity {
 
     }
 
+
+    public void workTodayModifyUpdateToServer(boolean isPhotoChecekd, String no){
+        String baseUrl = "http://willd88.dothome.co.kr/";
+        Retrofit.Builder builder = new Retrofit.Builder();
+        builder.baseUrl(baseUrl);
+        builder.addConverterFactory(ScalarsConverterFactory.create());
+        Retrofit retrofit = builder.build();
+
+        RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+
+
+        //여기서 보내냐 안보내냐를 판단해야함..................................................
+        MultipartBody.Part filePart = null;
+        Log.i("bnm", isPhotoChecekd+"");
+            if (isPhotoChecekd) {
+                String realImgagePath = getRealPathFromUri(Uri.parse(imgPath)); ////////////*******************
+                File file = new File(realImgagePath);
+                RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
+                filePart = MultipartBody.Part.createFormData("img", file.getName(), requestBody);
+            }
+
+            Map<String, String> dataPart = new HashMap<>();
+            dataPart.put("id", id);
+            dataPart.put("name", name);
+            dataPart.put("nickName", nickName);
+//          dataPart.put("imgPath", imgPath);  //이미지는 절대경로로 보내주는거니까 안줘도됨.
+            Gson gson = new Gson();
+            String weeksDataJsonStr = gson.toJson(weeksData);
+            dataPart.put("weeksDataJsonStr", weeksDataJsonStr);
+
+            dataPart.put("isGoalChecked", String.valueOf(isGoalChecked));
+            dataPart.put("goalSet", goalSet);
+            dataPart.put("isPreNotificationChecked", String.valueOf(isPreNotificationChecked));
+            dataPart.put("preNotificationTime", preNotificationTime);
+            dataPart.put("isLocalNotificationChecked", String.valueOf(isLocalNotificationChecked));
+
+            dataPart.put("placeName", placeName);
+            dataPart.put("latitude", String.valueOf(latitude));
+            dataPart.put("longitude", String.valueOf(longitude));
+            dataPart.put("isItemOnOff", String.valueOf(isItemOnOff));
+            dataPart.put("isItemPublic", String.valueOf(isItemPublic));
+
+            String todolistBooleanJsonStr = gson.toJson(todolistBooleanState);
+            Log.i("TAGBoolean", todolistBooleanJsonStr);
+            dataPart.put("todoistBooleanState", todolistBooleanJsonStr);
+
+            dataPart.put("completeNum", String.valueOf(completeNum));
+
+            String jsonStr = gson.toJson(isDayOrTodaySelected);
+            dataPart.put("isDayOrTodaySelected", jsonStr);
+            Log.i("TAGadadad", jsonStr);
+
+            dataPart.put("isPhotoChecekd", String.valueOf(isPhotoChecekd));
+            dataPart.put("no", no);
+
+
+            Call<String> call = retrofitService.workTodayModifyUpdateToServer(dataPart, filePart);
+            Log.i("qazxc", filePart+"");
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    Log.i("retrofit", response.body());
+                    finish();
+                    overridePendingTransition(R.anim.fragment_none, R.anim.activity_data_set_end);
+                }
+
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Toast.makeText(WokrDataSetActivity.this, "네트워크 문제 발생", Toast.LENGTH_SHORT).show();
+                    Log.i("retrofit", "ERROR : " + t.getMessage());
+
+                }
+            });
+
+
+
+
+    }
+
+
+
+
     public void WorkItemModifyDataLoadDB(String no){
         Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
         RetrofitService retrofitService = retrofit.create(RetrofitService.class);
@@ -1053,7 +1153,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
                     nickName = jsonObject.getString("nickName");
 
                     String dstName = jsonObject.getString("dstName");
-                    String httpPath = "http://willd88.dothome.co.kr/YogaDesign2/workitem/" + dstName;
+                    imgPath = "http://willd88.dothome.co.kr/YogaDesign2/workitem/" + dstName;
 
                     String weeksDataJsonStr = jsonObject.getString("weeksData");
                     Gson gson = new Gson();
@@ -1066,7 +1166,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
                         isGoalChecked = false;
                     }
 
-                    String goalSet = jsonObject.getString("goalSet");
+                    goalSet = jsonObject.getString("goalSet");
 
                     String isPre = jsonObject.getString("isPreNotificationChecked");
 
@@ -1114,8 +1214,22 @@ public class WokrDataSetActivity extends AppCompatActivity {
                     String isDayOrToday = jsonObject.getString("isDayOrTodaySelected");
                     isDayOrTodaySelected = gson.fromJson(isDayOrToday, boolean[].class);
 
-                    imgPath = jsonObject.getString("uriToString");
-                    Log.i("TAGasdfgh", imgPath);
+
+//                    Log.i("qazxc", name);
+//                    Log.i("qazxc", nickName);
+//                    Log.i("qazxc", imgPath);
+//                    Log.i("qazxc", weeksData+"");
+//                    Log.i("qazxc", isGoalChecked+"");
+//                    Log.i("qazxc", goalSet+"");
+//                    Log.i("qazxc", isPreNotificationChecked);
+//                    Log.i("qazxc", preNotificationTime);
+//                    Log.i("qazxc", nickName);
+//                    Log.i("qazxc", nickName);
+//                    Log.i("qazxc", nickName);
+//                    Log.i("qazxc", nickName);
+//                    Log.i("qazxc", nickName);
+//                    Log.i("qazxc", nickName);
+//                    Log.i("qazxc", nickName);
 
 
 
@@ -1125,31 +1239,9 @@ public class WokrDataSetActivity extends AppCompatActivity {
 
                         tvPhoto.setVisibility(View.INVISIBLE);
                         civPhoto.setVisibility(View.VISIBLE);
-                        Glide.with(WokrDataSetActivity.this).load(httpPath).into(civPhoto);
+                        Log.i("qazxc", imgPath);
+                        Glide.with(WokrDataSetActivity.this).load(imgPath).into(civPhoto);
 
-
-                        if (!weeksData[0]) weeks[0].setImageResource(R.drawable.ic_unchecked);
-                        else weeks[0].setImageResource(R.drawable.ic_checked);
-                        if (!weeksData[1]) weeks[1].setImageResource(R.drawable.ic_unchecked);
-                        else weeks[1].setImageResource(R.drawable.ic_checked);
-                        if (!weeksData[2]) weeks[2].setImageResource(R.drawable.ic_unchecked);
-                        else weeks[2].setImageResource(R.drawable.ic_checked);
-                        if (!weeksData[3]) weeks[3].setImageResource(R.drawable.ic_unchecked);
-                        else weeks[3].setImageResource(R.drawable.ic_checked);
-                        if (!weeksData[4]) weeks[4].setImageResource(R.drawable.ic_unchecked);
-                        else weeks[4].setImageResource(R.drawable.ic_checked);
-                        if (!weeksData[5]) weeks[5].setImageResource(R.drawable.ic_unchecked);
-                        else weeks[5].setImageResource(R.drawable.ic_checked);
-                        if (!weeksData[6]) weeks[6].setImageResource(R.drawable.ic_unchecked);
-                        else weeks[6].setImageResource(R.drawable.ic_checked);
-
-                        if (!isDayOrTodaySelected[0] && isDayOrTodaySelected[1]){
-                            cdWeeksDialogDaysBlur.setVisibility(View.VISIBLE);
-                            tvWeeksDialogSelectedToday.setTextColor(0xFF9999FF);
-                        }else if (isDayOrTodaySelected[0] && !isDayOrTodaySelected[1]){
-                            cdWeeksDialogDaysBlur.setVisibility(View.INVISIBLE);
-                            tvWeeksDialogSelectedDays.setTextColor(0xFF9999FF);
-                        }
 
 
                         StringBuffer buffer = new StringBuffer();
@@ -1168,16 +1260,55 @@ public class WokrDataSetActivity extends AppCompatActivity {
                             tvWeeks.setTextColor(0xFF9999FF);
                         }
 
+                    if (!isDayOrTodaySelected[0] && isDayOrTodaySelected[1]){
+                        cdWeeksDialogDaysBlur.setVisibility(View.VISIBLE);
+                        tvWeeksDialogSelectedToday.setTextColor(0xFF9999FF);
+                        tvWeeks.setText("오늘 하루만");
+                        tvWeeks.setTextColor(0xFF9999FF);
+                    }else if (isDayOrTodaySelected[0] && !isDayOrTodaySelected[1]){
+                        cdWeeksDialogDaysBlur.setVisibility(View.INVISIBLE);
+                        tvWeeksDialogSelectedDays.setTextColor(0xFF9999FF);
+                        tvWeeks.setText(replaceFirst);
+                        tvWeeks.setTextColor(0xFF9999FF);
+
+                        if (!weeksData[0]) weeks[0].setImageResource(R.drawable.ic_unchecked);
+                        else weeks[0].setImageResource(R.drawable.ic_checked);
+                        if (!weeksData[1]) weeks[1].setImageResource(R.drawable.ic_unchecked);
+                        else weeks[1].setImageResource(R.drawable.ic_checked);
+                        if (!weeksData[2]) weeks[2].setImageResource(R.drawable.ic_unchecked);
+                        else weeks[2].setImageResource(R.drawable.ic_checked);
+                        if (!weeksData[3]) weeks[3].setImageResource(R.drawable.ic_unchecked);
+                        else weeks[3].setImageResource(R.drawable.ic_checked);
+                        if (!weeksData[4]) weeks[4].setImageResource(R.drawable.ic_unchecked);
+                        else weeks[4].setImageResource(R.drawable.ic_checked);
+                        if (!weeksData[5]) weeks[5].setImageResource(R.drawable.ic_unchecked);
+                        else weeks[5].setImageResource(R.drawable.ic_checked);
+                        if (!weeksData[6]) weeks[6].setImageResource(R.drawable.ic_unchecked);
+                        else weeks[6].setImageResource(R.drawable.ic_checked);
+
+
+                    }
+
+
+
+
+
+
+
+
+
                         if (isGoalChecked){
                             swGoal.setChecked(true);
                             goalDialog.setVisibility(View.INVISIBLE);
                             mcdGoalFixed.setVisibility(View.VISIBLE);
                             tvGoal.setText(goalSet);
                             tvGoal.setTextColor(0xFF9999FF);
-                            String a = goalSet.charAt(4) + "";
-                            Log.i("TAGzxc", a);
-                            int num = Integer.parseInt(a);
-                            numberPickerGoalNumber.setValue(num);
+                            if (goalSet!=null){
+                                String a = String.valueOf(goalSet.charAt(4));
+                                Log.i("TAGzxc", a);
+                                int num = Integer.parseInt(a);
+                                numberPickerGoalNumber.setValue(num);
+                            }
                         }
 
                         if (isPreNotificationChecked){
@@ -1199,6 +1330,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
                             tvLocalNotifiacation.setText(placeName);;
                             tvLocalNotifiacation.setTextColor(0xFF9999FF);
                         }
+
 
 
 
@@ -1251,10 +1383,12 @@ public class WokrDataSetActivity extends AppCompatActivity {
                     civPhoto.setVisibility(View.VISIBLE);
                     Glide.with(WokrDataSetActivity.this).load(uri).into(civPhoto);
                     WokrDataSetActivity.this.imgPath = uri.toString(); //절대경로 레트로핏 작업할때 전송해야함
-                    uriToString  = uri.toString();
                     Log.i("TAGzxcv", imgPath);
+                    isPhotoChecekd = true;
                 }
 
+            }else{
+                isPhotoChecekd = false;
             }
         }
     });
