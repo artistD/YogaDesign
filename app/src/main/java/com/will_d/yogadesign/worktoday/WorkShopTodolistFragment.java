@@ -153,6 +153,7 @@ public class WorkShopTodolistFragment extends Fragment {
 
         if (!(dayStr.equals(s))){
             insertWorkitemTodolistBooleanStateInitDB();
+            adapter.notifyDataSetChanged();
             editor.putString("dayCompairison", dayStr);
             editor.commit();
         }

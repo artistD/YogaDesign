@@ -47,6 +47,9 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
     private String no;
 
+    //아이템 퍼블릭의 불린값임
+    boolean popupIsItemPublick = true;
+
     public WorkRecyclerAdapter(Context context, ArrayList<WorkItem> items) {
         this.context = context;
         this.items = items;
@@ -249,6 +252,15 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
             cdTodayWork = itemView.findViewById(R.id.cd_today_work);
 
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context, "asdf", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(context, WorkItemClickedActivity.class);
+                    context.startActivity(intent);
+
+                }
+            });
 
 
 
@@ -262,9 +274,11 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
             View popupView = inflater.inflate(R.layout.workitem_popupmenu, null);
 
 
+
             RelativeLayout popupRlModify =  popupView.findViewById(R.id.rl_modify);
             RelativeLayout popupRlDelete = popupView.findViewById(R.id.rl_delete);
             RelativeLayout popupRlPublick = popupView.findViewById(R.id.rl_itempublic);
+            TextView tvItemPublic = popupView.findViewById(R.id.tv_itempublic);
 
 
             int width = RelativeLayout.LayoutParams.WRAP_CONTENT;
@@ -332,8 +346,13 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
             popupRlPublick.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    popupIsItemPublick = !popupIsItemPublick;
                     Toast.makeText(context, "qwfqwffqw", Toast.LENGTH_SHORT).show();
-                    popupWindow.dismiss();
+                    if (popupIsItemPublick) tvItemPublic.setText("on");
+                    else tvItemPublic.setText("off");
+                    WorkItem workItem = items.get(finalPosition);
+                    workItemPublicUpdate(workItem.getNo(), popupIsItemPublick);
+                    notifyDataSetChanged();
                 }
             });
 
@@ -386,9 +405,23 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
         }
 
-        public void workItemPublicUpdate(String no){
+        public void workItemPublicUpdate(String no, boolean isItemPublic){
             Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
             RetrofitService retrofitServic= retrofit.create(RetrofitService.class);
+
+            Call<String> call = retrofitServic.workItemPublicUpdate(no, isItemPublic);
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                   Log.i("Tag", response.body());
+                }
+
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Log.i("Tag", t.getMessage());
+                }
+            });
+
 
 
         }

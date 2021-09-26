@@ -87,6 +87,11 @@
         <item name="neumorph_cornerSize">16dp</item>
     </style>
 
+    <style name="ShapeAppearance3">
+        <item name="neumorph_cornerFamily">oval</item>
+        <item name="neumorph_cornerSize">16dp</item>
+    </style>
+
 
 
 

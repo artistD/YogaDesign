@@ -117,9 +117,10 @@
                     android:layout_alignParentRight="true"
                     app:cardCornerRadius="8dp">
                     <TextView
+                        android:id="@+id/tv_itempublic"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="off"
+                        android:text="on"
                         android:textSize="16sp"
                         android:gravity="center"
                         android:layout_gravity="center"

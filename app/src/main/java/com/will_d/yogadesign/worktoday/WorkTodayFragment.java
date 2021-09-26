@@ -133,15 +133,17 @@ public class WorkTodayFragment extends Fragment {
         SharedPreferences pref = getActivity().getSharedPreferences("Data", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         String str = pref.getString("dayCompairison", "");
+        //todo: 일단 이기능이 제대로 동작을 안함.
         if (!(dayStr.equals(str))){
             workItemOnedayUpdateDB();
+            adapter.notifyDataSetChanged();
             editor.putString("dayCompairison", dayStr);
             editor.commit();
         }
 
         Log.i("asdfg", !(dayStr.equals(str))+"");
 
-
+        Log.i("asdfggg", isFirst+"");
         if (isFirst){
             loadWorkTodayDataServer();
             isFirst=false;

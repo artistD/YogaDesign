@@ -2,30 +2,30 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.will_d.yogadesign">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <!-- 외장메모리 사용에 대한 퍼미션 : 동적퍼미션까지 필요   -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <!-- api29 버전 이상부터 미디어파일에 대한 위치접근 허용 퍼미션 추가   -->
-    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION"/>
-<!--    위치 권한요청-->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 외장메모리 사용에 대한 퍼미션 : 동적퍼미션까지 필요 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- api29 버전 이상부터 미디어파일에 대한 위치접근 허용 퍼미션 추가 -->
+    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" /> <!-- 위치 권한요청 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.YogaDesign"
-        android:usesCleartextTraffic="true"
-        android:requestLegacyExternalStorage="true">
-
-<!--        todo:이거 꼭질문-->
-
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".time.AlarmDataSetActivity"
+            android:exported="true" />
+        <activity
+            android:name=".worktoday.WorkItemClickedActivity"
+            android:exported="true" /> <!-- todo:이거 꼭질문 -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDmmL_S0PLZfXQy_Qvna9F_uyQEMvFMRtA"/>
+            android:value="AIzaSyDmmL_S0PLZfXQy_Qvna9F_uyQEMvFMRtA" />
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -35,20 +35,16 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-
         <activity
-            android:windowSoftInputMode="adjustUnspecified"
             android:name=".IntroActivity"
             android:exported="true"
-            android:theme="@style/IntroActivity">
-        </activity>
-
-
+            android:theme="@style/IntroActivity"
+            android:windowSoftInputMode="adjustUnspecified" />
         <activity
-            android:windowSoftInputMode="adjustUnspecified"
             android:name=".LoginActivity"
             android:exported="true"
-            android:theme="@style/LoginActivity" >
+            android:theme="@style/LoginActivity"
+            android:windowSoftInputMode="adjustUnspecified">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -56,10 +52,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:windowSoftInputMode="adjustUnspecified"
             android:name=".worktoday.WokrDataSetActivity"
             android:exported="true"
-            android:theme="@style/WorkSDataSetActivity" />
+            android:theme="@style/WorkSDataSetActivity"
+            android:windowSoftInputMode="adjustUnspecified" />
         <activity
             android:name=".WorkShopActivity"
             android:exported="true"

@@ -74,7 +74,7 @@ public interface RetrofitService {
     Call<String> workTodayModifyUpdateToServer(@PartMap Map<String, String> dataPart, @Part MultipartBody.Part filePart);
 
     @GET("/YogaDesign2/workitem/workItemPublicUpdate.php")
-    Call<String> workItemPublicUpdate(@Query("isPublic") boolean isPublic);
+    Call<String> workItemPublicUpdate(@Query("no") String no, @Query("isItemPublic") boolean isItemPublic);
 
 
 
