@@ -322,13 +322,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@drawable/mainbg_02"
-                    android:layout_marginTop="8dp"/>
+                    android:layout_marginTop="4dp"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:layout_marginLeft="16dp">
+                    android:layout_marginLeft="16dp"
+                    android:layout_centerVertical="true">
 
 
                     <TextView
@@ -404,7 +405,8 @@
                     android:src="@drawable/ic_recycler_fix"
                     android:layout_alignParentRight="true"
                     android:layout_marginTop="12dp"
-                    android:layout_marginRight="24dp"/>
+                    android:layout_marginRight="24dp"
+                    android:layout_centerVertical="true"/>
 
 
 

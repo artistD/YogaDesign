@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.will_d.yogadesign.R;
 
@@ -18,10 +19,15 @@ import soup.neumorphism.NeumorphCardView;
 
 public class TimeAlarmFragment extends Fragment {
 
-    ArrayList<AlarmItem> items = new ArrayList<AlarmItem>();
 
 
     private NeumorphCardView cdAddBtn;
+    private NeumorphCardView cdAddBtn2;
+
+
+    private ArrayList<AlarmItem> alarmItems = new ArrayList<AlarmItem>();
+    private RecyclerView recyclerView;
+    private AlarmItemAdapter adapter;
 
     @Nullable
     @Override
@@ -34,6 +40,23 @@ public class TimeAlarmFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         cdAddBtn = view.findViewById(R.id.cd_addbtn);
+        cdAddBtn2 = view.findViewById(R.id.cd_addbtn2);
+
+        cdAddBtn.setBackgroundColor(0xFFC7DDFF);
+        cdAddBtn2.setBackgroundColor(0xFFC7DDFF);
+
+        boolean[] weeks = new boolean[]{true, true, true, true, false, false, false};
+        alarmItems.add(new AlarmItem("08:30", weeks));
+        alarmItems.add(new AlarmItem("09:30", weeks));
+        alarmItems.add(new AlarmItem("10:30", weeks));
+        alarmItems.add(new AlarmItem("11:00", weeks));
+        alarmItems.add(new AlarmItem("12:30", weeks));
+
+
+        recyclerView = view.findViewById(R.id.recycler);
+        adapter = new AlarmItemAdapter(getActivity(), alarmItems);
+        recyclerView.setAdapter(adapter);
+
 
         cdAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
