@@ -4,11 +4,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.will_d.yogadesign.R;
 
 import java.util.ArrayList;
@@ -38,6 +41,8 @@ public class LogItemAdapter extends RecyclerView.Adapter<LogItemAdapter.VH> {
         holder.tvDate.setText(item.getDate());
         holder.tvLog.setText(item.getLog());
 
+        Glide.with(context).load(R.drawable.mainbg_03).into(holder.iv);
+
     }
 
     @Override
@@ -49,12 +54,16 @@ public class LogItemAdapter extends RecyclerView.Adapter<LogItemAdapter.VH> {
         private TextView tvDate;
         private TextView tvLog;
 
+        private ImageView iv;
+
 
         public VH(@NonNull View itemView) {
             super(itemView);
 
             tvDate = itemView.findViewById(R.id.tv_date);
             tvLog = itemView.findViewById(R.id.tv_log);
+
+            iv= itemView.findViewById(R.id.iv);
         }
     }//##################################################################
 }

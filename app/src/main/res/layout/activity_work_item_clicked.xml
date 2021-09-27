@@ -78,7 +78,9 @@
                 app:type="many_days_picker"
                 app:headerColor="#FF9999FF"
                 app:swipeEnabled="false"
-                app:selectionColor="#FF9999FF"/>
+                app:selectionColor="#FF9999FF"
+                app:pagesColor="#55C7DDFF"
+                app:abbreviationsBarColor="#55C7DDFF" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -108,7 +110,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:padding="16dp"
-                android:background="@drawable/mainbg_03">
+                android:background="#55C7DDFF">
 
 
                 <RelativeLayout
