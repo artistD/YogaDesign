@@ -26,6 +26,8 @@
         android:layout_height="280dp"
         app:neumorph_shadowColorLight="#77FFFFFF"
         app:neumorph_shadowColorDark="#77999999"
+        app:neumorph_shapeAppearance="@style/ShapeAppearance3"
+        app:neumorph_shapeType="pressed"
         android:layout_centerHorizontal="true"
         android:layout_alignBottom="@id/view3">
 
@@ -122,15 +124,23 @@
             app:neumorph_shapeAppearance="@style/ShapeAppearance3"
             app:neumorph_shadowColorLight="#77FFFFFF"
             app:neumorph_shadowColorDark="#77999999"
-            android:padding="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:clickable="true">
 
-            <ImageView
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_play" />
+                android:padding="8dp"
+                android:background="@drawable/mainbg_03">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_play"/>
+
+            </RelativeLayout>
+
 
         </soup.neumorphism.NeumorphCardView>
 
@@ -141,6 +151,13 @@
             android:text="저장"
             android:textSize="20sp"
             android:layout_gravity="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="화"
+            android:textSize="20sp"
+            android:layout_gravity="center"
+            android:textColor="#00FFFFFF"/>
 
     </LinearLayout>
 

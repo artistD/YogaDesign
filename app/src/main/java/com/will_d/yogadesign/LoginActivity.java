@@ -20,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.will_d.yogadesign.worktoday.RetrofitHelper;
+import com.will_d.yogadesign.worktoday.RetrofitService;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -1,4 +1,4 @@
-package com.will_d.yogadesign.worktoday;
+package com.will_d.yogadesign.worktoday.activity;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -42,8 +42,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.will_d.yogadesign.R;
-import com.will_d.yogadesign.RetrofitHelper;
-import com.will_d.yogadesign.RetrofitService;
+import com.will_d.yogadesign.worktoday.GworkToday;
+import com.will_d.yogadesign.worktoday.RetrofitHelper;
+import com.will_d.yogadesign.worktoday.RetrofitService;
+import com.will_d.yogadesign.worktoday.fragment.WorkShopTodolistFragment;
+import com.will_d.yogadesign.worktoday.fragment.WorkTodayFragment;
+import com.will_d.yogadesign.worktoday.item.WorkItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;

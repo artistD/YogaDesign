@@ -3,9 +3,7 @@ package com.will_d.yogadesign.set;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,22 +13,23 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.bumptech.glide.Glide;
 import com.will_d.yogadesign.LoginActivity;
 import com.will_d.yogadesign.R;
+import com.will_d.yogadesign.WorkShopActivity;
 
-public class WorkShopStatisticsFragment extends Fragment {
+public class WorkShopUserSetFragment extends Fragment {
     Button btn;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_workshop_statistics, container, false);
+        return inflater.inflate(R.layout.fragment_workshop_userset, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
 
         btn = view.findViewById(R.id.btn);
         btn.setOnClickListener(new View.OnClickListener() {
@@ -54,5 +53,6 @@ public class WorkShopStatisticsFragment extends Fragment {
 
 
     }
+
 
 }

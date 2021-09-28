@@ -1,4 +1,4 @@
-package com.will_d.yogadesign;
+package com.will_d.yogadesign.worktoday.fragment;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -14,8 +14,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.will_d.yogadesign.R;
 import com.will_d.yogadesign.month.WorkMonthFragment;
-import com.will_d.yogadesign.worktoday.WorkTodayFragment;
+import com.will_d.yogadesign.worktoday.fragment.WorkTodayFragment;
 
 public class WorkShopWorkFragment extends Fragment {
 

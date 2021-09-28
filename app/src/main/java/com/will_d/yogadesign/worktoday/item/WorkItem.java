@@ -1,4 +1,4 @@
-package com.will_d.yogadesign.worktoday;
+package com.will_d.yogadesign.worktoday.item;
 
 import android.widget.RelativeLayout;
 import android.widget.TextView;

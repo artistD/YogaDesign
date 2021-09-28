@@ -1,7 +1,6 @@
-package com.will_d.yogadesign.worktoday;
+package com.will_d.yogadesign.worktoday.adapter;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,15 +14,11 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.common.api.GoogleApi;
 import com.google.gson.Gson;
 import com.will_d.yogadesign.R;
-import com.will_d.yogadesign.RetrofitHelper;
-import com.will_d.yogadesign.RetrofitService;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.will_d.yogadesign.worktoday.RetrofitHelper;
+import com.will_d.yogadesign.worktoday.RetrofitService;
+import com.will_d.yogadesign.worktoday.item.TodolistItem;
 
 import java.util.ArrayList;
 

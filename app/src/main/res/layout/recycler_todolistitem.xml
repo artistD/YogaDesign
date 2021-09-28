@@ -204,7 +204,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:cardCornerRadius="8dp"
-        android:backgroundTint="#FF9999FF"
+        android:backgroundTint="#FFFFFFFF"
         android:layout_marginLeft="4dp"
         android:visibility="invisible">
 
@@ -212,7 +212,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="오늘 하루만"
-            android:textColor="#FFeeeeee"
             android:textSize="12sp"
             android:paddingRight="12dp"
             android:paddingLeft="12dp"

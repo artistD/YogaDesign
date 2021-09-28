@@ -21,7 +21,7 @@
             android:name=".time.AlarmDataSetActivity"
             android:exported="true" />
         <activity
-            android:name=".worktoday.WorkItemClickedActivity"
+            android:name=".worktoday.activity.WorkItemClickedActivity"
             android:exported="true" /> <!-- todo:이거 꼭질문 -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -52,7 +52,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".worktoday.WokrDataSetActivity"
+            android:name=".worktoday.activity.WokrDataSetActivity"
             android:exported="true"
             android:theme="@style/WorkSDataSetActivity"
             android:windowSoftInputMode="adjustUnspecified" />

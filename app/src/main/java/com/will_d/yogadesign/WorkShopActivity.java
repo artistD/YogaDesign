@@ -10,16 +10,15 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.will_d.yogadesign.set.WorkShopStatisticsFragment;
+import com.will_d.yogadesign.set.WorkShopUserSetFragment;
 import com.will_d.yogadesign.square.WorkShopSquareFragment;
 import com.will_d.yogadesign.worktoday.GworkToday;
-import com.will_d.yogadesign.worktoday.WorkShopTimeFragment;
-import com.will_d.yogadesign.worktoday.WorkShopTodolistFragment;
-import com.will_d.yogadesign.worktoday.WorkTodayFragment;
+import com.will_d.yogadesign.worktoday.fragment.WorkShopTimeFragment;
+import com.will_d.yogadesign.worktoday.fragment.WorkShopTodolistFragment;
+import com.will_d.yogadesign.worktoday.fragment.WorkTodayFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -202,9 +201,9 @@ public class WorkShopActivity extends AppCompatActivity {
                 break;
 
             case 3:
-                BnvFragmentChange(BNV_STATISTICS, new WorkShopStatisticsFragment());
+                BnvFragmentChange(BNV_STATISTICS, new WorkShopUserSetFragment());
                 BnvRevertState();
-                BnvChangeState(cdNabStatistics, ivNabStatistics, R.drawable.ic_fragment_statistics_push);
+                BnvChangeState(cdNabStatistics, ivNabStatistics, R.drawable.ic_usersetting_push);
 
                 meterialCdTodolist.setVisibility(View.VISIBLE);
                 ivTodolistBack.setVisibility(View.INVISIBLE);
@@ -241,9 +240,9 @@ public class WorkShopActivity extends AppCompatActivity {
     }
 
     public void clickNabStatistics(View view) {
-        BnvFragmentChange(BNV_STATISTICS, new WorkShopStatisticsFragment());
+        BnvFragmentChange(BNV_STATISTICS, new WorkShopUserSetFragment());
         BnvRevertState();
-        BnvChangeState(cdNabStatistics, ivNabStatistics, R.drawable.ic_fragment_statistics_push);
+        BnvChangeState(cdNabStatistics, ivNabStatistics, R.drawable.ic_usersetting_push);
 
         isNav = BNV_STATISTICS;
     }
@@ -282,7 +281,7 @@ public class WorkShopActivity extends AppCompatActivity {
 
         cdNabStatistics.setShapeType(ShapeType.FLAT);
         cdNabStatistics.setBackgroundColor(0x00);
-        ivNabStatistics.setImageResource(R.drawable.ic_fragment_statistics);
+        ivNabStatistics.setImageResource(R.drawable.ic_usersetting);
     }
 
      public void BnvChangeState(NeumorphCardView cdNab, ImageView ivNab, int nabRes){

@@ -1,4 +1,4 @@
-package com.will_d.yogadesign;
+package com.will_d.yogadesign.worktoday;
 
 import java.util.ArrayList;
 import java.util.Map;

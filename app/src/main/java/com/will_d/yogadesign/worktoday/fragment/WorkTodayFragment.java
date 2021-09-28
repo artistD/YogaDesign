@@ -1,4 +1,4 @@
-package com.will_d.yogadesign.worktoday;
+package com.will_d.yogadesign.worktoday.fragment;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,8 +23,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.will_d.yogadesign.R;
-import com.will_d.yogadesign.RetrofitHelper;
-import com.will_d.yogadesign.RetrofitService;
+import com.will_d.yogadesign.worktoday.GworkToday;
+import com.will_d.yogadesign.worktoday.ItemTouchHelperCallback;
+import com.will_d.yogadesign.worktoday.RetrofitHelper;
+import com.will_d.yogadesign.worktoday.RetrofitService;
+import com.will_d.yogadesign.worktoday.activity.WokrDataSetActivity;
+import com.will_d.yogadesign.worktoday.adapter.WorkRecyclerAdapter;
+import com.will_d.yogadesign.worktoday.item.WorkItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -60,7 +65,7 @@ public class WorkTodayFragment extends Fragment {
     private NeumorphCardView cdAddBtn2;
 
     private boolean isFirst = false;
-    static boolean isWorkItemAdd = false;
+    public static boolean isWorkItemAdd = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

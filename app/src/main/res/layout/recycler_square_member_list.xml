@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="144dp"
+    android:layout_height="120dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <soup.neumorphism.NeumorphCardView
@@ -23,7 +23,6 @@
                 android:layout_height="56dp"
                 app:neumorph_shapeAppearance="@style/ShapeAppearance"
                 android:layout_alignParentRight="true"
-                android:layout_alignTop="@id/tv_memberlist_nickname"
                 android:layout_marginRight="16dp"
                 android:src="@drawable/ic_weeks"
                 android:padding="16dp"
@@ -35,8 +34,8 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/civ_memberlist_photo"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="16dp"
                 android:src="@drawable/bg_maincontents04" />
@@ -49,7 +48,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_toRightOf="@id/civ_memberlist_photo"
                 android:text="morning"
-                android:textSize="20sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/tv_memberlist_name"
@@ -60,7 +59,7 @@
                 android:layout_marginTop="4dp"
                 android:layout_toRightOf="@id/civ_memberlist_photo"
                 android:text="매일 아침 운동하기"
-                android:textSize="16sp" />
+                android:textSize="12sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -91,7 +90,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="counter : "
-                            android:textSize="16sp"
+                            android:textSize="12sp"
                             android:layout_gravity="center"/>
                         <TextView
                             android:id="@+id/tv_memberlist_counter"
@@ -126,9 +125,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="timeSum : "
-                            android:textSize="16sp"
+                            android:textSize="12sp"
                             android:layout_gravity="center"/>
                         <TextView
+                            android:id="@+id/tv_memberlist_timesum"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="216"

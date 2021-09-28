@@ -1,4 +1,4 @@
-package com.will_d.yogadesign.worktoday;
+package com.will_d.yogadesign.worktoday.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,10 +16,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.widget.PopupWindowCompat;
@@ -27,12 +23,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.will_d.yogadesign.R;
-import com.will_d.yogadesign.RetrofitHelper;
-import com.will_d.yogadesign.RetrofitService;
 import com.will_d.yogadesign.WorkShopActivity;
+import com.will_d.yogadesign.worktoday.GworkToday;
+import com.will_d.yogadesign.worktoday.ItemTouchHelperListener;
+import com.will_d.yogadesign.worktoday.RetrofitHelper;
+import com.will_d.yogadesign.worktoday.RetrofitService;
+import com.will_d.yogadesign.worktoday.activity.WokrDataSetActivity;
+import com.will_d.yogadesign.worktoday.activity.WorkItemClickedActivity;
+import com.will_d.yogadesign.worktoday.item.WorkItem;
 
 import java.util.ArrayList;
-import java.util.zip.CheckedOutputStream;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;

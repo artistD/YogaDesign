@@ -1,4 +1,4 @@
-package com.will_d.yogadesign.worktoday;
+package com.will_d.yogadesign.worktoday.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

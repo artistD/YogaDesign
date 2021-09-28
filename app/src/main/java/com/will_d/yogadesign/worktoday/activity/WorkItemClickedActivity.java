@@ -1,4 +1,4 @@
-package com.will_d.yogadesign.worktoday;
+package com.will_d.yogadesign.worktoday.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,16 +10,12 @@ import android.widget.TextView;
 
 
 import com.applandeo.materialcalendarview.CalendarView;
-import com.applandeo.materialcalendarview.exceptions.OutOfDateRangeException;
-import com.google.android.material.card.MaterialCardView;
 import com.will_d.yogadesign.R;
+import com.will_d.yogadesign.worktoday.adapter.LogItemAdapter;
+import com.will_d.yogadesign.worktoday.item.LogItem;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashSet;
-import java.util.List;
-
-import retrofit2.Call;
 
 public class WorkItemClickedActivity extends AppCompatActivity {
 

@@ -12,7 +12,9 @@
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:overScrollMode="never"
-        android:orientation="vertical"/>
+        android:orientation="vertical"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"/>
 
 
     <soup.neumorphism.NeumorphCardView

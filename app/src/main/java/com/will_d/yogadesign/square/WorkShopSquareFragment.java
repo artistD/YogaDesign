@@ -41,6 +41,7 @@ public class WorkShopSquareFragment extends Fragment {
     //리사이클러뷰는 한텀으로 끝내장
     private RecyclerView recyclerViewMemberItem;
     private ArrayList<SquareMemberItemListItem> squareMemberItemListItems = new ArrayList<SquareMemberItemListItem>();
+    private SquareMemberListAdapter squareMemberListAdapter;
 
     private RelativeLayout rlMemberChatting;
 
@@ -88,6 +89,27 @@ public class WorkShopSquareFragment extends Fragment {
         recyclerViewMember = view.findViewById(R.id.recycler_member);
         squareMemberAdapter = new SquareMemberAdapter(getActivity(), squareMemberItems);
         recyclerViewMember.setAdapter(squareMemberAdapter);
+
+
+
+        String imgUrl2 = "http://img2.sbs.co.kr/img/seditor/VD/2020/04/09/VD62139889_w640.jpg";
+
+        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, 32));
+        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, 32));
+        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, 32));
+        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, 32));
+        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, 32));
+        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, 32));
+        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, 32));
+        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, 32));
+        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, 32));
+
+
+
+        recyclerViewMemberItem = view.findViewById(R.id.recycler_item);
+        squareMemberListAdapter = new SquareMemberListAdapter(getActivity(), squareMemberItemListItems);
+        recyclerViewMemberItem.setAdapter(squareMemberListAdapter);
+
 
 
 

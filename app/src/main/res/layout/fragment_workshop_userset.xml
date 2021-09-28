@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="#C7DDFF">
+
+    <Button
+        android:id="@+id/btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Logout"
+        android:textSize="16sp"
+        android:textColor="#FFFFFFFF"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+
+<!--    로그아웃, 프로필 변경, 이름변경, 상태메세지 변경, 퍼블릭모드 변경, -->
+
+    <RelativeLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerInParent="true">
+
+            <TextView
+                android:id="@+id/tv_timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="User Setting"
+                android:textSize="16sp"
+                android:textColor="#FF333333"
+                android:layout_marginBottom="4dp"/>
+
+            <View
+                android:id="@+id/view_line_timer"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@drawable/mainbg_02"
+                android:visibility="visible"/>
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
+            android:backgroundTint="#FFFFFF"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:visibility="invisible">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="취소"
+                    android:padding="8dp"/>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/mainbg_02"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="확인"
+                    android:padding="8dp"/>
+
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+
+        <soup.neumorphism.NeumorphCardView
+            android:id="@+id/ncd"
+            style="@style/Widget.Neumorph.CardView"
+            android:layout_width="match_parent"
+            android:layout_height="132dp"
+            app:neumorph_shadowColorDark="#77999999"
+            app:neumorph_shadowColorLight="#77FFFFFF"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp">
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="8dp"
+                android:background="@drawable/mainbg_03">
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="4dp">
+
+
+                    <soup.neumorphism.NeumorphImageView
+                        android:id="@+id/niv_usersetting_modify"
+                        style="@style/Widget.Neumorph.ImageView"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginRight="9dp"
+                        android:clickable="true"
+                        android:padding="16dp"
+                        android:src="@drawable/ic_modify"
+                        android:visibility="visible"
+                        app:neumorph_shadowColorDark="#77999999"
+                        app:neumorph_shadowColorLight="#77FFFFFF"
+                        app:neumorph_shapeAppearance="@style/ShapeAppearance" />
+
+                    <RelativeLayout
+                        android:id="@+id/rl_usersetting_profile"
+                        android:layout_width="72dp"
+                        android:layout_height="72dp">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/civ_usersetting_profile"
+                            android:layout_width="64dp"
+                            android:layout_height="64dp"
+                            android:src="@drawable/bg_maincontents03"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="4dp"/>
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/civ_usersetting_profile_modify"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:cardCornerRadius="8dp"
+                            android:backgroundTint="#FFFFFFFF"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentRight="true"
+                            android:visibility="invisible">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_photo"
+                                android:padding="4dp"/>
+
+                        </androidx.cardview.widget.CardView>
+
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/tv_usersetting_nickname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="will_d88"
+                        android:layout_toRightOf="@id/rl_usersetting_profile"
+                        android:layout_marginLeft="12dp"
+                        android:layout_alignTop="@id/rl_usersetting_profile"
+                        android:layout_marginTop="8dp"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/civ_usersetting_nickname_modify"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="8dp"
+                        android:backgroundTint="#FFFFFFFF"
+                        android:layout_toRightOf="@id/tv_usersetting_nickname"
+                        android:visibility="invisible"
+                        android:layout_marginLeft="8dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_modify"
+                            android:padding="4dp"/>
+
+                    </androidx.cardview.widget.CardView>
+
+
+                    <TextView
+                        android:id="@+id/tv_usersetting_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="이 시대의 진정한 예술가"
+                        android:maxWidth="160dp"
+                        android:maxLines="2"
+                        android:ellipsize="end"
+                        android:layout_toRightOf="@id/rl_usersetting_profile"
+                        android:layout_marginLeft="12dp"
+                        android:layout_below="@id/tv_usersetting_nickname"
+                        android:layout_marginTop="4dp"
+                        android:textSize="16sp"/>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/civ_usersetting_name_modify"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="8dp"
+                        android:backgroundTint="#FFFFFFFF"
+                        android:layout_toRightOf="@id/tv_usersetting_name"
+                        android:layout_below="@id/tv_usersetting_nickname"
+                        android:visibility="invisible"
+                        android:layout_marginLeft="8dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_modify"
+                            android:padding="4dp"/>
+
+                    </androidx.cardview.widget.CardView>
+
+                </RelativeLayout>
+
+
+
+            </LinearLayout>
+
+
+
+        </soup.neumorphism.NeumorphCardView>
+
+    </RelativeLayout>
+
+
+    <soup.neumorphism.NeumorphCardView
+        style="@style/Widget.Neumorph.CardView"
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        app:neumorph_shadowColorDark="#77999999"
+        app:neumorph_shadowColorLight="#77FFFFFF"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="사진변경"/>
+
+        </RelativeLayout>
+
+    </soup.neumorphism.NeumorphCardView>
+
+    <soup.neumorphism.NeumorphCardView
+        style="@style/Widget.Neumorph.CardView"
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        app:neumorph_shadowColorDark="#77999999"
+        app:neumorph_shadowColorLight="#77FFFFFF"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="사진변경"/>
+
+        </RelativeLayout>
+
+    </soup.neumorphism.NeumorphCardView>
+
+    <soup.neumorphism.NeumorphCardView
+        style="@style/Widget.Neumorph.CardView"
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        app:neumorph_shadowColorDark="#77999999"
+        app:neumorph_shadowColorLight="#77FFFFFF"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="사진변경"/>
+
+        </RelativeLayout>
+
+    </soup.neumorphism.NeumorphCardView>
+
+
+
+
+</LinearLayout>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".worktoday.WorkItemClickedActivity"
+    tools:context=".worktoday.activity.WorkItemClickedActivity"
     android:background="#C7DDFF">
 
     <LinearLayout

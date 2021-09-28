@@ -1,6 +1,7 @@
 package com.will_d.yogadesign.square;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.will_d.yogadesign.R;
 
 import java.util.ArrayList;
@@ -16,8 +18,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SquareMemberListAdapter extends RecyclerView.Adapter<SquareMemberListAdapter.VH> {
 
-    Context context;
-    ArrayList<SquareMemberItemListItem> squareMemberItemListItems;
+    private Context context;
+    private ArrayList<SquareMemberItemListItem> squareMemberItemListItems;
 
     public SquareMemberListAdapter(Context context, ArrayList<SquareMemberItemListItem> squareMemberItemListItems) {
         this.context = context;
@@ -27,11 +29,19 @@ public class SquareMemberListAdapter extends RecyclerView.Adapter<SquareMemberLi
     @NonNull
     @Override
     public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
+        View itemView = LayoutInflater.from(context).inflate(R.layout.recycler_square_member_list, parent, false);
+        return new VH(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
+        SquareMemberItemListItem item = squareMemberItemListItems.get(position);
+        Glide.with(context).load(item.getImgUrl()).into(holder.civMemberListPhoto);
+
+        holder.tvMemberListNickName.setText(item.getNickName());
+        holder.tvMemberListName.setText(item.getName());
+        holder.tvMemberListCounter.setText(item.getCounter()+"");
+        holder.tvMemberListTimeSum.setText(item.getTimeSum()+"");
 
     }
 
@@ -55,7 +65,9 @@ public class SquareMemberListAdapter extends RecyclerView.Adapter<SquareMemberLi
             tvMemberListNickName = itemView.findViewById(R.id.tv_memberlist_nickname);
             tvMemberListName = itemView.findViewById(R.id.tv_memberlist_name);
 
-//            tvMemberListCounter = itemView.findViewById(R.id)
+            tvMemberListCounter = itemView.findViewById(R.id.tv_memberlist_counter);
+            tvMemberListTimeSum = itemView.findViewById(R.id.tv_memberlist_timesum);
+
         }
     }
 }
