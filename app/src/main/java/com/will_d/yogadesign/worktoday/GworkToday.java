@@ -1,5 +1,7 @@
 package com.will_d.yogadesign.worktoday;
 
+import androidx.cardview.widget.CardView;
+
 import com.will_d.yogadesign.worktoday.item.WorkItem;
 
 import java.util.ArrayList;
@@ -21,5 +23,7 @@ public class GworkToday {
     public static boolean isSwitchEnd=false;
     public static boolean isDeletEnd=false;
     ////************************************************************
+
+    //todolist 아이템 log에 대한 데이터임
 
 }

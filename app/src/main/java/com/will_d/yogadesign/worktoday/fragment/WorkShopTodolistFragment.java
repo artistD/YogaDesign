@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.will_d.yogadesign.R;
+import com.will_d.yogadesign.worktoday.GworkToday;
 import com.will_d.yogadesign.worktoday.RetrofitHelper;
 import com.will_d.yogadesign.worktoday.RetrofitService;
 import com.will_d.yogadesign.worktoday.adapter.TodolistAdapter;
@@ -136,6 +137,9 @@ public class WorkShopTodolistFragment extends Fragment {
         }
 
         tvTodolistCurrentTime.setText(getTime + ".(" + dayStr + ")");
+
+
+
 
     }
 

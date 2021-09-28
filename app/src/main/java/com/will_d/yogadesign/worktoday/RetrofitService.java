@@ -77,5 +77,10 @@ public interface RetrofitService {
     Call<String> workItemPublicUpdate(@Query("no") String no, @Query("isItemPublic") boolean isItemPublic);
 
 
+    @FormUrlEncoded
+    @POST("/YogaDesign2/todolist/todolistLogDataInsertDB.php")
+    Call<String> todolistLogDataInsertDB(@Field("identifier") int identifier, @Field("workItemNo") String workItemNo, @Field("days") String days, @Field("log") String log);
+
+
 
 }

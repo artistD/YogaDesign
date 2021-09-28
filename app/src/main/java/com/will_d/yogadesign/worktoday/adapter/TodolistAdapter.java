@@ -1,6 +1,7 @@
 package com.will_d.yogadesign.worktoday.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,11 +17,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.will_d.yogadesign.R;
+import com.will_d.yogadesign.worktoday.GworkToday;
 import com.will_d.yogadesign.worktoday.RetrofitHelper;
 import com.will_d.yogadesign.worktoday.RetrofitService;
 import com.will_d.yogadesign.worktoday.item.TodolistItem;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -155,11 +160,16 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
 
 
         private TextView name;
+        //로그
         private CardView cdLog;
+        private CardView cdLogModify;
+
+        private boolean isLogModify = false;
 
         private RelativeLayout rltodolistMissionComplete;
 
         private CardView cdTodayWork;
+
 
         public VH(@NonNull View itemView) {
             super(itemView);
@@ -173,7 +183,10 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
             checked3 = itemView.findViewById(R.id.checked_3);
 
             name = itemView.findViewById(R.id.name);
+
+            //로그
             cdLog = itemView.findViewById(R.id.cd_log);
+            cdLogModify = itemView.findViewById(R.id.cd_log_modify);
 
             rltodolistMissionComplete = itemView.findViewById(R.id.rl_todolist_mission_complete);
 
@@ -350,7 +363,58 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
                                 item.getRlTodolistLogDialog().setVisibility(View.INVISIBLE);
                                 item.getEtTodolistLog().setText("");
                             }else {
-                                String LogData = item.getEtTodolistLog().getText().toString();
+                                String logData = item.getEtTodolistLog().getText().toString();
+
+                                long now = System.currentTimeMillis();
+                                Date date = new Date(now);
+
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+                                String getTime = sdf.format(date);
+
+                                Calendar calendar = Calendar.getInstance();
+                                int day_of_week = calendar.get(Calendar.DAY_OF_WEEK);
+                                String dayStr = "";
+
+                                switch (day_of_week){
+                                    case 1: //일
+                                        dayStr = "일";
+                                        break;
+
+                                    case 2: //일
+                                        dayStr = "월";
+                                        break;
+
+                                    case 3: //일
+                                        dayStr = "화";
+                                        break;
+
+                                    case 4: //일
+                                        dayStr = "수";
+                                        break;
+
+                                    case 5: //일
+                                        dayStr = "목";
+                                        break;
+
+                                    case 6: //일
+                                        dayStr = "금";
+                                        break;
+
+                                    case 7: //일
+                                        dayStr = "토";
+                                        break;
+                                }
+                                String days = getTime + ".(" + dayStr + ")";
+
+                                todolistLogDataInsertDB(0 ,item.getNo(), days, logData);
+                                item.getRlTodolistLogDialog().setVisibility(View.INVISIBLE);
+                                item.getEtTodolistLog().setText("");
+
+                                cdLog.setVisibility(View.INVISIBLE);
+                                cdLogModify.setVisibility(View.VISIBLE);
+
+                                Log.i("TagTest", item.getNo() + " : "  + days + " : " + logData);
+
                             }
 
                         }
@@ -358,15 +422,118 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
                 }
             });
 
+            cdLogModify.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    TodolistItem item = todolistItems.get(getAdapterPosition());
+                    item.getRlTodolistLogDialog().setVisibility(View.VISIBLE);
+
+                    item.getTvTodolistLogCancel().setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            item.getRlTodolistLogDialog().setVisibility(View.INVISIBLE);
+                            item.getEtTodolistLog().setText("");
+                        }
+                    });
+
+                    item.getTvTodolistLogOk().setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (item.getEtTodolistLog().getText().toString().equals("")){
+                                item.getRlTodolistLogDialog().setVisibility(View.INVISIBLE);
+                                item.getEtTodolistLog().setText("");
+                            }else {
+                                String logData = item.getEtTodolistLog().getText().toString();
+
+                                long now = System.currentTimeMillis();
+                                Date date = new Date(now);
+
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+                                String getTime = sdf.format(date);
+
+                                Calendar calendar = Calendar.getInstance();
+                                int day_of_week = calendar.get(Calendar.DAY_OF_WEEK);
+                                String dayStr = "";
+
+                                switch (day_of_week){
+                                    case 1: //일
+                                        dayStr = "일";
+                                        break;
+
+                                    case 2: //일
+                                        dayStr = "월";
+                                        break;
+
+                                    case 3: //일
+                                        dayStr = "화";
+                                        break;
+
+                                    case 4: //일
+                                        dayStr = "수";
+                                        break;
+
+                                    case 5: //일
+                                        dayStr = "목";
+                                        break;
+
+                                    case 6: //일
+                                        dayStr = "금";
+                                        break;
+
+                                    case 7: //일
+                                        dayStr = "토";
+                                        break;
+                                }
+                                String days = getTime + ".(" + dayStr + ")";
+
+                                todolistLogDataInsertDB(1, item.getNo(), days, logData);
+                                item.getRlTodolistLogDialog().setVisibility(View.INVISIBLE);
+                                item.getEtTodolistLog().setText("");
+
+                                cdLog.setVisibility(View.INVISIBLE);
+                                cdLogModify.setVisibility(View.VISIBLE);
+
+                                Log.i("TagTest", item.getNo() + " : "  + days + " : " + logData);
+
+                            }
+
+                        }
+                    });
 
 
 
-
-
-
+                }
+            });
 
 
         }
+
+
+        //log상태에 대한 작업을 해야함 평소에는 0을 가지고 있다가
+        //입력을 하면 불린값이 1을 가지게해서 상태가 수정인 상태로 보이도록 해야하고
+        //하루가 지나면 0으로 다시 초기화시켜서 다시 로그를 입력할수 있는 상태로 만들어야함.
+
+        //log값 넣어주는 레트로핏
+        //Identifier : 식별자 0이면 추가하는거고 1이면 업데이트 하는거
+        public void todolistLogDataInsertDB(int identifier, String workItemNo, String days, String log){
+            Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
+            RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+
+            Call<String> call = retrofitService.todolistLogDataInsertDB(identifier, workItemNo, days, log);
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    Log.i("Tag", response.body());
+                }
+
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Log.i("Tag", t.getMessage());
+                }
+            });
+        }
+
+
 
 
 //        Gson gson = new Gson();
@@ -468,5 +635,9 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
             }
         }//missionComplete method....
 
+
+
     }// class ViewHolder....
+
+
 }// TodolistAdapter class....
