@@ -59,8 +59,7 @@ public interface RetrofitService {
 
 //***************
     @GET("/YogaDesign2/workitem/workItemChangePositionInsertToDB.php")
-    Call<String> workItemChangePositionInsertToDB(@Query("fromNo") String fromNo, @Query("toNo") String toNo);
-
+    Call<String> workItemChangePositionInsertToDB(@Query("fromNo") String fromNo, @Query("fromSortationNo") String fromSorationNo, @Query("toNo") String toNo, @Query("toSortationNo") String toSortationNo);
     //********************** 이것들 일단보류
 
 

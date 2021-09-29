@@ -11,6 +11,8 @@ public class WorkItem {
 
     private String no;
 
+    private String sortationNo;
+
     @SerializedName("dstName")
     private String imgUrl;
 
@@ -55,8 +57,9 @@ public class WorkItem {
 
     }
 
-    public WorkItem(String no, String imgUrl, String nickName, String name, boolean isgoal, String tvgoal, boolean ispreNotification, String tvpreNotification, boolean islocationNotification, String tvlocalNotification, boolean[] isweeks, boolean isItemInOff, int completeNum, boolean[] isDayOrTodaySelected, RelativeLayout rlWorkitemDeleteDialog, TextView tvWorkitemDeleteOK, TextView tvWorkitemDeleteCancel) {
+    public WorkItem(String no, String sortationNo, String imgUrl, String nickName, String name, boolean isgoal, String tvgoal, boolean ispreNotification, String tvpreNotification, boolean islocationNotification, String tvlocalNotification, boolean[] isweeks, boolean isItemInOff, int completeNum, boolean[] isDayOrTodaySelected, RelativeLayout rlWorkitemDeleteDialog, TextView tvWorkitemDeleteOK, TextView tvWorkitemDeleteCancel) {
         this.no = no;
+        this.sortationNo = sortationNo;
         this.imgUrl = imgUrl;
         this.nickName = nickName;
         this.name = name;
@@ -77,6 +80,10 @@ public class WorkItem {
 
     public String getNo() {
         return no;
+    }
+
+    public String getSortationNo() {
+        return sortationNo;
     }
 
     public String getImgUrl() {

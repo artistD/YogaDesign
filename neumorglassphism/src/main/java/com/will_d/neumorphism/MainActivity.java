@@ -2,6 +2,7 @@ package com.will_d.neumorphism;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -14,11 +15,17 @@ public class MainActivity extends AppCompatActivity {
 
     NeumorphButton neumorphButton;
 
+
     BlurLayout blurLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
+
+
 
         blurLayout = findViewById(R.id.blurlayout);
         neumorphButton = findViewById(R.id.nmp_button);

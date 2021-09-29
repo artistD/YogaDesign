@@ -105,7 +105,6 @@ public class WorkTodayFragment extends Fragment {
 
         setcdAddBtnToPreventBlurring();
 
-
         cdAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -223,8 +222,7 @@ public class WorkTodayFragment extends Fragment {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
 
                         String no = jsonObject.getString("no");
-
-                        //여기서 sortation number에대한 레트로핏 작업을 해야하는것
+                        String sortationNo = jsonObject.getString("sortationNo");
 
                         String id =jsonObject.getString("id");
                         String name = jsonObject.getString("name");
@@ -300,7 +298,7 @@ public class WorkTodayFragment extends Fragment {
 
 //                        insertWorkitemSortationNumber(no);
 
-                        workItems.add(0, new WorkItem(no, imgUrl, nickName, name, isGoalChecked, goalSet, isPreNotificationChecked, preNotificationTime, isLocalNotificationChecked, placeName, weeksData, isItemOnOff, completeNum, isDayOrTodaySelected, rlWorkitemDeleteDialog, tvWorkitemDeleteOK, tvWorkitemDeleteCancel));
+                        workItems.add(0, new WorkItem(no, sortationNo, imgUrl, nickName, name, isGoalChecked, goalSet, isPreNotificationChecked, preNotificationTime, isLocalNotificationChecked, placeName, weeksData, isItemOnOff, completeNum, isDayOrTodaySelected, rlWorkitemDeleteDialog, tvWorkitemDeleteOK, tvWorkitemDeleteCancel));
                         adapter.notifyItemChanged(0);
 
                     }
@@ -321,16 +319,6 @@ public class WorkTodayFragment extends Fragment {
         });
 
     }
-
-
-
-    //todo: 여기서 부터 작업해야함
-    public void workItemInsertSortationNoFromDB(){
-        Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
-        RetrofitService retrofitService = retrofit.create(RetrofitService.class);
-
-    }
-
 
 
     public void workItemOnedayUpdateDB(){

@@ -51,6 +51,8 @@ public class LoginActivity extends AppCompatActivity {
     private boolean isLogin = false;
     ArrayList<String> datas = new ArrayList<>();
 
+    private boolean isSorationFirst = true;
+
 
 
     @Override
@@ -64,6 +66,9 @@ public class LoginActivity extends AppCompatActivity {
 
         SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
         isLogin = pref.getBoolean("isLogin", false);
+
+
+
 
 
 

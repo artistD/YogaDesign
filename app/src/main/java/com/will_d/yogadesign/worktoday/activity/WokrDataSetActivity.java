@@ -76,6 +76,7 @@ import soup.neumorphism.NeumorphImageView;
 public class WokrDataSetActivity extends AppCompatActivity {
 
     private final int PERMISSION_EX_PHOTO =100;
+    private boolean isSortationNoFirst;
 
     private EditText etName;
     private TextView tvNickname;
@@ -193,7 +194,18 @@ public class WokrDataSetActivity extends AppCompatActivity {
 
 
         SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+
+
+        isSortationNoFirst = pref.getBoolean("isSortationNoFirst", true);
+        if (isSortationNoFirst){
+            editor.putInt("sortationNo", 1);
+            editor.putBoolean("isSortationNoFirst", false);
+            editor.commit();
+        }
         id = pref.getString("id", "");
+
+
 
 
 
@@ -559,7 +571,6 @@ public class WokrDataSetActivity extends AppCompatActivity {
         }else {
             name = etName.getText().toString();
             WorkTodayDataToServer();
-
         }
 
         WorkTodayFragment.isWorkItemAdd = true;
@@ -1008,6 +1019,15 @@ public class WokrDataSetActivity extends AppCompatActivity {
 
             Map<String, String> dataPart = new HashMap<>();
             dataPart.put("id", id);
+
+            SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
+            SharedPreferences.Editor editor = pref.edit();
+            int sortationNo = pref.getInt("sortationNo", 1);
+            dataPart.put("sortationNo", String.valueOf(sortationNo));
+
+            editor.putInt("sortationNo", (sortationNo+1));
+            editor.commit();
+
             dataPart.put("name", name);
             dataPart.put("nickName", nickName);
 //          dataPart.put("imgPath", imgPath);  //이미지는 절대경로로 보내주는거니까 안줘도됨.
