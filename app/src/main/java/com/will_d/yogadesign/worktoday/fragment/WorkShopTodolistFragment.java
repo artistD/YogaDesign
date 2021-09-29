@@ -157,7 +157,7 @@ public class WorkShopTodolistFragment extends Fragment {
         String dayStr = sdf.format(date);
 
         if (!(dayStr.equals(s))){
-            insertWorkitemTodolistBooleanStateInitDB();
+            insertWorkitemTodolistBooleanStateInitDB(); //여기서 isModify도 초기화 해주자
             adapter.notifyDataSetChanged();
             editor.putString("dayCompairison", dayStr);
             editor.commit();
@@ -181,8 +181,32 @@ public class WorkShopTodolistFragment extends Fragment {
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
 
-        Toast.makeText(getActivity(), "hiddenTodolist : " + hidden, Toast.LENGTH_SHORT).show();
+
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        String s = sharedPreferences.getString("dayCompairison", "");
+
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+        String dayStr = sdf.format(date);
+
+        if (!(dayStr.equals(s))){
+            insertWorkitemTodolistBooleanStateInitDB(); //여기서 isModify도 초기화 해주자
+            adapter.notifyDataSetChanged();
+            editor.putString("dayCompairison", dayStr);
+            editor.commit();
+        }
+        Log.i("asdfgh", !(dayStr.equals(s))+"");
+
+
+
         loadWorkTodayDataServer();
+
+
+
+
     }
 
     public void insertWorkitemTodolistBooleanStateInitDB(){
@@ -262,54 +286,65 @@ public class WorkShopTodolistFragment extends Fragment {
                         String isDayOrToday = jsonObject.getString("isDayOrTodaySelected");
                         boolean[] isDayOrTodaySelected = gson.fromJson(isDayOrToday, boolean[].class);
 
+
+                        String isl = jsonObject.getString("isLogModify");
+                        boolean isLogModify = false;
+                        if (isl.equals("1")){
+                            isLogModify = true;
+                        }else if (isl.equals("0")){
+                            isLogModify = false;
+                        }
+
+
+
                         Calendar cal = Calendar.getInstance();
                         int day_of_week = cal.get(Calendar.DAY_OF_WEEK);
                         switch (day_of_week){
                             case 1://일
                                 if (weeksData[6]){
-                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk, todolistBooleanState, isDayOrTodaySelected));
+                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk, todolistBooleanState, isDayOrTodaySelected, isLogModify));
                                     adapter.notifyItemChanged(0);
                                 }
                                 break;
 
                             case 2://월
                                 if (weeksData[0]){
-                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk, todolistBooleanState, isDayOrTodaySelected));
+                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk, todolistBooleanState, isDayOrTodaySelected, isLogModify));
                                     adapter.notifyItemChanged(0);
                                 }
                                 break;
 
                             case 3://화
                                 if (weeksData[1]){
-                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk, todolistBooleanState, isDayOrTodaySelected));
+                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk, todolistBooleanState, isDayOrTodaySelected, isLogModify));
                                     adapter.notifyItemChanged(0);
                                 }
                                 break;
 
                             case 4://수
                                 if (weeksData[2]){
-                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk, todolistBooleanState, isDayOrTodaySelected));
+                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk, todolistBooleanState, isDayOrTodaySelected, isLogModify));
                                     adapter.notifyItemChanged(0);
                                 }
                                 break;
 
                             case 5://목
                                 if (weeksData[3]){
-                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk, todolistBooleanState, isDayOrTodaySelected));
+                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk, todolistBooleanState, isDayOrTodaySelected, isLogModify));
                                     adapter.notifyItemChanged(0);
                                 }
                                 break;
 
                             case 6://금
                                 if (weeksData[4]){
-                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk, todolistBooleanState, isDayOrTodaySelected));
+                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk, todolistBooleanState, isDayOrTodaySelected, isLogModify));
                                     adapter.notifyItemChanged(0);
                                 }
                                 break;
 
                             case 7://토
                                 if (weeksData[5]){
-                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk, todolistBooleanState, isDayOrTodaySelected));
+                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk, todolistBooleanState, isDayOrTodaySelected, isLogModify));
                                     adapter.notifyItemChanged(0);
                                 }
                                 break;

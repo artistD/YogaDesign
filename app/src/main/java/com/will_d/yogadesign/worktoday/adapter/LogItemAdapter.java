@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -39,9 +40,25 @@ public class LogItemAdapter extends RecyclerView.Adapter<LogItemAdapter.VH> {
         LogItem item = logItems.get(position);
 
         holder.tvDate.setText(item.getDate());
-        holder.tvLog.setText(item.getLog());
+
+
+        if (item.getLog().equals("null")){
+               holder.tvLog.setVisibility(View.GONE);
+        }else {
+            holder.tvLog.setVisibility(View.VISIBLE);
+            holder.tvLog.setText(item.getLog());
+        }
+
+        if (item.getTime().equals("null")){
+            holder.cdWorkItemTime.setVisibility(View.INVISIBLE);
+        }else {
+            holder.cdWorkItemTime.setVisibility(View.VISIBLE);
+            holder.tvWorkItemTime.setText(item.getTime());
+        }
+
 
         Glide.with(context).load(R.drawable.mainbg_03).into(holder.iv);
+
 
     }
 
@@ -56,6 +73,9 @@ public class LogItemAdapter extends RecyclerView.Adapter<LogItemAdapter.VH> {
 
         private ImageView iv;
 
+        private CardView cdWorkItemTime;
+        private TextView tvWorkItemTime;
+
 
         public VH(@NonNull View itemView) {
             super(itemView);
@@ -64,6 +84,9 @@ public class LogItemAdapter extends RecyclerView.Adapter<LogItemAdapter.VH> {
             tvLog = itemView.findViewById(R.id.tv_log);
 
             iv= itemView.findViewById(R.id.iv);
+
+            cdWorkItemTime = itemView.findViewById(R.id.cd_workitem_time);
+            tvWorkItemTime = itemView.findViewById(R.id.tv_workitem_time);
         }
     }//##################################################################
 }

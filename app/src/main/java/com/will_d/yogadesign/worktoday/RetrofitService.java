@@ -58,11 +58,9 @@ public interface RetrofitService {
     Call<String> WorkItemModifyDataLoadDB(@Query("no") String no);
 
 //***************
-    @GET("/YogaDesign2/workitem/workItemFromPositionChangeDB.php")
-    Call<String> workItemFromPositionChangeDB(@Query("noFrom") String noFrom, @Query("noTo") String noTo);
+    @GET("/YogaDesign2/workitem/workItemChangePositionInsertToDB.php")
+    Call<String> workItemChangePositionInsertToDB(@Query("fromNo") String fromNo, @Query("toNo") String toNo);
 
-    @GET("/YogaDesign2/workitem/workItemToPositionChangeDB.php")
-    Call<String> workItemToPositionChangeDB(@Query("noFrom") String noFrom, @Query("noTo") String noTo);
     //********************** 이것들 일단보류
 
 
@@ -79,7 +77,18 @@ public interface RetrofitService {
 
     @FormUrlEncoded
     @POST("/YogaDesign2/todolist/todolistLogDataInsertDB.php")
-    Call<String> todolistLogDataInsertDB(@Field("identifier") int identifier, @Field("workItemNo") String workItemNo, @Field("days") String days, @Field("log") String log);
+    Call<String> todolistLogDataInsertDB(@Field("identifier") int identifier, @Field("workItemNo") String workItemNo, @Field("days") String days, @Field("log") String log, @Field("isLogModify") boolean isLogModify);
+
+    @GET("/YogaDesign2/todolist/logLoadDataFromServer.php")
+    Call<String> logLoadDataFromServer(@Query("workItemNo") String workItemNo);
+
+    //칼렌다 데이터에 관한 레트로핏임
+    @FormUrlEncoded
+    @POST("/YogaDesign2/todolist/todolistCalendarInsertDB.php")
+    Call<String> todolistCalendarInsertDB(@Field("identifier") int idnetifier, @Field("workItemNo") String workItemNo, @Field("days") String days);
+
+    @GET("/YogaDesign2/todolist/calendarDataLoadFromServer.php")
+    Call<String> calendarDataLoadFromServer(@Query("workItemNo") String workItemNo);
 
 
 

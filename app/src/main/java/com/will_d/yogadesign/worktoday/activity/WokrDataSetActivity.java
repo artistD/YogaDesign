@@ -172,6 +172,8 @@ public class WokrDataSetActivity extends AppCompatActivity {
     private int completeNum = 0;
     private boolean[] todolistBooleanState = new boolean[] {false,false,false};
     private boolean[] isDayOrTodaySelected = new boolean[2];
+
+    private boolean isLogModify = false;
     //##############################
 
     private double originalLatitude;
@@ -1034,6 +1036,8 @@ public class WokrDataSetActivity extends AppCompatActivity {
             String jsonStr = gson.toJson(isDayOrTodaySelected);
             dataPart.put("isDayOrTodaySelected", jsonStr);
             Log.i("TAGadadad", jsonStr);
+
+            dataPart.put("isLogModify", String.valueOf(isLogModify));
 
             Call<String> call = retrofitService.WorkItemPostDataToServer(dataPart, filePart);
             call.enqueue(new Callback<String>() {

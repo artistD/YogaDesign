@@ -130,6 +130,14 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
             holder.cdTodayWork.setVisibility(View.VISIBLE);
         }
 
+        if(item.getIsLogModify()){
+            holder.cdLog.setVisibility(View.INVISIBLE);
+            holder.cdLogModify.setVisibility(View.VISIBLE);
+        }else {
+            holder.cdLog.setVisibility(View.VISIBLE);
+            holder.cdLogModify.setVisibility(View.INVISIBLE);
+        }
+
 
 
 
@@ -248,7 +256,10 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
                         else Glide.with(context).load(R.drawable.ic_todolit_unchecked).into(checked3);
                         item.setCompleteNum(item.getCompleteNum()+1);
                         countNum =item.getCompleteNum();
-                        workitemTodolistBooleanStateInsertDB(item);
+
+                        todolistCalendarInsertDB(0, item.getNo());
+
+                        workitemTodolistBooleanStateInsertDB(item);//식별자 0이면 인설트고 1이면 딜리트임
                         missionCompleteChecked(getAdapterPosition());
                         Log.i("TAG", countNum+"gggg");
                     }else if (isChecked1 && isChecked2 && isChecked3 && disdiction==3){
@@ -259,6 +270,9 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
                         else Glide.with(context).load(R.drawable.ic_todolit_unchecked).into(checked3);
                         item.setCompleteNum(item.getCompleteNum()-1);
                         countNum =item.getCompleteNum();
+
+                        todolistCalendarInsertDB(1, item.getNo());
+
                         workitemTodolistBooleanStateInsertDB(item);
                         missionCompleteChecked(getAdapterPosition());
                         Log.i("TAG", countNum+"ggg");
@@ -270,6 +284,9 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
                         else Glide.with(context).load(R.drawable.ic_todolit_unchecked).into(checked3);
                         item.setCompleteNum(item.getCompleteNum()+1);
                         countNum =item.getCompleteNum();
+
+                        todolistCalendarInsertDB(0, item.getNo());
+
                         workitemTodolistBooleanStateInsertDB(item);
                         missionCompleteChecked(getAdapterPosition());
                         Log.i("TAG", countNum+"");
@@ -281,6 +298,9 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
                         else Glide.with(context).load(R.drawable.ic_todolit_unchecked).into(checked3);
                         item.setCompleteNum(item.getCompleteNum()-1);
                         countNum =item.getCompleteNum();
+
+                        todolistCalendarInsertDB(1, item.getNo());
+
                         workitemTodolistBooleanStateInsertDB(item);
                         missionCompleteChecked(getAdapterPosition());
                         Log.i("TAG", countNum+"qfqwf");
@@ -292,6 +312,9 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
                         else Glide.with(context).load(R.drawable.ic_todolit_unchecked).into(checked3);
                         item.setCompleteNum(item.getCompleteNum()-1);
                         countNum =item.getCompleteNum();
+
+                        todolistCalendarInsertDB(1, item.getNo());
+
                         workitemTodolistBooleanStateInsertDB(item);
                         missionCompleteChecked(getAdapterPosition());
                         Log.i("TAG", countNum+"ss");
@@ -304,6 +327,9 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
                         else Glide.with(context).load(R.drawable.ic_todolit_unchecked).into(checked3);
                         item.setCompleteNum(item.getCompleteNum()+1);
                         countNum =item.getCompleteNum();
+
+                        todolistCalendarInsertDB(0, item.getNo());
+
                         workitemTodolistBooleanStateInsertDB(item);
                         missionCompleteChecked(getAdapterPosition());
                         Log.i("TAG", countNum+"ssss");
@@ -315,6 +341,9 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
                         if (isChecked3) Glide.with(context).load(R.drawable.ic_todolist_checked).into(checked3);
                         else Glide.with(context).load(R.drawable.ic_todolit_unchecked).into(checked3);
                         item.setCompleteNum(item.getCompleteNum()-1);
+
+                        todolistCalendarInsertDB(1, item.getNo());
+
                         countNum =item.getCompleteNum();
                         workitemTodolistBooleanStateInsertDB(item);
                         missionCompleteChecked(getAdapterPosition());
@@ -328,6 +357,9 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
                         else Glide.with(context).load(R.drawable.ic_todolit_unchecked).into(checked3);
                         item.setCompleteNum(item.getCompleteNum() + 1);
                         countNum = item.getCompleteNum();
+
+                        todolistCalendarInsertDB(0, item.getNo());
+
                         workitemTodolistBooleanStateInsertDB(item);
                         missionCompleteChecked(getAdapterPosition());
                         Log.i("TAG", countNum + "kkkk");
@@ -406,7 +438,8 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
                                 }
                                 String days = getTime + ".(" + dayStr + ")";
 
-                                todolistLogDataInsertDB(0 ,item.getNo(), days, logData);
+                                isLogModify = true;
+                                todolistLogDataInsertDB(0 ,item.getNo(), days, logData, isLogModify);
                                 item.getRlTodolistLogDialog().setVisibility(View.INVISIBLE);
                                 item.getEtTodolistLog().setText("");
 
@@ -486,7 +519,7 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
                                 }
                                 String days = getTime + ".(" + dayStr + ")";
 
-                                todolistLogDataInsertDB(1, item.getNo(), days, logData);
+                                todolistLogDataInsertDB(1, item.getNo(), days, logData, isLogModify);
                                 item.getRlTodolistLogDialog().setVisibility(View.INVISIBLE);
                                 item.getEtTodolistLog().setText("");
 
@@ -509,26 +542,60 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
         }
 
 
+        //여기서 인설트 하거나 업데이트 해야함.
+        public void todolistCalendarInsertDB(int idnetifier, String workItemNO){
+            Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
+            RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+
+            long now = System.currentTimeMillis();
+            Date date = new Date(now);
+
+            SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy:MM:dd");
+            String getTiem = simpleDate.format(date);
+
+            Call<String> call = retrofitService.todolistCalendarInsertDB(idnetifier, workItemNO, getTiem);
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                   Log.i("retrofitCalendar", response.body());
+
+                }
+
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Log.i("retrofitCalendar", t.getMessage());
+                }
+            });
+
+
+        }
+
+
+
         //log상태에 대한 작업을 해야함 평소에는 0을 가지고 있다가
         //입력을 하면 불린값이 1을 가지게해서 상태가 수정인 상태로 보이도록 해야하고
         //하루가 지나면 0으로 다시 초기화시켜서 다시 로그를 입력할수 있는 상태로 만들어야함.
 
         //log값 넣어주는 레트로핏
         //Identifier : 식별자 0이면 추가하는거고 1이면 업데이트 하는거
-        public void todolistLogDataInsertDB(int identifier, String workItemNo, String days, String log){
+        public void todolistLogDataInsertDB(int identifier, String workItemNo, String days, String log, boolean isLogModify){
             Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
             RetrofitService retrofitService = retrofit.create(RetrofitService.class);
 
-            Call<String> call = retrofitService.todolistLogDataInsertDB(identifier, workItemNo, days, log);
+            Call<String> call = retrofitService.todolistLogDataInsertDB(identifier, workItemNo, days, log, isLogModify);
             call.enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
                     Log.i("Tag", response.body());
+
+
                 }
 
                 @Override
                 public void onFailure(Call<String> call, Throwable t) {
                     Log.i("Tag", t.getMessage());
+
+
                 }
             });
         }

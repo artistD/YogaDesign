@@ -3,8 +3,10 @@ package com.will_d.yogadesign.worktoday.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -170,14 +172,15 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
     public boolean onItemMove(int from_position, int to_position) {
         WorkItem workItem_from= items.get(from_position);
         WorkItem workItem_to= items.get(to_position);
-//        workItemFromPositionChangeDB(workItem_from, workItem_to);
-//        workItemToPositionChangeDB(workItem_from, workItem_to);
         Log.i("TAGKKK", from_position +  " : " + to_position + "");
         items.remove(from_position);
         items.add(to_position, workItem_from);
         notifyItemMoved(from_position,to_position);
-        return true;
+        workItemChangePositionInsertToDB(workItem_from.getNo(), workItem_to.getNo());
+        return false;
     }
+
+
 
     @Override
     public void onItemSwipe(int position) {
@@ -252,11 +255,16 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
             cdTodayWork = itemView.findViewById(R.id.cd_today_work);
 
 
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    WorkItem item = items.get(getAdapterPosition());
                     Toast.makeText(context, "asdf", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(context, WorkItemClickedActivity.class);
+                    intent.putExtra("workItemNo", item.getNo());
+                    intent.putExtra("name", item.getName());
+                    intent.putExtra("nickName", item.getNickName());
                     context.startActivity(intent);
 
                 }
@@ -430,51 +438,27 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
     }
 
-    public void workItemFromPositionChangeDB(WorkItem workItem_from, WorkItem workItem_to){
+    public void workItemChangePositionInsertToDB(String fromNo, String toNo){
         Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
         RetrofitService retrofitService = retrofit.create(RetrofitService.class);
 
-       Call<String> call = retrofitService.workItemFromPositionChangeDB(workItem_from.getNo(), workItem_to.getNo());
-       call.enqueue(new Callback<String>() {
-           @Override
-           public void onResponse(Call<String> call, Response<String> response) {
-               Log.i("TAGasdf", response.body());
-           }
-
-           @Override
-           public void onFailure(Call<String> call, Throwable t) {
-               Log.i("TAGasdf", "fff");
-           }
-       });
-
-
-
-    }
-
-
-    public void workItemToPositionChangeDB(WorkItem workItem_from, WorkItem workItem_to){
-        Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
-        RetrofitService retrofitService = retrofit.create(RetrofitService.class);
-
-        Call<String> call = retrofitService.workItemToPositionChangeDB(workItem_from.getNo(), workItem_to.getNo());
+        Call<String> call = retrofitService.workItemChangePositionInsertToDB(fromNo, toNo);
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                Log.i("TAGasdf", response.body());
+                Log.i("retrofitPosition", response.body());
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                Log.i("TAGasdf", "fff");
+                Log.i("retrofitPosition", t.getMessage());
             }
         });
 
 
 
+
+
     }
-
-
-
-
 
 }

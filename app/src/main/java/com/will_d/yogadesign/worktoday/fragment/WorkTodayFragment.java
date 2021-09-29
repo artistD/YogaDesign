@@ -166,7 +166,25 @@ public class WorkTodayFragment extends Fragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        Toast.makeText(getActivity(), "ddd", Toast.LENGTH_SHORT).show();
+
+
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+        String dayStr = sdf.format(date);
+
+        SharedPreferences pref = getActivity().getSharedPreferences("Data", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        String str = pref.getString("dayCompairison", "");
+        //todo: 일단 이기능이 제대로 동작을 안함.
+        if (!(dayStr.equals(str))){
+            workItemOnedayUpdateDB();
+            adapter.notifyDataSetChanged();
+            editor.putString("dayCompairison", dayStr);
+            editor.commit();
+        }
+
         loadWorkTodayDataServer();
 
     }
@@ -205,6 +223,9 @@ public class WorkTodayFragment extends Fragment {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
 
                         String no = jsonObject.getString("no");
+
+                        //여기서 sortation number에대한 레트로핏 작업을 해야하는것
+
                         String id =jsonObject.getString("id");
                         String name = jsonObject.getString("name");
 
@@ -300,6 +321,16 @@ public class WorkTodayFragment extends Fragment {
         });
 
     }
+
+
+
+    //todo: 여기서 부터 작업해야함
+    public void workItemInsertSortationNoFromDB(){
+        Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
+        RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+
+    }
+
 
 
     public void workItemOnedayUpdateDB(){

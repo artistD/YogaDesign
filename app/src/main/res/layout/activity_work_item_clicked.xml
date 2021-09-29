@@ -125,6 +125,7 @@
                         android:layout_centerInParent="true"/>
 
                     <LinearLayout
+                        android:id="@+id/ll_workitem_clicked_timesum"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
@@ -146,11 +147,15 @@
                             android:backgroundTint="#FF9999FF">
 
                             <TextView
+                                android:id="@+id/tv_workitem_clicked_timesum"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:padding="4dp"
+                                android:paddingLeft="8dp"
+                                android:paddingRight="8dp"
+                                android:paddingTop="4dp"
+                                android:paddingBottom="4dp"
                                 android:textSize="16sp"
-                                android:text="122시간" />
+                                android:text="122:30" />
 
                         </androidx.cardview.widget.CardView>
 
