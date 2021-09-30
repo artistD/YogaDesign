@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="112dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginBottom="20dp">
+
+    <soup.neumorphism.NeumorphCardView
+        android:id="@+id/ncd"
+        style="@style/Widget.Neumorph.CardView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:neumorph_shadowColorDark="#77999999"
+        app:neumorph_shadowColorLight="#77FFFFFF">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/mainbg_03"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginBottom="4dp">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cd"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    app:cardCornerRadius="8dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="4dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/mainbg_03"
+                        android:layout_gravity="center"/>
+
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/nickName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/cd"
+                    android:text="morning"
+                    android:textSize="16sp" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cd_timeSet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="4dp"
+                    android:layout_marginLeft="8dp"
+                    android:backgroundTint="#FF9999FF"
+                    android:layout_toRightOf="@id/nickName"
+                    android:layout_centerVertical="true"
+                    android:visibility="invisible">
+
+                    <TextView
+                        android:id="@+id/tv_timeSet"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="03:30"
+                        android:textColor="#FFeeeeee"
+                        android:textSize="12dp"
+                        android:padding="4dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"/>
+
+                </androidx.cardview.widget.CardView>
+
+
+
+
+
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="매일아침 운동하기"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="4dp"/>
+
+
+
+            </RelativeLayout>
+
+
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_todolist_mission_complete"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/mainbg_01"
+            android:padding="12dp"
+            android:visibility="invisible">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Mission Complete!!"
+                android:textSize="16sp"/>
+
+        </RelativeLayout>
+
+
+    </soup.neumorphism.NeumorphCardView>
+
+
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cd_log"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="8dp"
+        android:backgroundTint="#FF9999FF"
+        android:clickable="true"
+        android:layout_marginRight="4dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:visibility="visible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Log"
+            android:textColor="#FFeeeeee"
+            android:textSize="16sp"
+            android:paddingRight="12dp"
+            android:paddingLeft="12dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:layout_gravity="center"
+            android:gravity="center" />
+
+
+
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cd_log_modify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="8dp"
+        android:backgroundTint="#FF9999FF"
+        android:clickable="true"
+        android:layout_marginRight="4dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:visibility="invisible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="수정"
+            android:textColor="#FFeeeeee"
+            android:textSize="16sp"
+            android:paddingRight="12dp"
+            android:paddingLeft="12dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:layout_gravity="center"
+            android:gravity="center" />
+
+
+
+    </androidx.cardview.widget.CardView>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="24dp"
+        android:layout_alignParentRight="true">
+
+        <ImageView
+            android:id="@+id/checked_1"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_todolit_unchecked"
+            android:visibility="visible"
+            android:clickable="false"/>
+
+        <ImageView
+            android:id="@+id/checked_2"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_todolit_unchecked"
+            android:layout_marginLeft="8dp"
+            android:visibility="visible"
+            android:clickable="false"/>
+
+        <ImageView
+            android:id="@+id/checked_3"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_todolit_unchecked"
+            android:layout_marginLeft="8dp"
+            android:visibility="visible"
+            android:clickable="false"/>
+
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cd_today_work"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="8dp"
+        android:backgroundTint="#FFFFFFFF"
+        android:layout_marginLeft="4dp"
+        android:visibility="invisible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="오늘 하루만"
+            android:textSize="12sp"
+            android:paddingRight="12dp"
+            android:paddingLeft="12dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:layout_gravity="center"
+            android:gravity="center" />
+
+
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

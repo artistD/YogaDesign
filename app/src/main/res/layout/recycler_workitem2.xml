@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="196dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cd_today_work"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="8dp"
+        android:backgroundTint="#FFFFFFFF"
+        android:layout_marginLeft="4dp"
+        android:visibility="invisible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="오늘 하루만"
+            android:textSize="12sp"
+            android:paddingRight="12dp"
+            android:paddingLeft="12dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:layout_gravity="center"
+            android:gravity="center" />
+
+
+
+    </androidx.cardview.widget.CardView>
+
+
+
+    <soup.neumorphism.NeumorphCardView
+        style="@style/Widget.Neumorph.CardView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:neumorph_shadowColorDark="#77999999"
+        app:neumorph_shadowColorLight="#77FFFFFF">
+
+        <LinearLayout
+            android:id="@+id/ll_itemcontainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/mainbg_03"
+            android:orientation="vertical"
+            android:layout_gravity="center">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/civ"
+                    android:layout_width="104dp"
+                    android:layout_height="104dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="8dp"
+                    android:paddingTop="8dp"
+                    android:src="@drawable/bg_maincontents01" />
+
+                <TextView
+                    android:id="@+id/tv_nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_toRightOf="@id/civ"
+                    android:text="아침인사 드립니다."
+                    android:textSize="20sp" />
+
+                <Switch
+                    android:id="@+id/sw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginRight="20dp"
+                    android:checked="true"/>
+
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_nickname"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_toRightOf="@id/civ"
+                    android:ellipsize="end"
+                    android:maxWidth="240dp"
+                    android:maxLines="1"
+                    android:text="매일 아침 물마시기!안녕하세연 반갑습니당"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/tv_name"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:layout_toRightOf="@id/civ">
+
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_toRightOf="@id/goalprelocalcontainer"
+                        app:cardCornerRadius="8dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/mainbg_02">
+
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:orientation="horizontal">
+
+
+                                <TextView
+                                    android:id="@+id/count"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Count : "
+                                    android:textColor="#FF9999FF"
+                                    android:textSize="16sp" />
+
+                                <TextView
+                                    android:id="@+id/tv_workitem_counter"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_toRightOf="@id/count"
+                                    android:textColor="#FF9999FF"
+                                    android:textSize="16sp"
+                                    android:text="32" />
+
+                            </LinearLayout>
+
+
+                        </RelativeLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <LinearLayout
+                        android:id="@+id/goalprelocalcontainer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:layout_gravity="center"
+                                app:cardCornerRadius="8dp">
+
+                                <ImageView
+                                    android:id="@+id/iv_goal"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="center"
+                                    android:background="#FFeeeeee" />
+
+                            </androidx.cardview.widget.CardView>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="4dp"
+                                android:text="목표"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="알림"
+                                android:textColor="#00FFFFFF"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/tv_goal"
+                                android:layout_width="56dp"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="12dp"
+                                android:ellipsize="end"
+                                android:gravity="center|left"
+                                android:text="하루 1번"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:visibility="invisible" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:layout_gravity="center"
+                                app:cardCornerRadius="8dp">
+
+                                <ImageView
+                                    android:id="@+id/iv_preNotification"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="center"
+                                    android:background="#FFeeeeee" />
+
+                            </androidx.cardview.widget.CardView>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="4dp"
+                                android:text="미리알림"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tv_preNotification"
+                                android:layout_width="56dp"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="12dp"
+                                android:ellipsize="end"
+                                android:gravity="center|left"
+                                android:text="23 : 30"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:visibility="invisible" />
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:layout_gravity="center"
+                                app:cardCornerRadius="8dp">
+
+                                <ImageView
+                                    android:id="@+id/iv_locationNotification"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="center"
+                                    android:background="#FFeeeeee" />
+
+                            </androidx.cardview.widget.CardView>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="4dp"
+                                android:text="위치알림"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tv_localNotification"
+                                android:layout_width="56dp"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="12dp"
+                                android:ellipsize="end"
+                                android:gravity="center|left"
+                                android:text="학원"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:visibility="invisible" />
+
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="3">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@drawable/mainbg_02"
+                    android:layout_marginTop="4dp"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_centerVertical="true">
+
+
+                    <TextView
+                        android:id="@+id/tv_week_mon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="월"
+                        android:paddingRight="8dp"
+                        android:paddingLeft="8dp"
+                        android:textColor="#FF999999"/>
+
+                    <TextView
+                        android:id="@+id/tv_week_tues"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="화"
+                        android:paddingRight="8dp"
+                        android:paddingLeft="8dp"
+                        android:textColor="#FF999999"/>
+
+                    <TextView
+                        android:id="@+id/tv_week_wendnes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="수"
+                        android:paddingRight="8dp"
+                        android:paddingLeft="8dp"
+                        android:textColor="#FF999999"/>
+
+                    <TextView
+                        android:id="@+id/tv_week_thurs"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="목"
+                        android:paddingRight="8dp"
+                        android:paddingLeft="8dp"
+                        android:textColor="#FF999999"/>
+
+                    <TextView
+                        android:id="@+id/tv_week_fri"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="금"
+                        android:paddingRight="8dp"
+                        android:paddingLeft="8dp"
+                        android:textColor="#FF999999"/>
+
+                    <TextView
+                        android:id="@+id/tv_week_satur"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="토"
+                        android:paddingRight="8dp"
+                        android:paddingLeft="8dp"
+                        android:textColor="#FF999999"/>
+
+                    <TextView
+                        android:id="@+id/tv_week_sun"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="일"
+                        android:paddingRight="8dp"
+                        android:paddingLeft="8dp"
+                        android:textColor="#FF999999"/>
+
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/iv_itemSet"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_recycler_fix"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_centerVertical="true"/>
+
+
+
+            </RelativeLayout>
+
+
+
+
+
+        </LinearLayout>
+
+
+    </soup.neumorphism.NeumorphCardView>
+
+
+</RelativeLayout>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="144dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <soup.neumorphism.NeumorphCardView
+        style="@style/Widget.Neumorph.CardView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:neumorph_shadowColorDark="#77999999"
+        app:neumorph_shadowColorLight="#77FFFFFF">
+
+        <LinearLayout
+            android:id="@+id/ll_itemcontainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/mainbg_03"
+            android:orientation="vertical"
+            android:layout_gravity="center">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tv_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="07:30"
+                    android:textSize="40sp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="16dp"/>
+
+                <Switch
+                    android:id="@+id/sw_alarm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="24dp"
+                    android:checked="true"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@drawable/mainbg_02"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_centerVertical="true">
+
+
+                    <TextView
+                        android:id="@+id/tv_week_mon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="월"
+                        android:paddingRight="8dp"
+                        android:paddingLeft="8dp"
+                        android:textColor="#FF999999"/>
+
+                    <TextView
+                        android:id="@+id/tv_week_tues"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="화"
+                        android:paddingRight="8dp"
+                        android:paddingLeft="8dp"
+                        android:textColor="#FF999999"/>
+
+                    <TextView
+                        android:id="@+id/tv_week_wendnes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="수"
+                        android:paddingRight="8dp"
+                        android:paddingLeft="8dp"
+                        android:textColor="#FF999999"/>
+
+                    <TextView
+                        android:id="@+id/tv_week_thurs"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="목"
+                        android:paddingRight="8dp"
+                        android:paddingLeft="8dp"
+                        android:textColor="#FF999999"/>
+
+                    <TextView
+                        android:id="@+id/tv_week_fri"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="금"
+                        android:paddingRight="8dp"
+                        android:paddingLeft="8dp"
+                        android:textColor="#FF999999"/>
+
+                    <TextView
+                        android:id="@+id/tv_week_satur"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="토"
+                        android:paddingRight="8dp"
+                        android:paddingLeft="8dp"
+                        android:textColor="#FF999999"/>
+
+                    <TextView
+                        android:id="@+id/tv_week_sun"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="일"
+                        android:paddingRight="8dp"
+                        android:paddingLeft="8dp"
+                        android:textColor="#FF999999"/>
+
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/iv_itemSet"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_recycler_fix"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_centerVertical="true"/>
+
+
+
+            </RelativeLayout>
+
+
+
+
+
+        </LinearLayout>
+
+
+    </soup.neumorphism.NeumorphCardView>
+
+</RelativeLayout>

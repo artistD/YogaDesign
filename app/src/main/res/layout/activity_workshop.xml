@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".WorkShopActivity"
-    android:id="@+id/drawer"
+    android:orientation="vertical"
     android:background="#C7DDFF">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+
 
 
         <FrameLayout
@@ -25,24 +27,26 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@drawable/mainbg_02"
-            android:visibility="visible"/>
+            android:visibility="visible"
+            android:layout_marginBottom="4dp"/>
 
 
-<!--        바텀네비게이션바 -->
+        <!--        바텀네비게이션바 -->
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="104dp">
+            android:layout_height="72dp"
+            android:layout_marginBottom="12dp">
 
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="104dp"
+                android:layout_height="72dp"
                 android:orientation="horizontal">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="88dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1">
 
                     <soup.neumorphism.NeumorphCardView
@@ -61,19 +65,19 @@
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_fragment_work" />
+                            android:src="@drawable/ic_fragment_work2" />
 
                     </soup.neumorphism.NeumorphCardView>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginBottom="4dp"
-                        android:text="Work"
-                        android:textColor="#FF333333"
-                        android:textSize="12sp"/>
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_alignParentBottom="true"-->
+<!--                        android:layout_centerHorizontal="true"-->
+<!--                        android:layout_marginBottom="4dp"-->
+<!--                        android:text="Work"-->
+<!--                        android:textColor="#FF333333"-->
+<!--                        android:textSize="12sp"/>-->
 
 
 
@@ -81,11 +85,11 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="88dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1">
 
                     <soup.neumorphism.NeumorphCardView
-                        android:id="@+id/cd_nab_timer"
+                        android:id="@+id/cd_nab_time"
                         style="@style/Widget.Neumorph.CardView"
                         android:layout_width="72dp"
                         android:layout_height="72dp"
@@ -93,106 +97,78 @@
                         app:neumorph_shadowColorLight="#77FFFFFF"
                         app:neumorph_shadowColorDark="#77999999"
                         android:layout_centerHorizontal="true"
-                        android:onClick="clickNabTimer">
+                        android:onClick="clickNabTime">
 
                         <ImageView
-                            android:id="@+id/iv_nab_timer"
+                            android:id="@+id/iv_nab_time"
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_fragment_timer"/>
+                            android:src="@drawable/ic_fragment_time"/>
 
                     </soup.neumorphism.NeumorphCardView>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginBottom="4dp"
-                        android:text="Timer"
-                        android:textColor="#FF333333"
-                        android:textSize="12sp" />
 
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <soup.neumorphism.NeumorphCardView
+                        android:id="@+id/cd_nab_square"
+                        style="@style/Widget.Neumorph.CardView"
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
+                        app:neumorph_shapeAppearance="@style/ShapeAppearance"
+                        app:neumorph_shadowColorLight="#77FFFFFF"
+                        app:neumorph_shadowColorDark="#77999999"
+                        android:layout_centerHorizontal="true"
+                        android:onClick="clickNabSquare">
+
+                        <ImageView
+                            android:id="@+id/iv_nab_square"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_fragment_square"/>
+
+                    </soup.neumorphism.NeumorphCardView>
 
 
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="88dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1">
 
                     <soup.neumorphism.NeumorphCardView
-                        android:id="@+id/cd_nab_music"
+                        android:id="@+id/cd_nab_statistics"
                         style="@style/Widget.Neumorph.CardView"
                         android:layout_width="72dp"
                         android:layout_height="72dp"
-                        app:neumorph_shapeAppearance="@style/ShapeAppearance"
-                        app:neumorph_shadowColorLight="#77FFFFFF"
-                        app:neumorph_shadowColorDark="#77999999"
                         android:layout_centerHorizontal="true"
-                        android:onClick="clickNabMusic">
+                        android:onClick="clickNabStatistics"
+                        app:neumorph_shadowColorDark="#77999999"
+                        app:neumorph_shadowColorLight="#77FFFFFF"
+                        app:neumorph_shapeAppearance="@style/ShapeAppearance">
 
                         <ImageView
-                            android:id="@+id/iv_nab_music"
+                            android:id="@+id/iv_nab_statistics"
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_fragment_music"/>
+                            android:src="@drawable/ic_usersetting" />
 
                     </soup.neumorphism.NeumorphCardView>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginBottom="4dp"
-                        android:text="Music"
-                        android:textColor="#FF333333"
-                        android:textSize="12sp" />
-
 
 
                 </RelativeLayout>
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="88dp"
-                    android:layout_weight="1">
-
-                    <soup.neumorphism.NeumorphCardView
-                        style="@style/Widget.Neumorph.CardView"
-                        android:layout_width="72dp"
-                        android:layout_height="72dp"
-                        app:neumorph_shapeAppearance="@style/ShapeAppearance"
-                        app:neumorph_shadowColorLight="#77FFFFFF"
-                        app:neumorph_shadowColorDark="#77999999"
-                        android:layout_centerHorizontal="true"
-                        android:onClick="clickGotoToolList">
-
-                        <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:layout_gravity="center"
-                            android:src="@drawable/ic_fragment_tool"/>
-
-                    </soup.neumorphism.NeumorphCardView>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginBottom="4dp"
-                        android:text="Tool"
-                        android:textColor="#FF333333"
-                        android:textSize="12sp" />
-
-
-
-                </RelativeLayout>
 
             </LinearLayout>
 
@@ -207,18 +183,70 @@
         </RelativeLayout>
 
 
-
     </LinearLayout>
 
-
-<!--    드로우어 레이아웃-->
-<!--    android:layout_gravity="start"-->
     <RelativeLayout
-        android:id="@+id/nav"
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="@drawable/mainbg_02">
+        android:layout_height="?android:attr/actionBarSize">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/meterial_cd_todolist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            app:cardCornerRadius="4dp"
+            android:clickable="true"
+            android:onClick="clickTodolist"
+            android:visibility="visible">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_fragment_work"
+                android:background="@drawable/mainbg_02" />
+
+        </androidx.cardview.widget.CardView>
+
+        <ImageView
+            android:id="@+id/meterial_iv_todolist_blur"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:clickable="true"
+            android:visibility="visible"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="#ccC7DDFF" />
+
+
+        <ImageView
+            android:id="@+id/iv_todolist_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_back"
+            android:clickable="true"
+            android:layout_marginLeft="16dp"
+            android:layout_centerVertical="true"
+            android:onClick="clickTodolistBack"
+            android:visibility="invisible"/>
+
+<!--        android:background="#ccC7DDFF"-->
+
+<!--        <androidx.cardview.widget.CardView-->
+<!--            android:id="@+id/meterial_cd_todolist_blur"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:cardCornerRadius="4dp"-->
+<!--            android:layout_centerVertical="true"-->
+<!--            android:layout_marginLeft="16dp"-->
+<!--            android:clickable="true"-->
+<!--            android:visibility="visible"-->
+<!--            android:onClick="clickTodolist"-->
+<!--            app:cardElevation="1dp">-->
+
+
+<!--        </androidx.cardview.widget.CardView>-->
 
 
 
@@ -226,9 +254,4 @@
 
 
 
-
-
-
-
-
-</androidx.drawerlayout.widget.DrawerLayout>
+</RelativeLayout>
