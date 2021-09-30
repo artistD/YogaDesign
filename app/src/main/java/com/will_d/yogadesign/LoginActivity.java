@@ -69,9 +69,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-
-
-
         //퍼미션 작업 수행
         String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (checkSelfPermission(permissions[0]) == PackageManager.PERMISSION_DENIED){
@@ -99,11 +96,9 @@ public class LoginActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = pref.edit();
                 editor.putBoolean("isLogin", isLogin);
                 editor.putString("id", datas.get(i));
-
                 editor.putBoolean("isFirstCompair", true);
-
-
                 editor.commit();
+
                 Log.i("Global", datas.get(i));
                 Intent intent = new Intent(this, WorkShopActivity.class);
                 startActivity(intent);

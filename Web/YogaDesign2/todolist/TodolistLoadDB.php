@@ -10,7 +10,7 @@
 
 
     $a = '1';
-    $sql = "SELECT * FROM WorkItemYogaDesign WHERE id='$id' and isItemOnOff='$a' ORDER BY no ASC";
+    $sql = "SELECT * FROM WorkItemYogaDesign WHERE id='$id' and isItemOnOff='$a' ORDER BY indexNo DESC";
     $result = mysqli_query($conn, $sql);
 
     $row_num = mysqli_num_rows($result);

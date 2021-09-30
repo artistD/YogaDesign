@@ -8,7 +8,7 @@
 
     mysqli_query($conn, "set names utf8");
 
-    $sql = "SELECT * FROM WorkItemYogaDesign WHERE no='$no' ORDER BY no ASC";
+    $sql = "SELECT * FROM WorkItemYogaDesign WHERE no='$no' ORDER BY indexNo DESC";
     $result = mysqli_query($conn, $sql);
 
     $row_num = mysqli_num_rows($result);

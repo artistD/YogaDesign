@@ -3,6 +3,8 @@ package com.will_d.yogadesign.worktoday.fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -167,6 +169,7 @@ public class WorkShopTodolistFragment extends Fragment {
 
 
         if (isFirst){
+            Log.i("누가더빠르나", "t");
             loadWorkTodayDataServer();
             isFirst=false;
         }
@@ -200,12 +203,7 @@ public class WorkShopTodolistFragment extends Fragment {
         }
         Log.i("asdfgh", !(dayStr.equals(s))+"");
 
-
-
         loadWorkTodayDataServer();
-
-
-
 
     }
 

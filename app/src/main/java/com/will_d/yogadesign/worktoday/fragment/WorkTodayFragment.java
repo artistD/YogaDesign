@@ -38,6 +38,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -49,6 +50,8 @@ import soup.neumorphism.NeumorphCardView;
 import static android.content.Context.MODE_PRIVATE;
 
 public class WorkTodayFragment extends Fragment {
+
+    private ArrayList<String> workItemIndextNo = new ArrayList<>();
 
     private ArrayList<WorkItem> workItems = new ArrayList<>();
     //**********
@@ -113,12 +116,6 @@ public class WorkTodayFragment extends Fragment {
                 getActivity().overridePendingTransition(R.anim.activity_data_set, R.anim.fragment_none);
 
 
-
-                //todo:StackOverFlowError, OutOfMemory 에러
-//                Gson gson = new Gson();
-//                String jsonStr = gson.toJson(workItems);
-//                intent.putExtra("Workitems", jsonStr);
-
             }
         });
     }
@@ -127,6 +124,20 @@ public class WorkTodayFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        workItemIndextNo.clear();
+        for (int i=0; i<workItems.size(); i++){
+            workItemIndextNo.add(workItems.get(i).getNo());
+            Log.i("workitemPostion", workItems.get(i).getNo());
+        }
+        Log.i("workitemPostion", " -------- ");
+
+        Gson gson = new Gson();
+        String workItemIndexJsonStr = gson.toJson(workItemIndextNo);
+        Log.i("workItemIndexJsonStr", workItemIndexJsonStr);
+        workItemPositionSetLoadToDB(workItemIndexJsonStr, workItemIndextNo.size());
+
+
 
         long now = System.currentTimeMillis();
         Date date = new Date(now);
@@ -165,26 +176,50 @@ public class WorkTodayFragment extends Fragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
+        //숨겨지면 true
+        //다시 나타나면 false
+        Log.i("누가더빠르나", "h");
+        if (hidden){
+            workItemIndextNo.clear();
+            for (int i=0; i<workItems.size(); i++){
+                workItemIndextNo.add(workItems.get(i).getNo());
+                Log.i("workitemPostion", workItems.get(i).getNo());
+            }
+            Log.i("workitemPostion", " -------- ");
 
+            Gson gson = new Gson();
+            String workItemIndexJsonStr = gson.toJson(workItemIndextNo);
+            Log.i("workItemIndexJsonStr", workItemIndexJsonStr);
+            workItemPositionSetLoadToDB(workItemIndexJsonStr, workItemIndextNo.size());
 
-        long now = System.currentTimeMillis();
-        Date date = new Date(now);
+        }else {
+            long now = System.currentTimeMillis();
+            Date date = new Date(now);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
-        String dayStr = sdf.format(date);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+            String dayStr = sdf.format(date);
 
-        SharedPreferences pref = getActivity().getSharedPreferences("Data", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        String str = pref.getString("dayCompairison", "");
-        //todo: 일단 이기능이 제대로 동작을 안함.
-        if (!(dayStr.equals(str))){
-            workItemOnedayUpdateDB();
-            adapter.notifyDataSetChanged();
-            editor.putString("dayCompairison", dayStr);
-            editor.commit();
+            SharedPreferences pref = getActivity().getSharedPreferences("Data", MODE_PRIVATE);
+            SharedPreferences.Editor editor = pref.edit();
+            String str = pref.getString("dayCompairison", "");
+            //todo: 일단 이기능이 제대로 동작을 안함.
+            if (!(dayStr.equals(str))){
+                workItemOnedayUpdateDB();
+                adapter.notifyDataSetChanged();
+                editor.putString("dayCompairison", dayStr);
+                editor.commit();
+            }
+
+            loadWorkTodayDataServer();
         }
 
-        loadWorkTodayDataServer();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        //강제종료를 하거나 뒤로가기를 눌러서 끄면 onStop()이 발동
+
 
     }
 
@@ -222,7 +257,6 @@ public class WorkTodayFragment extends Fragment {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
 
                         String no = jsonObject.getString("no");
-                        String sortationNo = jsonObject.getString("sortationNo");
 
                         String id =jsonObject.getString("id");
                         String name = jsonObject.getString("name");
@@ -296,14 +330,13 @@ public class WorkTodayFragment extends Fragment {
 
                         String now = jsonObject.getString("now");
 
-//                        insertWorkitemSortationNumber(no);
-
-                        workItems.add(0, new WorkItem(no, sortationNo, imgUrl, nickName, name, isGoalChecked, goalSet, isPreNotificationChecked, preNotificationTime, isLocalNotificationChecked, placeName, weeksData, isItemOnOff, completeNum, isDayOrTodaySelected, rlWorkitemDeleteDialog, tvWorkitemDeleteOK, tvWorkitemDeleteCancel));
+                        workItems.add(0, new WorkItem(no, imgUrl, nickName, name, isGoalChecked, goalSet, isPreNotificationChecked, preNotificationTime, isLocalNotificationChecked, placeName, weeksData, isItemOnOff, completeNum, isDayOrTodaySelected, rlWorkitemDeleteDialog, tvWorkitemDeleteOK, tvWorkitemDeleteCancel));
                         adapter.notifyItemChanged(0);
 
                     }
 
                     GworkToday.workItems = workItems;
+
 
 
                 } catch (JSONException e) {
@@ -330,20 +363,32 @@ public class WorkTodayFragment extends Fragment {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 Log.i("TAG", response.body());
-//                for (int i=0; i<workItems.size(); i++){
-//                    WorkItem workItem = workItems.get(i);
-//                    if(workItem.getIsItemInOff()){
-//
-//                    }else {
-//
-//                    }
-//
-//                }
-
             }
             @Override
             public void onFailure(Call<String> call, Throwable t) {
                 Log.i("TAG", t.getMessage());
+            }
+        });
+
+    }
+
+
+    public void workItemPositionSetLoadToDB(String workItemIndexJsonStr, int workItemIndexSize){
+        Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
+        RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+
+        Call<String> call = retrofitService.workItemPositionSetLoadToDB(workItemIndexJsonStr, workItemIndexSize);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+               Log.i("workItemPositionSetLoadToDB", response.body());
+
+
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.i("workItemPositionSetLoadToDB", t.getMessage());
             }
         });
 

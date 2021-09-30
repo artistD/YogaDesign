@@ -193,22 +193,6 @@ public class WokrDataSetActivity extends AppCompatActivity {
         setContentView(R.layout.activity_wokr_data_set);
 
 
-        SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-
-
-        isSortationNoFirst = pref.getBoolean("isSortationNoFirst", true);
-        if (isSortationNoFirst){
-            editor.putInt("sortationNo", 1);
-            editor.putBoolean("isSortationNoFirst", false);
-            editor.commit();
-        }
-        id = pref.getString("id", "");
-
-
-
-
-
         etName = findViewById(R.id.et_name);
         tvNickname = findViewById(R.id.tv_nickname);
         nivNickname = findViewById(R.id.niv_nickname);

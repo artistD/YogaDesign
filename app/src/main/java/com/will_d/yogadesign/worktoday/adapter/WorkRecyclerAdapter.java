@@ -170,13 +170,11 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
     @Override
     public boolean onItemMove(int from_position, int to_position) {
-        WorkItem workItem_from= items.get(from_position);
-        WorkItem workItem_to= items.get(to_position);
+        WorkItem workItem= items.get(from_position);
         Log.i("Tagposition", from_position +  " : " + to_position + "");
         items.remove(from_position);
-        items.add(to_position, workItem_from);
+        items.add(to_position, workItem);
         notifyItemMoved(from_position,to_position);
-        workItemChangePositionInsertToDB(workItem_from.getNo(), workItem_from.getSortationNo(), workItem_to.getNo(), workItem_to.getSortationNo());
         return false;
     }
 
@@ -438,27 +436,5 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
     }
 
-    public void workItemChangePositionInsertToDB(String fromNo, String fromSortationNo, String toNo, String toSortationNo){
-        Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
-        RetrofitService retrofitService = retrofit.create(RetrofitService.class);
-
-        Call<String> call = retrofitService.workItemChangePositionInsertToDB(fromNo, fromSortationNo, toNo, toSortationNo);
-        call.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                Log.i("retrofitPosition", response.body());
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                Log.i("retrofitPosition", t.getMessage());
-            }
-        });
-
-
-
-
-
-    }
 
 }

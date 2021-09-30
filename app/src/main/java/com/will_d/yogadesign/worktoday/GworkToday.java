@@ -24,6 +24,6 @@ public class GworkToday {
     public static boolean isDeletEnd=false;
     ////************************************************************
 
-    //todolist 아이템 log에 대한 데이터임
+    //todolist와 workitem 동기를 위한 불린 변수
 
 }
