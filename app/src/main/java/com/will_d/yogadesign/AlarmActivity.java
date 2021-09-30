@@ -14,13 +14,15 @@ public class AlarmActivity extends AppCompatActivity {
         setContentView(R.layout.activity_alarm);
     }
 
-    public void clickGotoHome(View view) {
-        startActivity(new Intent(this, MainActivity.class));
-        finish();
-        overridePendingTransition(R.anim.activity_vertical_none, R.anim.activity_vertical_none);
-    }
 
     public void clickBackPress(View view) {
         onBackPressed();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        overridePendingTransition(R.anim.activity_vertical_none, R.anim.activity_horizontal_left_end);
     }
 }

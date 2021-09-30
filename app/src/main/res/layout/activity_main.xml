@@ -93,7 +93,8 @@
                     android:layout_height="match_parent"
                     app:blk_blurRadius="12"
                     app:blk_downscaleFactor="0.12"
-                    app:blk_fps="0"/>
+                    app:blk_fps="0" />
+
 
 
                 <TextView
@@ -164,12 +165,6 @@
                     android:layout_height="match_parent"
                     android:scaleType="fitXY" />
 
-                <io.alterac.blurkit.BlurLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:blk_blurRadius="12"
-                    app:blk_downscaleFactor="0.12"
-                    app:blk_fps="0" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -238,6 +233,7 @@
                     app:blk_downscaleFactor="0.12"
                     app:blk_fps="0" />
 
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -279,6 +275,7 @@
                     app:blk_downscaleFactor="0.12"
                     app:blk_fps="0" />
 
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -314,6 +311,7 @@
                     app:blk_blurRadius="12"
                     app:blk_downscaleFactor="0.12"
                     app:blk_fps="0" />
+
 
                 <TextView
                     android:layout_width="wrap_content"

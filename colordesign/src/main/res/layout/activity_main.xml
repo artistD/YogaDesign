@@ -106,7 +106,7 @@
                     android:layout_height="80dp"
                     android:layout_marginLeft="8dp"
                     android:layout_weight="1"
-                    android:background="#FF9999FF" />
+                    android:background="#80B4FF" />
 
                 <TextView
                     android:layout_width="80dp"
