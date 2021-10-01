@@ -3,10 +3,14 @@ package com.will_d.yogadesign.worktoday.fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowInsets;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +39,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -67,8 +72,11 @@ public class WorkTodayFragment extends Fragment {
 
     private NeumorphCardView cdAddBtn2;
 
+    private ProgressBar progressBar;
+
     private boolean isFirst = false;
     public static boolean isWorkItemAdd = false;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -105,6 +113,8 @@ public class WorkTodayFragment extends Fragment {
         tvWorkitemDeleteCancel = view.findViewById(R.id.tv_workitem_delete_cancel);
         cdAddBtn2 = view.findViewById(R.id.cd_addbtn2);
 
+        progressBar = view.findViewById(R.id.progress_today);
+
 
         setcdAddBtnToPreventBlurring();
 
@@ -118,7 +128,32 @@ public class WorkTodayFragment extends Fragment {
 
             }
         });
+
+
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+        String dayStr = sdf.format(date);
+
+        SharedPreferences pref = getActivity().getSharedPreferences("Data", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        String str = pref.getString("dayCompairison", "");
+
+        //todo: 일단 이기능이 제대로 동작을 안함.
+        if (!(dayStr.equals(str))){
+            workItemOnedayUpdateDB();
+            adapter.notifyDataSetChanged();
+            editor.putString("dayCompairison", dayStr);
+            editor.commit();
+        }else {
+            loadWorkTodayDataServer();
+        }
+
+        Log.i("asdfg", !(dayStr.equals(str))+"");
+
     }
+
 
 
     @Override
@@ -138,31 +173,11 @@ public class WorkTodayFragment extends Fragment {
         workItemPositionSetLoadToDB(workItemIndexJsonStr, workItemIndextNo.size());
 
 
-
-        long now = System.currentTimeMillis();
-        Date date = new Date(now);
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
-        String dayStr = sdf.format(date);
-
-        SharedPreferences pref = getActivity().getSharedPreferences("Data", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        String str = pref.getString("dayCompairison", "");
-        //todo: 일단 이기능이 제대로 동작을 안함.
-        if (!(dayStr.equals(str))){
-            workItemOnedayUpdateDB();
-            adapter.notifyDataSetChanged();
-            editor.putString("dayCompairison", dayStr);
-            editor.commit();
-        }
-
-        Log.i("asdfg", !(dayStr.equals(str))+"");
-
-        Log.i("asdfggg", isFirst+"");
-        if (isFirst){
-            loadWorkTodayDataServer();
-            isFirst=false;
-        }
+//        Log.i("asdfggg", isFirst+"");
+//        if (isFirst){
+//            loadWorkTodayDataServer();
+//            isFirst=false;
+//        }
 
 
         Log.i("nmn", isWorkItemAdd + "");
@@ -171,6 +186,7 @@ public class WorkTodayFragment extends Fragment {
             isWorkItemAdd=false;
         }
 
+
     }
 
     @Override
@@ -178,7 +194,6 @@ public class WorkTodayFragment extends Fragment {
         super.onHiddenChanged(hidden);
         //숨겨지면 true
         //다시 나타나면 false
-        Log.i("누가더빠르나", "h");
         if (hidden){
             workItemIndextNo.clear();
             for (int i=0; i<workItems.size(); i++){
@@ -208,9 +223,11 @@ public class WorkTodayFragment extends Fragment {
                 adapter.notifyDataSetChanged();
                 editor.putString("dayCompairison", dayStr);
                 editor.commit();
+            }else {
+                loadWorkTodayDataServer();
             }
 
-            loadWorkTodayDataServer();
+
         }
 
     }
@@ -229,7 +246,11 @@ public class WorkTodayFragment extends Fragment {
 
     }
 
+
+
     public void loadWorkTodayDataServer(){
+        recyclerView.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
         SharedPreferences pref = getActivity().getSharedPreferences("Data", MODE_PRIVATE);
         String id = pref.getString("id", "");
         Log.i("확인!!제발", id);
@@ -330,8 +351,11 @@ public class WorkTodayFragment extends Fragment {
 
                         String now = jsonObject.getString("now");
 
+                        progressBar.setVisibility(View.INVISIBLE);
+
                         workItems.add(0, new WorkItem(no, imgUrl, nickName, name, isGoalChecked, goalSet, isPreNotificationChecked, preNotificationTime, isLocalNotificationChecked, placeName, weeksData, isItemOnOff, completeNum, isDayOrTodaySelected, rlWorkitemDeleteDialog, tvWorkitemDeleteOK, tvWorkitemDeleteCancel));
                         adapter.notifyItemChanged(0);
+                        recyclerView.setVisibility(View.VISIBLE);
 
                     }
 
@@ -363,6 +387,7 @@ public class WorkTodayFragment extends Fragment {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 Log.i("TAG", response.body());
+                loadWorkTodayDataServer();
             }
             @Override
             public void onFailure(Call<String> call, Throwable t) {
@@ -381,14 +406,12 @@ public class WorkTodayFragment extends Fragment {
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-               Log.i("workItemPositionSetLoadToDB", response.body());
-
 
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                Log.i("workItemPositionSetLoadToDB", t.getMessage());
+
             }
         });
 

@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,6 +58,8 @@ public class WorkShopTodolistFragment extends Fragment {
 
     private Boolean[] todolistBooleanStateInit = new Boolean[]{false, false, false};
 
+    private ProgressBar progressBar;
+
     private boolean isFirst = false;
     public static boolean isWorkItemAdd = false;
 
@@ -64,6 +67,7 @@ public class WorkShopTodolistFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         isFirst = true;
+
     }
 
     @Nullable
@@ -96,6 +100,11 @@ public class WorkShopTodolistFragment extends Fragment {
         adapter = new TodolistAdapter(getActivity(), todolistItems);
         recyclerView = view.findViewById(R.id.todolist_recycler);
         recyclerView.setAdapter(adapter);
+
+        progressBar = view.findViewById(R.id.progress_todo);
+
+
+
 
         //현재시간 구하기
         long now = System.currentTimeMillis();
@@ -141,6 +150,29 @@ public class WorkShopTodolistFragment extends Fragment {
         tvTodolistCurrentTime.setText(getTime + ".(" + dayStr + ")");
 
 
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        String dayStr2 = sdf.format(date);
+        String s = sharedPreferences.getString("dayCompairison", "");
+
+        Log.i("zxcvb", s + " : " + dayStr2);
+
+        if (!(dayStr2.equals(s))){
+            todolistItems.clear();
+            adapter.notifyDataSetChanged();
+
+            insertWorkitemTodolistBooleanStateInitDB(); //여기서 isModify도 초기화 해주자
+            adapter.notifyDataSetChanged();
+            editor.putString("dayCompairison", dayStr);
+            editor.commit();
+        }else {
+            todolistItems.clear();
+            adapter.notifyDataSetChanged();
+            loadWorkTodayDataServer();
+        }
+        Log.i("asdfgh", !(dayStr2.equals(s))+"");
+
+
 
 
     }
@@ -148,31 +180,12 @@ public class WorkShopTodolistFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        String s = sharedPreferences.getString("dayCompairison", "");
 
-        long now = System.currentTimeMillis();
-        Date date = new Date(now);
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
-        String dayStr = sdf.format(date);
-
-        if (!(dayStr.equals(s))){
-            insertWorkitemTodolistBooleanStateInitDB(); //여기서 isModify도 초기화 해주자
-            adapter.notifyDataSetChanged();
-            editor.putString("dayCompairison", dayStr);
-            editor.commit();
-        }
-        Log.i("asdfgh", !(dayStr.equals(s))+"");
-
-
-
-        if (isFirst){
-            Log.i("누가더빠르나", "t");
-            loadWorkTodayDataServer();
-            isFirst=false;
-        }
+//        if (isFirst){
+//            Log.i("누가더빠르나", "t");
+//            loadWorkTodayDataServer();
+//            isFirst=false;
+//        }
 
         if (isWorkItemAdd){
             loadWorkTodayDataServer();
@@ -180,10 +193,10 @@ public class WorkShopTodolistFragment extends Fragment {
         }
     }
 
+
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -196,16 +209,24 @@ public class WorkShopTodolistFragment extends Fragment {
         String dayStr = sdf.format(date);
 
         if (!(dayStr.equals(s))){
+            todolistItems.clear();
+            adapter.notifyDataSetChanged();
+
             insertWorkitemTodolistBooleanStateInitDB(); //여기서 isModify도 초기화 해주자
             adapter.notifyDataSetChanged();
             editor.putString("dayCompairison", dayStr);
             editor.commit();
+        }else {
+            todolistItems.clear();
+            adapter.notifyDataSetChanged();
+            loadWorkTodayDataServer();
         }
-        Log.i("asdfgh", !(dayStr.equals(s))+"");
+        Log.i("asdfghKK", !(dayStr.equals(s))+"");
 
-        loadWorkTodayDataServer();
+
 
     }
+
 
     public void insertWorkitemTodolistBooleanStateInitDB(){
         Gson gson = new Gson();
@@ -217,6 +238,7 @@ public class WorkShopTodolistFragment extends Fragment {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 Log.i("asdf", response.body());
+                loadWorkTodayDataServer();
             }
 
             @Override
@@ -227,6 +249,8 @@ public class WorkShopTodolistFragment extends Fragment {
     }
 
     public void loadWorkTodayDataServer(){
+        recyclerView.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
         SharedPreferences pref = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
         String id = pref.getString("id", "");
         Log.i("eee", id);
@@ -245,8 +269,8 @@ public class WorkShopTodolistFragment extends Fragment {
 
                 String jsonStr = response.body();
                 Log.i("loadTodolistData", response.body());
-                todolistItems.clear();
-                adapter.notifyDataSetChanged();
+//                todolistItems.clear();
+//                adapter.notifyDataSetChanged();
                 try {
                     JSONArray jsonArray = new JSONArray(jsonStr);
                     for (int i=0; i<jsonArray.length(); i++){
@@ -294,6 +318,7 @@ public class WorkShopTodolistFragment extends Fragment {
                         }
 
 
+                        progressBar.setVisibility(View.INVISIBLE);
 
                         Calendar cal = Calendar.getInstance();
                         int day_of_week = cal.get(Calendar.DAY_OF_WEEK);
@@ -347,8 +372,7 @@ public class WorkShopTodolistFragment extends Fragment {
                                 }
                                 break;
                         }
-
-
+                        recyclerView.setVisibility(View.VISIBLE);
 
 
                     }
@@ -365,4 +389,11 @@ public class WorkShopTodolistFragment extends Fragment {
         });
 
     }
+
+
+
+
+
+
+
 }
