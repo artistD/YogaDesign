@@ -51,6 +51,7 @@ public class WorkShopActivity extends AppCompatActivity {
 
     private CardView meterialCdTodolist;
     private ImageView ivTodolistBack;
+    public boolean isCdTodolistClicked = false;
 
 
     private View viewLine;
@@ -103,6 +104,7 @@ public class WorkShopActivity extends AppCompatActivity {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
             String dayStr = sdf.format(date);
             editor.putString("dayCompairison", dayStr);
+            editor.putString("dayCompairisonTodo", dayStr);
             Log.i("First", dayStr);
             editor.putBoolean("isFirstCompair", false);
             editor.commit();
@@ -155,6 +157,7 @@ public class WorkShopActivity extends AppCompatActivity {
 
     public void clickTodolist(View view) {
 
+            isCdTodolistClicked = true;
             BnvFragmentChange(TODOLIST, new WorkShopTodolistFragment());
 
             meterialCdTodolist.setVisibility(View.INVISIBLE);
@@ -169,6 +172,7 @@ public class WorkShopActivity extends AppCompatActivity {
     }
 
     public void clickTodolistBack(View view) {
+        isCdTodolistClicked = false;
         switch (isNav){
             case 0:
                 BnvFragmentChange(BNV_WORK, new WorkTodayFragment());

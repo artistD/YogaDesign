@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.will_d.yogadesign.R;
+import com.will_d.yogadesign.WorkShopActivity;
 import com.will_d.yogadesign.worktoday.GworkToday;
 import com.will_d.yogadesign.worktoday.RetrofitHelper;
 import com.will_d.yogadesign.worktoday.RetrofitService;
@@ -149,30 +150,46 @@ public class WorkShopTodolistFragment extends Fragment {
 
         tvTodolistCurrentTime.setText(getTime + ".(" + dayStr + ")");
 
-
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         String dayStr2 = sdf.format(date);
-        String s = sharedPreferences.getString("dayCompairison", "");
+        String s = sharedPreferences.getString("dayCompairisonTodo", "");
 
         Log.i("zxcvb", s + " : " + dayStr2);
-
+        WorkShopActivity workShopActivity = (WorkShopActivity) getActivity();
         if (!(dayStr2.equals(s))){
             todolistItems.clear();
             adapter.notifyDataSetChanged();
-
+            recyclerView.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
             insertWorkitemTodolistBooleanStateInitDB(); //여기서 isModify도 초기화 해주자
-            adapter.notifyDataSetChanged();
-            editor.putString("dayCompairison", dayStr);
+            editor.putString("dayCompairisonTodo", dayStr);
             editor.commit();
-        }else {
+        }else if ((dayStr2.equals(s))&&workShopActivity.isCdTodolistClicked){
             todolistItems.clear();
             adapter.notifyDataSetChanged();
-            loadWorkTodayDataServer();
+            recyclerView.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+
+            GworkToday.workItemIndextNo.clear();
+            for (int i=0; i<GworkToday.workItems.size(); i++){
+                GworkToday.workItemIndextNo.add(GworkToday.workItems.get(i).getNo());
+                Log.i("workitemPostion", GworkToday.workItems.get(i).getNo());
+            }
+            Log.i("workitemPostion", " -------- ");
+
+            Gson gson = new Gson();
+            String workItemIndexJsonStr = gson.toJson(GworkToday.workItemIndextNo);
+            Log.i("workItemIndexJsonStr", workItemIndexJsonStr);
+            workItemPositionSetLoadToDB(workItemIndexJsonStr, GworkToday.workItemIndextNo.size());
+
         }
         Log.i("asdfgh", !(dayStr2.equals(s))+"");
 
-
+        if (todolistItems.size()==0){
+            progressBar.setVisibility(View.INVISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
 
 
     }
@@ -180,17 +197,6 @@ public class WorkShopTodolistFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-//        if (isFirst){
-//            Log.i("누가더빠르나", "t");
-//            loadWorkTodayDataServer();
-//            isFirst=false;
-//        }
-
-        if (isWorkItemAdd){
-            loadWorkTodayDataServer();
-            isWorkItemAdd=false;
-        }
     }
 
 
@@ -198,31 +204,57 @@ public class WorkShopTodolistFragment extends Fragment {
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
 
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        String s = sharedPreferences.getString("dayCompairison", "");
+        WorkShopActivity workShopActivity = (WorkShopActivity) getActivity();
 
-        long now = System.currentTimeMillis();
-        Date date = new Date(now);
+        if (hidden){
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
-        String dayStr = sdf.format(date);
+        }else if (!hidden && workShopActivity.isCdTodolistClicked){
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            String s = sharedPreferences.getString("dayCompairisonTodo", "");
 
-        if (!(dayStr.equals(s))){
-            todolistItems.clear();
-            adapter.notifyDataSetChanged();
+            long now = System.currentTimeMillis();
+            Date date = new Date(now);
 
-            insertWorkitemTodolistBooleanStateInitDB(); //여기서 isModify도 초기화 해주자
-            adapter.notifyDataSetChanged();
-            editor.putString("dayCompairison", dayStr);
-            editor.commit();
-        }else {
-            todolistItems.clear();
-            adapter.notifyDataSetChanged();
-            loadWorkTodayDataServer();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+            String dayStr = sdf.format(date);
+
+            if (!(dayStr.equals(s))){
+                todolistItems.clear();
+                adapter.notifyDataSetChanged();
+                recyclerView.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
+
+                insertWorkitemTodolistBooleanStateInitDB(); //여기서 isModify도 초기화 해주자
+                editor.putString("dayCompairisonTodo", dayStr);
+                editor.commit();
+            }else {
+                todolistItems.clear();
+                adapter.notifyDataSetChanged();
+                recyclerView.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
+
+                GworkToday.workItemIndextNo.clear();
+                for (int i=0; i<GworkToday.workItems.size(); i++){
+                    GworkToday.workItemIndextNo.add(GworkToday.workItems.get(i).getNo());
+                    Log.i("workitemPostion", GworkToday.workItems.get(i).getNo());
+                }
+                Log.i("workitemPostion", " -------- ");
+
+                Gson gson = new Gson();
+                String workItemIndexJsonStr = gson.toJson(GworkToday.workItemIndextNo);
+                Log.i("workItemIndexJsonStr", workItemIndexJsonStr);
+                workItemPositionSetLoadToDB(workItemIndexJsonStr, GworkToday.workItemIndextNo.size());
+            }
+            Log.i("asdfghKK", !(dayStr.equals(s))+"");
+
         }
-        Log.i("asdfghKK", !(dayStr.equals(s))+"");
 
+
+        if (todolistItems.size()==0){
+            progressBar.setVisibility(View.INVISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
 
 
     }
@@ -238,7 +270,18 @@ public class WorkShopTodolistFragment extends Fragment {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 Log.i("asdf", response.body());
-                loadWorkTodayDataServer();
+
+                GworkToday.workItemIndextNo.clear();
+                for (int i=0; i<GworkToday.workItems.size(); i++){
+                    GworkToday.workItemIndextNo.add(GworkToday.workItems.get(i).getNo());
+                    Log.i("workitemPostion", GworkToday.workItems.get(i).getNo());
+                }
+                Log.i("workitemPostion", " -------- ");
+
+                Gson gson = new Gson();
+                String workItemIndexJsonStr = gson.toJson(GworkToday.workItemIndextNo);
+                Log.i("workItemIndexJsonStr", workItemIndexJsonStr);
+                workItemPositionSetLoadToDB(workItemIndexJsonStr, GworkToday.workItemIndextNo.size());
             }
 
             @Override
@@ -249,8 +292,6 @@ public class WorkShopTodolistFragment extends Fragment {
     }
 
     public void loadWorkTodayDataServer(){
-        recyclerView.setVisibility(View.INVISIBLE);
-        progressBar.setVisibility(View.VISIBLE);
         SharedPreferences pref = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
         String id = pref.getString("id", "");
         Log.i("eee", id);
@@ -389,6 +430,26 @@ public class WorkShopTodolistFragment extends Fragment {
         });
 
     }
+
+    public void workItemPositionSetLoadToDB(String workItemIndexJsonStr, int workItemIndexSize){
+        Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
+        RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+
+        Call<String> call = retrofitService.workItemPositionSetLoadToDB(workItemIndexJsonStr, workItemIndexSize);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                loadWorkTodayDataServer();
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+
+            }
+        });
+
+    }
+
 
 
 

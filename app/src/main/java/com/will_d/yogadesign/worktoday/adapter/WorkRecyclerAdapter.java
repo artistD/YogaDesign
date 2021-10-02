@@ -84,6 +84,7 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
         }
         else {
             holder.ivGaol.setBackgroundColor(0xFFeeeeee);
+            holder.tvGoal.setVisibility(View.INVISIBLE);
         }
 
         if (item.getIspreNotification()) {
@@ -93,6 +94,7 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
         }
         else {
             holder.ivPreNotification.setBackgroundColor(0xFFeeeeee);
+            holder.tvPreNotification.setVisibility(View.INVISIBLE);
         }
 
         if (item.getIslocationNotification()) {
@@ -102,6 +104,7 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
         }
         else {
             holder.ivLocationNotification.setBackgroundColor(0xFFeeeeee);
+            holder.tvLocalNotification.setVisibility(View.INVISIBLE);
         }
 
 
@@ -128,6 +131,8 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
         if (!isDayOrTodaySelected[0] && isDayOrTodaySelected[1]){
             holder.cdTodayWork.setVisibility(View.VISIBLE);
+        }else {
+            holder.cdTodayWork.setVisibility(View.INVISIBLE);
         }
 
 

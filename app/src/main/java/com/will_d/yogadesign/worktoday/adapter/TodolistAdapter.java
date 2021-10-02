@@ -128,6 +128,8 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
         boolean[] isDayOrTodaySelected = item.getIsDayOrTodaySelected();
         if (!isDayOrTodaySelected[0] && isDayOrTodaySelected[1]){
             holder.cdTodayWork.setVisibility(View.VISIBLE);
+        }else {
+            holder.cdTodayWork.setVisibility(View.INVISIBLE);
         }
 
         if(item.getIsLogModify()){

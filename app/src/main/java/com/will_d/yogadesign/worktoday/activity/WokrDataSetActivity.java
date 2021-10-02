@@ -76,7 +76,6 @@ import soup.neumorphism.NeumorphImageView;
 public class WokrDataSetActivity extends AppCompatActivity {
 
     private final int PERMISSION_EX_PHOTO =100;
-    private boolean isSortationNoFirst;
 
     private EditText etName;
     private TextView tvNickname;
@@ -191,6 +190,8 @@ public class WokrDataSetActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wokr_data_set);
+        SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
+        id = pref.getString("id", "");
 
 
         etName = findViewById(R.id.et_name);
@@ -639,7 +640,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (!isSelectedToday && !isSelectedDays){
+                if (!isSelectedDays && !isSelectedToday){
                     Toast.makeText(WokrDataSetActivity.this, "날짜를 선택해주세요!", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -801,8 +802,6 @@ public class WokrDataSetActivity extends AppCompatActivity {
 
     }
 
-
-
     public void clickWeeksChecked(View view) {
         isWeeksChecked=!isWeeksChecked;
         ImageView imageView = (ImageView) view;
@@ -856,7 +855,6 @@ public class WokrDataSetActivity extends AppCompatActivity {
         Log.i("TAG", numberPickerGoalNumber.getValue() + "");
 
     }
-
 
     //dialog 부분임
     public void clickPreNotificationFixed(View view) {
@@ -1004,14 +1002,6 @@ public class WokrDataSetActivity extends AppCompatActivity {
             Map<String, String> dataPart = new HashMap<>();
             dataPart.put("id", id);
 
-            SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
-            SharedPreferences.Editor editor = pref.edit();
-            int sortationNo = pref.getInt("sortationNo", 1);
-            dataPart.put("sortationNo", String.valueOf(sortationNo));
-
-            editor.putInt("sortationNo", (sortationNo+1));
-            editor.commit();
-
             dataPart.put("name", name);
             dataPart.put("nickName", nickName);
 //          dataPart.put("imgPath", imgPath);  //이미지는 절대경로로 보내주는거니까 안줘도됨.
@@ -1064,7 +1054,6 @@ public class WokrDataSetActivity extends AppCompatActivity {
 
 
     }
-
 
     public void workTodayModifyUpdateToServer(boolean isPhotoChecekd, String no){
         String baseUrl = "http://willd88.dothome.co.kr/";
@@ -1143,9 +1132,6 @@ public class WokrDataSetActivity extends AppCompatActivity {
 
 
     }
-
-
-
 
     public void WorkItemModifyDataLoadDB(String no){
         Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
@@ -1273,11 +1259,17 @@ public class WokrDataSetActivity extends AppCompatActivity {
                         }
 
                     if (!isDayOrTodaySelected[0] && isDayOrTodaySelected[1]){
+                        isSelectedDays = isDayOrTodaySelected[0];
+                        isSelectedToday = isDayOrTodaySelected[1];
+
                         cdWeeksDialogDaysBlur.setVisibility(View.VISIBLE);
                         tvWeeksDialogSelectedToday.setTextColor(0xFF9999FF);
                         tvWeeks.setText("오늘 하루만");
                         tvWeeks.setTextColor(0xFF9999FF);
                     }else if (isDayOrTodaySelected[0] && !isDayOrTodaySelected[1]){
+                        isSelectedDays = isDayOrTodaySelected[0];
+                        isSelectedToday = isDayOrTodaySelected[1];
+
                         cdWeeksDialogDaysBlur.setVisibility(View.INVISIBLE);
                         tvWeeksDialogSelectedDays.setTextColor(0xFF9999FF);
                         tvWeeks.setText(replaceFirst);
@@ -1383,7 +1375,6 @@ public class WokrDataSetActivity extends AppCompatActivity {
         });
     }
 
-    //todo:여기서도 에러남 ㅜㅜㅠㅠㅠㅠㅜㅜㅠㅠㅜ
     ActivityResultLauncher<Intent> intentActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
@@ -1404,7 +1395,6 @@ public class WokrDataSetActivity extends AppCompatActivity {
             }
         }
     });
-
 
     //Uri -- > 절대경로로 바꿔서 리턴시켜주는 메소드
     String getRealPathFromUri(Uri uri){

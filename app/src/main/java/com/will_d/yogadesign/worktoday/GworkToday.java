@@ -24,6 +24,8 @@ public class GworkToday {
     public static boolean isDeletEnd=false;
     ////************************************************************
 
-    //todolist와 workitem 동기를 위한 불린 변수
+    //todolist와 workitem 동기를 위한 변수
+    public static ArrayList<String> workItemIndextNo;
+
 
 }

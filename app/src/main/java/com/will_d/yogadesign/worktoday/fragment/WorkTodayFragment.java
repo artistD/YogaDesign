@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.will_d.yogadesign.R;
+import com.will_d.yogadesign.WorkShopActivity;
 import com.will_d.yogadesign.worktoday.GworkToday;
 import com.will_d.yogadesign.worktoday.ItemTouchHelperCallback;
 import com.will_d.yogadesign.worktoday.RetrofitHelper;
@@ -142,16 +143,28 @@ public class WorkTodayFragment extends Fragment {
 
         //todo: 일단 이기능이 제대로 동작을 안함.
         if (!(dayStr.equals(str))){
-            workItemOnedayUpdateDB();
+            workItems.clear();
             adapter.notifyDataSetChanged();
+            recyclerView.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+            workItemOnedayUpdateDB();
             editor.putString("dayCompairison", dayStr);
             editor.commit();
         }else {
+            workItems.clear();
+            adapter.notifyDataSetChanged();
+            recyclerView.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
             loadWorkTodayDataServer();
         }
 
         Log.i("asdfg", !(dayStr.equals(str))+"");
 
+
+        if (workItems.size()==0){
+            progressBar.setVisibility(View.INVISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
     }
 
 
@@ -160,41 +173,8 @@ public class WorkTodayFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        workItemIndextNo.clear();
-        for (int i=0; i<workItems.size(); i++){
-            workItemIndextNo.add(workItems.get(i).getNo());
-            Log.i("workitemPostion", workItems.get(i).getNo());
-        }
-        Log.i("workitemPostion", " -------- ");
-
-        Gson gson = new Gson();
-        String workItemIndexJsonStr = gson.toJson(workItemIndextNo);
-        Log.i("workItemIndexJsonStr", workItemIndexJsonStr);
-        workItemPositionSetLoadToDB(workItemIndexJsonStr, workItemIndextNo.size());
-
-
-//        Log.i("asdfggg", isFirst+"");
-//        if (isFirst){
-//            loadWorkTodayDataServer();
-//            isFirst=false;
-//        }
-
-
-        Log.i("nmn", isWorkItemAdd + "");
-        if (isWorkItemAdd){
-            loadWorkTodayDataServer();
-            isWorkItemAdd=false;
-        }
-
-
-    }
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        //숨겨지면 true
-        //다시 나타나면 false
-        if (hidden){
+        WorkShopActivity workShopActivity = (WorkShopActivity) getActivity();
+        if (!(workShopActivity.isCdTodolistClicked)&& isFirst){
             workItemIndextNo.clear();
             for (int i=0; i<workItems.size(); i++){
                 workItemIndextNo.add(workItems.get(i).getNo());
@@ -206,8 +186,52 @@ public class WorkTodayFragment extends Fragment {
             String workItemIndexJsonStr = gson.toJson(workItemIndextNo);
             Log.i("workItemIndexJsonStr", workItemIndexJsonStr);
             workItemPositionSetLoadToDB(workItemIndexJsonStr, workItemIndextNo.size());
+            GworkToday.workItemIndextNo = workItemIndextNo;
+            isFirst = false;
+        }
 
-        }else {
+
+
+        Log.i("nmn", isWorkItemAdd + "");
+        if (isWorkItemAdd){
+            workItems.clear();
+            adapter.notifyDataSetChanged();
+            recyclerView.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+            loadWorkTodayDataServer();
+            isWorkItemAdd =false;
+        }
+
+
+        if (workItems.size()==0){
+            progressBar.setVisibility(View.INVISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
+
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+
+        //숨겨지면 true
+        //다시 나타나면 false
+        WorkShopActivity workShopActivity = (WorkShopActivity) getActivity();
+        if (hidden && !(workShopActivity.isCdTodolistClicked)){
+            workItemIndextNo.clear();
+            for (int i=0; i<workItems.size(); i++){
+                workItemIndextNo.add(workItems.get(i).getNo());
+                Log.i("workitemPostion", workItems.get(i).getNo());
+            }
+            Log.i("workitemPostion", " -------- ");
+
+            Gson gson = new Gson();
+            String workItemIndexJsonStr = gson.toJson(workItemIndextNo);
+            Log.i("workItemIndexJsonStr", workItemIndexJsonStr);
+            workItemPositionSetLoadToDB(workItemIndexJsonStr, workItemIndextNo.size());
+            GworkToday.workItemIndextNo = workItemIndextNo;
+
+        }else if(!hidden){
             long now = System.currentTimeMillis();
             Date date = new Date(now);
 
@@ -219,15 +243,27 @@ public class WorkTodayFragment extends Fragment {
             String str = pref.getString("dayCompairison", "");
             //todo: 일단 이기능이 제대로 동작을 안함.
             if (!(dayStr.equals(str))){
-                workItemOnedayUpdateDB();
+                workItems.clear();
                 adapter.notifyDataSetChanged();
+                recyclerView.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
+                workItemOnedayUpdateDB();
                 editor.putString("dayCompairison", dayStr);
                 editor.commit();
             }else {
+                workItems.clear();
+                adapter.notifyDataSetChanged();
+                recyclerView.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
                 loadWorkTodayDataServer();
             }
 
 
+        }
+
+        if (workItems.size()==0){
+            progressBar.setVisibility(View.INVISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
         }
 
     }
@@ -236,8 +272,17 @@ public class WorkTodayFragment extends Fragment {
     public void onStop() {
         super.onStop();
         //강제종료를 하거나 뒤로가기를 눌러서 끄면 onStop()이 발동
+        workItemIndextNo.clear();
+        for (int i=0; i<workItems.size(); i++){
+            workItemIndextNo.add(workItems.get(i).getNo());
+            Log.i("workitemPostion", workItems.get(i).getNo());
+        }
+        Log.i("workitemPostion", " -------- ");
 
-
+        Gson gson = new Gson();
+        String workItemIndexJsonStr = gson.toJson(workItemIndextNo);
+        Log.i("workItemIndexJsonStr", workItemIndexJsonStr);
+        workItemPositionSetLoadToDB(workItemIndexJsonStr, workItemIndextNo.size());
     }
 
     public void setcdAddBtnToPreventBlurring() {
@@ -249,8 +294,6 @@ public class WorkTodayFragment extends Fragment {
 
 
     public void loadWorkTodayDataServer(){
-        recyclerView.setVisibility(View.INVISIBLE);
-        progressBar.setVisibility(View.VISIBLE);
         SharedPreferences pref = getActivity().getSharedPreferences("Data", MODE_PRIVATE);
         String id = pref.getString("id", "");
         Log.i("확인!!제발", id);
@@ -269,8 +312,6 @@ public class WorkTodayFragment extends Fragment {
 
                 String jsonStr = response.body();
                 Log.i("loadWorkTodayData2", response.body());
-               workItems.clear();
-               adapter.notifyDataSetChanged();
                 try {
 
                     JSONArray jsonArray = new JSONArray(jsonStr);
