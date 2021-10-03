@@ -13,9 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.will_d.yogadesign.LoginActivity;
+import com.will_d.yogadesign.mainActivity.LoginActivity;
 import com.will_d.yogadesign.R;
-import com.will_d.yogadesign.WorkShopActivity;
 
 public class WorkShopUserSetFragment extends Fragment {
     Button btn;

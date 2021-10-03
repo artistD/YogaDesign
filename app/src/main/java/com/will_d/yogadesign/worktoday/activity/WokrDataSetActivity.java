@@ -42,9 +42,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.will_d.yogadesign.R;
-import com.will_d.yogadesign.worktoday.GworkToday;
-import com.will_d.yogadesign.worktoday.RetrofitHelper;
-import com.will_d.yogadesign.worktoday.RetrofitService;
+import com.will_d.yogadesign.service.Global;
+import com.will_d.yogadesign.service.RetrofitHelper;
+import com.will_d.yogadesign.service.RetrofitService;
 import com.will_d.yogadesign.worktoday.fragment.WorkShopTodolistFragment;
 import com.will_d.yogadesign.worktoday.fragment.WorkTodayFragment;
 import com.will_d.yogadesign.worktoday.item.WorkItem;
@@ -174,6 +174,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
     private boolean[] isDayOrTodaySelected = new boolean[2];
 
     private boolean isLogModify = false;
+    private boolean isTimeFirst = false;
     //##############################
 
     private double originalLatitude;
@@ -231,7 +232,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
 //        String jsonStr = intent.getStringExtra("Workitems");
 //        Gson gson = new Gson();
 //        WorkItem[] workItem = gson.fromJson(jsonStr, WorkItem[].class);
-        workItems = GworkToday.workItems;
+        workItems = Global.workItems;
 
         //weeks dialog
         weeks[0] = findViewById(R.id.iv_weeks_mon);
@@ -507,8 +508,8 @@ public class WokrDataSetActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         //수정을 위해 startActivity가 오면 어떻게 동작할건지 설정
-        if (GworkToday.isworkitemModifyChcecked){
-            WorkItemModifyDataLoadDB(GworkToday.no);
+        if (Global.isworkitemModifyChcecked){
+            WorkItemModifyDataLoadDB(Global.no);
         }
 
     }
@@ -526,13 +527,13 @@ public class WokrDataSetActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        GworkToday.isModifySave = false;
+        Global.isModifySave = false;
         finish();
         overridePendingTransition(R.anim.fragment_none, R.anim.activity_data_set_end);
     }
 
     public void clickClose(View view) {
-        GworkToday.isModifySave = false;
+        Global.isModifySave = false;
         finish();
         overridePendingTransition(R.anim.fragment_none, R.anim.activity_data_set_end);
     }
@@ -546,12 +547,12 @@ public class WokrDataSetActivity extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-        if (GworkToday.isModifySave){
+        if (Global.isModifySave){
             name = etName.getText().toString();
             String no = intent.getStringExtra("no");
             Log.i("qazw", no);
             workTodayModifyUpdateToServer(isPhotoChecekd, no);
-            GworkToday.isModifySave=false;
+            Global.isModifySave=false;
 
         }else {
             name = etName.getText().toString();
@@ -1032,6 +1033,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
             Log.i("TAGadadad", jsonStr);
 
             dataPart.put("isLogModify", String.valueOf(isLogModify));
+            dataPart.put("isTimeFirst", String.valueOf(isTimeFirst));
 
             Call<String> call = retrofitService.WorkItemPostDataToServer(dataPart, filePart);
             call.enqueue(new Callback<String>() {
@@ -1141,7 +1143,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                GworkToday.isworkitemModifyChcecked = false;
+                Global.isworkitemModifyChcecked = false;
                 String jsonStr = response.body();
                 try {
                     JSONArray jsonArray = new JSONArray(jsonStr);
@@ -1364,7 +1366,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                GworkToday.isModifySave =false;
+                Global.isModifySave =false;
                 Log.i("TAG", response.body());
             }
 

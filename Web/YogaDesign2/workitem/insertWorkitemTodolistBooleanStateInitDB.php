@@ -7,7 +7,7 @@
     $conn = mysqli_connect("localhost", "willd88", "messid88!!", "willd88");
     mysqli_query($conn, "set names utf8");
 
-    $sql = "UPDATE WorkItemYogaDesign SET todoistBooleanState = '$todoistBooleanStateInit', isLogModify = false";
+    $sql = "UPDATE WorkItemYogaDesign SET todoistBooleanState = '$todoistBooleanStateInit'";
 
     $result = mysqli_query($conn, $sql);
 

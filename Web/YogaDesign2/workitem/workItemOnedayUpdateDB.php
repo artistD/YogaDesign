@@ -7,15 +7,17 @@
     mysqli_query($conn, "set names utf8");
 
     $sql = "UPDATE WorkItemYogaDesign SET isItemOnOff = $off WHERE isDayOrTodaySelected='[false,true]'";
+    $sql2 = "UPDATE WorkItemYogaDesign SET isLogModify = false, isTimeFirst = false";
 
     $result = mysqli_query($conn, $sql);
+    $result2 = mysqli_query($conn, $sql2);
 
-    if($result) echo "ㄱㅔ시글ㅣ 업로드 됬습니다";
+    if($result&&$result2) echo "ㄱㅔ시글ㅣ 업로드 됬습니다";
     else echo "eee";
 
     mysqli_close($conn);
 
 
 
-
+    
 ?>

@@ -1,4 +1,4 @@
-package com.will_d.yogadesign;
+package com.will_d.yogadesign.mainActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -13,10 +13,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.will_d.yogadesign.R;
 import com.will_d.yogadesign.set.WorkShopUserSetFragment;
-import com.will_d.yogadesign.square.WorkShopSquareFragment;
-import com.will_d.yogadesign.worktoday.GworkToday;
-import com.will_d.yogadesign.worktoday.fragment.WorkShopTimeFragment;
+import com.will_d.yogadesign.square.fragment.WorkShopSquareFragment;
+import com.will_d.yogadesign.time.fragment.TimeTimerFragment;
+import com.will_d.yogadesign.service.Global;
 import com.will_d.yogadesign.worktoday.fragment.WorkShopTodolistFragment;
 import com.will_d.yogadesign.worktoday.fragment.WorkTodayFragment;
 
@@ -163,8 +164,8 @@ public class WorkShopActivity extends AppCompatActivity {
             meterialCdTodolist.setVisibility(View.INVISIBLE);
             ivTodolistBack.setVisibility(View.VISIBLE);
             ivBnvBlur.setVisibility(View.VISIBLE);
-            GworkToday.isDeletEnd=false;
-            GworkToday.isSwitchEnd=false;
+            Global.isDeletEnd=false;
+            Global.isSwitchEnd=false;
 
 
 
@@ -185,7 +186,7 @@ public class WorkShopActivity extends AppCompatActivity {
                 break;
 
             case 1:
-                BnvFragmentChange(BNV_TIME, new WorkShopTimeFragment());
+                BnvFragmentChange(BNV_TIME, new TimeTimerFragment());
                 BnvRevertState();
                 BnvChangeState(cdNabTime, ivNabTime, R.drawable.ic_fragment_time_push);
 
@@ -228,7 +229,7 @@ public class WorkShopActivity extends AppCompatActivity {
     }
 
     public void clickNabTime(View view) {
-        BnvFragmentChange(BNV_TIME, new WorkShopTimeFragment());
+        BnvFragmentChange(BNV_TIME, new TimeTimerFragment());
         BnvRevertState();
         BnvChangeState(cdNabTime, ivNabTime, R.drawable.ic_fragment_time_push);
 

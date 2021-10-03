@@ -1,4 +1,4 @@
-package com.will_d.yogadesign.worktoday;
+package com.will_d.yogadesign.service;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -88,6 +88,13 @@ public interface RetrofitService {
 
     @GET("/YogaDesign2/todolist/calendarDataLoadFromServer.php")
     Call<String> calendarDataLoadFromServer(@Query("workItemNo") String workItemNo);
+
+
+    @GET("/YogaDesign2/timer/timeDataInsertDB.php")
+    Call<String> timeDataInsertDB(@Query("identifier") int identifier, @Query("workItemNo") String workItemNo, @Query("days") String days, @Query("time") String time, @Query("isTimeFirst") boolean isTimeFirst);
+
+    @GET("/YogaDesign2/timer/timeDataUpdateDB.php")
+    Call<String> timeDataUpdateDB(@Query("workItemNo") String workItemNo, @Query("days") String days, @Query("time") String time, @Query("isTimeFirst") boolean isTimeFirst);
 
 
 

@@ -1,4 +1,4 @@
-package com.will_d.yogadesign.worktoday;
+package com.will_d.yogadesign.service;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

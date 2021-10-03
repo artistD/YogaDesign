@@ -3,8 +3,6 @@ package com.will_d.yogadesign.worktoday.fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +11,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,10 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.will_d.yogadesign.R;
-import com.will_d.yogadesign.WorkShopActivity;
-import com.will_d.yogadesign.worktoday.GworkToday;
-import com.will_d.yogadesign.worktoday.RetrofitHelper;
-import com.will_d.yogadesign.worktoday.RetrofitService;
+import com.will_d.yogadesign.mainActivity.WorkShopActivity;
+import com.will_d.yogadesign.service.Global;
+import com.will_d.yogadesign.service.RetrofitHelper;
+import com.will_d.yogadesign.service.RetrofitService;
 import com.will_d.yogadesign.worktoday.adapter.TodolistAdapter;
 import com.will_d.yogadesign.worktoday.item.TodolistItem;
 
@@ -162,7 +159,7 @@ public class WorkShopTodolistFragment extends Fragment {
             adapter.notifyDataSetChanged();
             recyclerView.setVisibility(View.INVISIBLE);
             progressBar.setVisibility(View.VISIBLE);
-            insertWorkitemTodolistBooleanStateInitDB(); //여기서 isModify도 초기화 해주자
+            insertWorkitemTodolistBooleanStateInitDB();
             editor.putString("dayCompairisonTodo", dayStr);
             editor.commit();
         }else if ((dayStr2.equals(s))&&workShopActivity.isCdTodolistClicked){
@@ -171,17 +168,17 @@ public class WorkShopTodolistFragment extends Fragment {
             recyclerView.setVisibility(View.INVISIBLE);
             progressBar.setVisibility(View.VISIBLE);
 
-            GworkToday.workItemIndextNo.clear();
-            for (int i=0; i<GworkToday.workItems.size(); i++){
-                GworkToday.workItemIndextNo.add(GworkToday.workItems.get(i).getNo());
-                Log.i("workitemPostion", GworkToday.workItems.get(i).getNo());
+            Global.workItemIndextNo.clear();
+            for (int i = 0; i< Global.workItems.size(); i++){
+                Global.workItemIndextNo.add(Global.workItems.get(i).getNo());
+                Log.i("workitemPostion", Global.workItems.get(i).getNo());
             }
             Log.i("workitemPostion", " -------- ");
 
             Gson gson = new Gson();
-            String workItemIndexJsonStr = gson.toJson(GworkToday.workItemIndextNo);
+            String workItemIndexJsonStr = gson.toJson(Global.workItemIndextNo);
             Log.i("workItemIndexJsonStr", workItemIndexJsonStr);
-            workItemPositionSetLoadToDB(workItemIndexJsonStr, GworkToday.workItemIndextNo.size());
+            workItemPositionSetLoadToDB(workItemIndexJsonStr, Global.workItemIndextNo.size());
 
         }
         Log.i("asdfgh", !(dayStr2.equals(s))+"");
@@ -234,17 +231,17 @@ public class WorkShopTodolistFragment extends Fragment {
                 recyclerView.setVisibility(View.INVISIBLE);
                 progressBar.setVisibility(View.VISIBLE);
 
-                GworkToday.workItemIndextNo.clear();
-                for (int i=0; i<GworkToday.workItems.size(); i++){
-                    GworkToday.workItemIndextNo.add(GworkToday.workItems.get(i).getNo());
-                    Log.i("workitemPostion", GworkToday.workItems.get(i).getNo());
+                Global.workItemIndextNo.clear();
+                for (int i = 0; i< Global.workItems.size(); i++){
+                    Global.workItemIndextNo.add(Global.workItems.get(i).getNo());
+                    Log.i("workitemPostion", Global.workItems.get(i).getNo());
                 }
                 Log.i("workitemPostion", " -------- ");
 
                 Gson gson = new Gson();
-                String workItemIndexJsonStr = gson.toJson(GworkToday.workItemIndextNo);
+                String workItemIndexJsonStr = gson.toJson(Global.workItemIndextNo);
                 Log.i("workItemIndexJsonStr", workItemIndexJsonStr);
-                workItemPositionSetLoadToDB(workItemIndexJsonStr, GworkToday.workItemIndextNo.size());
+                workItemPositionSetLoadToDB(workItemIndexJsonStr, Global.workItemIndextNo.size());
             }
             Log.i("asdfghKK", !(dayStr.equals(s))+"");
 
@@ -271,17 +268,17 @@ public class WorkShopTodolistFragment extends Fragment {
             public void onResponse(Call<String> call, Response<String> response) {
                 Log.i("asdf", response.body());
 
-                GworkToday.workItemIndextNo.clear();
-                for (int i=0; i<GworkToday.workItems.size(); i++){
-                    GworkToday.workItemIndextNo.add(GworkToday.workItems.get(i).getNo());
-                    Log.i("workitemPostion", GworkToday.workItems.get(i).getNo());
+                Global.workItemIndextNo.clear();
+                for (int i = 0; i< Global.workItems.size(); i++){
+                    Global.workItemIndextNo.add(Global.workItems.get(i).getNo());
+                    Log.i("workitemPostion", Global.workItems.get(i).getNo());
                 }
                 Log.i("workitemPostion", " -------- ");
 
                 Gson gson = new Gson();
-                String workItemIndexJsonStr = gson.toJson(GworkToday.workItemIndextNo);
+                String workItemIndexJsonStr = gson.toJson(Global.workItemIndextNo);
                 Log.i("workItemIndexJsonStr", workItemIndexJsonStr);
-                workItemPositionSetLoadToDB(workItemIndexJsonStr, GworkToday.workItemIndextNo.size());
+                workItemPositionSetLoadToDB(workItemIndexJsonStr, Global.workItemIndextNo.size());
             }
 
             @Override

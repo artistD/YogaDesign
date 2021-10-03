@@ -13,10 +13,9 @@ import android.widget.TextView;
 
 
 import com.applandeo.materialcalendarview.CalendarView;
-import com.google.gson.JsonObject;
 import com.will_d.yogadesign.R;
-import com.will_d.yogadesign.worktoday.RetrofitHelper;
-import com.will_d.yogadesign.worktoday.RetrofitService;
+import com.will_d.yogadesign.service.RetrofitHelper;
+import com.will_d.yogadesign.service.RetrofitService;
 import com.will_d.yogadesign.worktoday.adapter.LogItemAdapter;
 import com.will_d.yogadesign.worktoday.item.LogItem;
 

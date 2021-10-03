@@ -18,9 +18,6 @@
         android:theme="@style/Theme.YogaDesign"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".time.AlarmDataSetActivity"
-            android:exported="true" />
-        <activity
             android:name=".worktoday.activity.WorkItemClickedActivity"
             android:exported="true" /> <!-- todo:이거 꼭질문 -->
         <meta-data
@@ -36,12 +33,12 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".IntroActivity"
+            android:name=".mainActivity.IntroActivity"
             android:exported="true"
             android:theme="@style/IntroActivity"
             android:windowSoftInputMode="adjustUnspecified" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".mainActivity.LoginActivity"
             android:exported="true"
             android:theme="@style/LoginActivity"
             android:windowSoftInputMode="adjustUnspecified">
@@ -57,7 +54,7 @@
             android:theme="@style/WorkSDataSetActivity"
             android:windowSoftInputMode="adjustUnspecified" />
         <activity
-            android:name=".WorkShopActivity"
+            android:name=".mainActivity.WorkShopActivity"
             android:exported="true"
             android:theme="@style/WorkShopActivity" />
     </application>

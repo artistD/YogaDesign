@@ -1,4 +1,4 @@
-package com.will_d.yogadesign.worktoday;
+package com.will_d.yogadesign.service;
 
 import androidx.cardview.widget.CardView;
 
@@ -6,7 +6,7 @@ import com.will_d.yogadesign.worktoday.item.WorkItem;
 
 import java.util.ArrayList;
 
-public class GworkToday {
+public class Global {
 
     //dataSetActivity에서 데이터 판별할때 쓰는 것임
     public static ArrayList<WorkItem> workItems;

@@ -1,4 +1,4 @@
-package com.will_d.yogadesign.square;
+package com.will_d.yogadesign.square.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.will_d.yogadesign.R;
+import com.will_d.yogadesign.square.item.SquareMemberItemListItem;
 
 import java.util.ArrayList;
 

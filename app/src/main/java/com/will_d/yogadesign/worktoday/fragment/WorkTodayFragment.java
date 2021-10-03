@@ -3,17 +3,13 @@ package com.will_d.yogadesign.worktoday.fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowInsets;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -27,11 +23,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.will_d.yogadesign.R;
-import com.will_d.yogadesign.WorkShopActivity;
-import com.will_d.yogadesign.worktoday.GworkToday;
+import com.will_d.yogadesign.mainActivity.WorkShopActivity;
+import com.will_d.yogadesign.service.Global;
 import com.will_d.yogadesign.worktoday.ItemTouchHelperCallback;
-import com.will_d.yogadesign.worktoday.RetrofitHelper;
-import com.will_d.yogadesign.worktoday.RetrofitService;
+import com.will_d.yogadesign.service.RetrofitHelper;
+import com.will_d.yogadesign.service.RetrofitService;
 import com.will_d.yogadesign.worktoday.activity.WokrDataSetActivity;
 import com.will_d.yogadesign.worktoday.adapter.WorkRecyclerAdapter;
 import com.will_d.yogadesign.worktoday.item.WorkItem;
@@ -40,11 +36,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -147,7 +141,7 @@ public class WorkTodayFragment extends Fragment {
             adapter.notifyDataSetChanged();
             recyclerView.setVisibility(View.INVISIBLE);
             progressBar.setVisibility(View.VISIBLE);
-            workItemOnedayUpdateDB();
+            workItemOnedayUpdateDB(); //여기서 isModify도 초기화 해주자 istimeFirst도 초기화해주자
             editor.putString("dayCompairison", dayStr);
             editor.commit();
         }else {
@@ -186,7 +180,7 @@ public class WorkTodayFragment extends Fragment {
             String workItemIndexJsonStr = gson.toJson(workItemIndextNo);
             Log.i("workItemIndexJsonStr", workItemIndexJsonStr);
             workItemPositionSetLoadToDB(workItemIndexJsonStr, workItemIndextNo.size());
-            GworkToday.workItemIndextNo = workItemIndextNo;
+            Global.workItemIndextNo = workItemIndextNo;
             isFirst = false;
         }
 
@@ -229,7 +223,7 @@ public class WorkTodayFragment extends Fragment {
             String workItemIndexJsonStr = gson.toJson(workItemIndextNo);
             Log.i("workItemIndexJsonStr", workItemIndexJsonStr);
             workItemPositionSetLoadToDB(workItemIndexJsonStr, workItemIndextNo.size());
-            GworkToday.workItemIndextNo = workItemIndextNo;
+            Global.workItemIndextNo = workItemIndextNo;
 
         }else if(!hidden){
             long now = System.currentTimeMillis();
@@ -272,17 +266,17 @@ public class WorkTodayFragment extends Fragment {
     public void onStop() {
         super.onStop();
         //강제종료를 하거나 뒤로가기를 눌러서 끄면 onStop()이 발동
-        workItemIndextNo.clear();
-        for (int i=0; i<workItems.size(); i++){
-            workItemIndextNo.add(workItems.get(i).getNo());
-            Log.i("workitemPostion", workItems.get(i).getNo());
-        }
-        Log.i("workitemPostion", " -------- ");
-
-        Gson gson = new Gson();
-        String workItemIndexJsonStr = gson.toJson(workItemIndextNo);
-        Log.i("workItemIndexJsonStr", workItemIndexJsonStr);
-        workItemPositionSetLoadToDB(workItemIndexJsonStr, workItemIndextNo.size());
+//        workItemIndextNo.clear();
+//        for (int i=0; i<workItems.size(); i++){
+//            workItemIndextNo.add(workItems.get(i).getNo());
+//            Log.i("workitemPostion", workItems.get(i).getNo());
+//        }
+//        Log.i("workitemPostion", " -------- ");
+//
+//        Gson gson = new Gson();
+//        String workItemIndexJsonStr = gson.toJson(workItemIndextNo);
+//        Log.i("workItemIndexJsonStr", workItemIndexJsonStr);
+//        workItemPositionSetLoadToDB(workItemIndexJsonStr, workItemIndextNo.size());
     }
 
     public void setcdAddBtnToPreventBlurring() {
@@ -392,15 +386,31 @@ public class WorkTodayFragment extends Fragment {
 
                         String now = jsonObject.getString("now");
 
+                        String isLogModi = jsonObject.getString("isLogModify");
+                        boolean isLogModify = false;
+                        if (isLogModi.equals("1")){
+                            isLogModify = true;
+                        }else if(isLogModi.equals("0")){
+                            isLogModify = false;
+                        }
+
+                        String isTime = jsonObject.getString("isTimeFirst");
+                        boolean isTimeFirst = false;
+                        if (isTime.equals("1")){
+                            isTimeFirst = true;
+                        }else if(isTime.equals("0")){
+                            isTimeFirst = false;
+                        }
+
                         progressBar.setVisibility(View.INVISIBLE);
 
-                        workItems.add(0, new WorkItem(no, imgUrl, nickName, name, isGoalChecked, goalSet, isPreNotificationChecked, preNotificationTime, isLocalNotificationChecked, placeName, weeksData, isItemOnOff, completeNum, isDayOrTodaySelected, rlWorkitemDeleteDialog, tvWorkitemDeleteOK, tvWorkitemDeleteCancel));
+                        workItems.add(0, new WorkItem(no, imgUrl, nickName, name, isGoalChecked, goalSet, isPreNotificationChecked, preNotificationTime, isLocalNotificationChecked, placeName, weeksData, isItemOnOff, completeNum, isDayOrTodaySelected, rlWorkitemDeleteDialog, tvWorkitemDeleteOK, tvWorkitemDeleteCancel, isLogModify, isTimeFirst));
                         adapter.notifyItemChanged(0);
                         recyclerView.setVisibility(View.VISIBLE);
 
                     }
 
-                    GworkToday.workItems = workItems;
+                    Global.workItems = workItems;
 
 
 

@@ -3,10 +3,8 @@ package com.will_d.yogadesign.worktoday.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -25,11 +23,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.will_d.yogadesign.R;
-import com.will_d.yogadesign.WorkShopActivity;
-import com.will_d.yogadesign.worktoday.GworkToday;
+import com.will_d.yogadesign.mainActivity.WorkShopActivity;
+import com.will_d.yogadesign.service.Global;
 import com.will_d.yogadesign.worktoday.ItemTouchHelperListener;
-import com.will_d.yogadesign.worktoday.RetrofitHelper;
-import com.will_d.yogadesign.worktoday.RetrofitService;
+import com.will_d.yogadesign.service.RetrofitHelper;
+import com.will_d.yogadesign.service.RetrofitService;
 import com.will_d.yogadesign.worktoday.activity.WokrDataSetActivity;
 import com.will_d.yogadesign.worktoday.activity.WorkItemClickedActivity;
 import com.will_d.yogadesign.worktoday.item.WorkItem;
@@ -311,9 +309,9 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
                     Log.i("qaz", no);
                     WorkItem item= items.get(finalPosition);
-                    GworkToday.no = item.getNo();
-                    GworkToday.isworkitemModifyChcecked = true;
-                    GworkToday.isModifySave = true;
+                    Global.no = item.getNo();
+                    Global.isworkitemModifyChcecked = true;
+                    Global.isModifySave = true;
 
 
                     context.startActivity(intent);

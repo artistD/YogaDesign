@@ -1,4 +1,4 @@
-package com.will_d.yogadesign;
+package com.will_d.yogadesign.mainActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.will_d.yogadesign.R;
 
 public class IntroActivity extends AppCompatActivity {
 

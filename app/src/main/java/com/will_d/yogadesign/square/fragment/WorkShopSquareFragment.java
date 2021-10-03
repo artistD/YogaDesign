@@ -1,4 +1,4 @@
-package com.will_d.yogadesign.square;
+package com.will_d.yogadesign.square.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,6 +15,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.will_d.yogadesign.R;
+import com.will_d.yogadesign.square.adapter.SquareMemberAdapter;
+import com.will_d.yogadesign.square.adapter.SquareMemberListAdapter;
+import com.will_d.yogadesign.square.item.SquareMemberItem;
+import com.will_d.yogadesign.square.item.SquareMemberItemListItem;
 
 import java.util.ArrayList;
 

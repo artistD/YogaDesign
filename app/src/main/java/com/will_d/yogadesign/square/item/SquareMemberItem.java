@@ -1,4 +1,4 @@
-package com.will_d.yogadesign.square;
+package com.will_d.yogadesign.square.item;
 
 public class SquareMemberItem {
     private String imgUrl;

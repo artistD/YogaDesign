@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".WorkShopActivity"
+    tools:context=".mainActivity.WorkShopActivity"
     android:orientation="vertical"
     android:background="#C7DDFF">
 
@@ -224,31 +224,12 @@
             android:id="@+id/iv_todolist_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_back"
+            android:src="@drawable/ic_newback"
             android:clickable="true"
             android:layout_marginLeft="16dp"
             android:layout_centerVertical="true"
             android:onClick="clickTodolistBack"
             android:visibility="invisible"/>
-
-<!--        android:background="#ccC7DDFF"-->
-
-<!--        <androidx.cardview.widget.CardView-->
-<!--            android:id="@+id/meterial_cd_todolist_blur"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            app:cardCornerRadius="4dp"-->
-<!--            android:layout_centerVertical="true"-->
-<!--            android:layout_marginLeft="16dp"-->
-<!--            android:clickable="true"-->
-<!--            android:visibility="visible"-->
-<!--            android:onClick="clickTodolist"-->
-<!--            app:cardElevation="1dp">-->
-
-
-<!--        </androidx.cardview.widget.CardView>-->
-
-
 
     </RelativeLayout>
 

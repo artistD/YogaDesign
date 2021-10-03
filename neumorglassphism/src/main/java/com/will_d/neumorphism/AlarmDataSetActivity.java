@@ -1,11 +1,9 @@
-package com.will_d.yogadesign.time;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.will_d.neumorphism;
 
 import android.os.Bundle;
 import android.view.View;
 
-import com.will_d.yogadesign.R;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class AlarmDataSetActivity extends AppCompatActivity {
 
