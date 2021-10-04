@@ -6,16 +6,6 @@
     android:orientation="vertical"
     android:background="#C7DDFF">
 
-    <Button
-        android:id="@+id/btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Logout"
-        android:textSize="16sp"
-        android:textColor="#FFFFFFFF"
-        android:layout_centerInParent="true"
-        android:visibility="gone"/>
-
 <!--    로그아웃, 프로필 변경, 이름변경, 상태메세지 변경, 퍼블릭모드 변경, -->
 
     <RelativeLayout
@@ -193,6 +183,7 @@
                 android:layout_marginLeft="8dp"/>
 
             <Switch
+                android:id="@+id/sw_puclick_mode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -230,6 +221,7 @@
 
 
             <soup.neumorphism.NeumorphImageView
+                android:id="@+id/btn"
                 style="@style/Widget.Neumorph.ImageView"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
@@ -237,7 +229,6 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="8dp"
                 android:clickable="true"
-                android:onClick="clickSetNickName"
                 android:padding="16dp"
                 android:src="@drawable/ic_logout"
                 android:visibility="visible"
@@ -281,7 +272,6 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="8dp"
                 android:clickable="true"
-                android:onClick="clickSetNickName"
                 android:padding="16dp"
                 android:src="@drawable/ic_licence"
                 android:visibility="visible"

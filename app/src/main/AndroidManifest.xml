@@ -57,6 +57,11 @@
             android:name=".mainActivity.WorkShopActivity"
             android:exported="true"
             android:theme="@style/WorkShopActivity" />
+
+
+        <service android:name=".service.ForcedTerminationService"
+            android:stopWithTask="false"/>
+
     </application>
 
 </manifest>

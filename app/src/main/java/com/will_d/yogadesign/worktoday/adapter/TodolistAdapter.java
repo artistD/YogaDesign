@@ -1,6 +1,7 @@
 package com.will_d.yogadesign.worktoday.adapter;
 
 import android.content.Context;
+import android.text.method.TextKeyListener;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -374,6 +375,11 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
             });
 
 
+
+
+
+
+
             cdLog.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -439,7 +445,11 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
                                 String days = getTime + ".(" + dayStr + ")";
 
                                 isLogModify = true;
-                                todolistLogDataInsertDB(0 ,item.getNo(), days, logData, isLogModify);
+                                if (item.getIsTimeFirst()){ //true면 first가 아니라는 뜻임
+                                    todolistLogDataInsertDB(1 ,item.getNo(), days, logData, isLogModify);
+                                }else {
+                                    todolistLogDataInsertDB(0 ,item.getNo(), days, logData, isLogModify);
+                                }
                                 item.getRlTodolistLogDialog().setVisibility(View.INVISIBLE);
                                 item.getEtTodolistLog().setText("");
 
@@ -519,7 +529,10 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
                                 }
                                 String days = getTime + ".(" + dayStr + ")";
 
+                                isLogModify = true;
                                 todolistLogDataInsertDB(1, item.getNo(), days, logData, isLogModify);
+
+
                                 item.getRlTodolistLogDialog().setVisibility(View.INVISIBLE);
                                 item.getEtTodolistLog().setText("");
 

@@ -1,5 +1,7 @@
 package com.will_d.yogadesign.time.fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.icu.text.RelativeDateTimeFormatter;
 import android.os.Bundle;
 import android.provider.Telephony;
@@ -7,8 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,7 +37,7 @@ public class TimeTimerFragment extends Fragment {
 
     private TextView tvInit;
     private NeumorphCardView ncdPlayAndPuase;
-    private ImageView ivPlayAndPuase;
+    public ImageView ivPlayAndPuase;
     private TextView tvSave;
 
 
@@ -43,8 +47,16 @@ public class TimeTimerFragment extends Fragment {
     private RecyclerView recyclerView;
     private TimerAdapter adapter;
 
-    private TimeThread timeThread;
-    private boolean isPlayAndPuase = false;
+    public TimeThread timeThread;
+    public boolean isPlayAndPuase = false;
+
+
+   public SharedPreferences pref;
+   public SharedPreferences.Editor editor;
+
+    //
+    public ProgressBar progressBar;
+    public RelativeLayout rl;
 
     @Nullable
     @Override
@@ -68,6 +80,20 @@ public class TimeTimerFragment extends Fragment {
         rldialogClickClose = view.findViewById(R.id.rl_dialog_clickclose);
         recyclerView = view.findViewById(R.id.recycler);
 
+        progressBar = view.findViewById(R.id.progress);
+        rl = view.findViewById(R.id.rl);
+
+        pref = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
+        editor = pref.edit();
+
+
+        if (!isPlayAndPuase){
+            int hour = pref.getInt("hour", 0);
+            int min  = pref.getInt("min", 0);
+            int sec = pref.getInt("sec", 0);
+            String time = String.format("%02d:%02d:%02d", hour, min, sec);
+            tvTime.setText(time);
+        }
 
 
         ncdPlayAndPuase.setOnClickListener(new View.OnClickListener() {
@@ -79,6 +105,14 @@ public class TimeTimerFragment extends Fragment {
                     ivPlayAndPuase.setImageResource(R.drawable.ic_pause);
                     if (timeThread==null){
                         timeThread = new TimeThread();
+
+                        int hour = pref.getInt("hour", 0);
+                        int min  = pref.getInt("min", 0);
+                        int sec = pref.getInt("sec", 0);
+                        timeThread.time = hour;
+                        timeThread.min = min;
+                        timeThread.sec = sec;
+
                         adapter.setTimeThread(timeThread);
                         adapter.notifyDataSetChanged(); //이거해줘야하나????? //todo : 질문해서 풀어내자
 
@@ -89,7 +123,13 @@ public class TimeTimerFragment extends Fragment {
 
                 }else {
                     ivPlayAndPuase.setImageResource(R.drawable.ic_play);
-                    if (timeThread !=null) timeThread.pauseThread();
+                    if (timeThread !=null) {
+                        timeThread.pauseThread();
+                        editor.putInt("hour", timeThread.time);
+                        editor.putInt("min", timeThread.min);
+                        editor.putInt("sec", timeThread.sec);
+                        editor.commit();
+                    }
 
                 }
 
@@ -107,9 +147,15 @@ public class TimeTimerFragment extends Fragment {
                     timeThread.min=0;
                     timeThread.sec=0;
                     tvTime.setText("00:00:00");
+
+                    editor.putInt("hour", timeThread.time);
+                    editor.putInt("min", timeThread.min);
+                    editor.putInt("sec", timeThread.sec);
+                    editor.commit();
                     timeThread = null;
                     adapter.setTimeThread(null);
                     adapter.notifyDataSetChanged();
+
                 }
             }
         });
@@ -119,7 +165,14 @@ public class TimeTimerFragment extends Fragment {
             public void onClick(View v) {
                 isPlayAndPuase = false;
                 ivPlayAndPuase.setImageResource(R.drawable.ic_play);
-                if (timeThread !=null) timeThread.pauseThread();
+                if (timeThread !=null) {
+                    timeThread.pauseThread();
+
+                    editor.putInt("hour", timeThread.time);
+                    editor.putInt("min", timeThread.min);
+                    editor.putInt("sec", timeThread.sec);
+                    editor.commit();
+                }
                 rlClickSaveDialog.setVisibility(View.VISIBLE);
 
             }
@@ -146,7 +199,7 @@ public class TimeTimerFragment extends Fragment {
 
 
 
-        adapter = new TimerAdapter(getActivity(), items);
+        adapter = new TimerAdapter(getActivity(), items, rlClickSaveDialog, tvTime);
         recyclerView.setAdapter(adapter);
 
 
@@ -219,6 +272,16 @@ public class TimeTimerFragment extends Fragment {
         if (hidden){
 
         }else {
+            if (!isPlayAndPuase){
+                int hour = pref.getInt("hour", 0);
+                int min  = pref.getInt("min", 0);
+                int sec = pref.getInt("sec", 0);
+                String time = String.format("%02d:%02d:%02d", hour, min, sec);
+                tvTime.setText(time);
+            }
+
+
+
             items.clear();
             adapter.notifyDataSetChanged();
             for (int i=0; i<Global.workItems.size(); i++){
@@ -280,7 +343,10 @@ public class TimeTimerFragment extends Fragment {
                 }
             }
         }
+
+
     }
+
 
     public class TimeThread extends Thread {
         public boolean isRun = true;
@@ -314,7 +380,7 @@ public class TimeTimerFragment extends Fragment {
                 });
 
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(10);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

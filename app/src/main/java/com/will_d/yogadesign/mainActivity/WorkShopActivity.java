@@ -6,14 +6,17 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.will_d.yogadesign.R;
+import com.will_d.yogadesign.service.ForcedTerminationService;
 import com.will_d.yogadesign.set.WorkShopUserSetFragment;
 import com.will_d.yogadesign.square.fragment.WorkShopSquareFragment;
 import com.will_d.yogadesign.time.fragment.TimeTimerFragment;
@@ -36,7 +39,7 @@ public class WorkShopActivity extends AppCompatActivity {
     private final int TODOLIST=4;
 
 
-    private Fragment[] fragments = new Fragment[5];
+    public Fragment[] fragments = new Fragment[5];
     private FragmentManager manager;
     private FragmentTransaction tran;
 
@@ -92,6 +95,8 @@ public class WorkShopActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workshop);
+
+        startService(new Intent(this, ForcedTerminationService.class));
 
         SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
@@ -152,6 +157,24 @@ public class WorkShopActivity extends AppCompatActivity {
 //            WorkShopWorkFragment workShopWorkFragment = (WorkShopWorkFragment) fragments[0];
 //            toolbarBlur =  workShopWorkFragment.getToolbarBlur();
 //        }
+    }
+
+    @Override
+    public void onDestroy() {
+        TimeTimerFragment timeTimerFragment = (TimeTimerFragment) fragments[1];
+        timeTimerFragment.isPlayAndPuase = false;
+        timeTimerFragment.ivPlayAndPuase.setImageResource(R.drawable.ic_play);
+        if (timeTimerFragment.timeThread !=null) {
+            timeTimerFragment.timeThread.pauseThread();
+
+            timeTimerFragment.editor.putInt("hour", timeTimerFragment.timeThread.time);
+            timeTimerFragment.editor.putInt("min", timeTimerFragment.timeThread.min);
+            timeTimerFragment.editor.putInt("sec", timeTimerFragment.timeThread.sec);
+            timeTimerFragment.editor.commit();
+        }
+        Toast.makeText(this, "qwdqwdqw", Toast.LENGTH_SHORT).show();
+        super.onDestroy();
+
     }
 
 

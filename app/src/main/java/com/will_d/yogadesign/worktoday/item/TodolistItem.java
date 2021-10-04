@@ -23,13 +23,14 @@ public class TodolistItem {
     private boolean[] isDayOrTodaySelected;
 
     private boolean isLogModify;
+    private boolean isTimeFirst;
 
 
     public TodolistItem() {
 
     }
 
-    public TodolistItem(String no, int completeNum, String name, String nickName, boolean isGoalChecked, String goalSet, RelativeLayout rlTodolistLogDialog, EditText etTodolistLog, TextView tvTodolistLogCancel, TextView tvTodolistLogOk, boolean[] todolistBooleanState, boolean[] isDayOrTodaySelected, boolean isLogModify) {
+    public TodolistItem(String no, int completeNum, String name, String nickName, boolean isGoalChecked, String goalSet, RelativeLayout rlTodolistLogDialog, EditText etTodolistLog, TextView tvTodolistLogCancel, TextView tvTodolistLogOk, boolean[] todolistBooleanState, boolean[] isDayOrTodaySelected, boolean isLogModify, boolean isTimeFirst) {
         this.no = no;
         this.completeNum = completeNum;
         this.name = name;
@@ -43,6 +44,7 @@ public class TodolistItem {
         this.todolistBooleanState = todolistBooleanState;
         this.isDayOrTodaySelected = isDayOrTodaySelected;
         this.isLogModify = isLogModify;
+        this.isTimeFirst = isTimeFirst;
 
     }
 
@@ -97,6 +99,8 @@ public class TodolistItem {
     public boolean[] getIsDayOrTodaySelected() { return isDayOrTodaySelected; }
 
     public boolean getIsLogModify() { return isLogModify; }
+
+    public boolean getIsTimeFirst() { return isTimeFirst; }
 
 }
 

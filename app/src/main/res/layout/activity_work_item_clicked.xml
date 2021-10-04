@@ -7,193 +7,202 @@
     tools:context=".worktoday.activity.WorkItemClickedActivity"
     android:background="#C7DDFF">
 
-    <LinearLayout
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <RelativeLayout
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?android:attr/actionBarSize">
-
-
-            <ImageView
-                android:id="@+id/iv_itemclicked_toolbar_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_back"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="16dp"/>
-
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_centerInParent="true">
-
-                <TextView
-                    android:id="@+id/tv_itemclicked_nickname"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="morning"
-                    android:textSize="20sp"
-                    android:layout_gravity="center"
-                    android:gravity="center"/>
-
-                <TextView
-                    android:id="@+id/tv_itemclicked_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="매일 아침 운동하기"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:textSize="16sp"
-                    android:textStyle="bold"/>
-
-            </LinearLayout>
-
-        </RelativeLayout>
-
-
-        <soup.neumorphism.NeumorphCardView
-            style="@style/Widget.Neumorph.CardView"
-            android:layout_width="match_parent"
-            android:layout_height="380dp"
-            app:neumorph_shadowColorDark="#77999999"
-            app:neumorph_shadowColorLight="#77FFFFFF"
-            android:layout_gravity="center"
-            android:layout_marginRight="16dp"
-            android:layout_marginLeft="16dp">
-
-
-
-            <com.applandeo.materialcalendarview.CalendarView
-                android:id="@+id/calendar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:overScrollMode="never"
-                app:highlightedDaysLabelsColor="#FF9999FF"
-                app:type="many_days_picker"
-                app:headerColor="#FF9999FF"
-                app:swipeEnabled="false"
-                app:selectionColor="#FF9999FF"
-                app:pagesColor="#55C7DDFF"
-                app:abbreviationsBarColor="#55C7DDFF" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clickable="true"/>
-
-
-
-
-        </soup.neumorphism.NeumorphCardView>
-
-
-        <androidx.cardview.widget.CardView
+        <LinearLayout
+            android:id="@+id/ll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="0dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="16dp">
+            android:orientation="vertical">
 
-
-
-            <LinearLayout
+            <RelativeLayout
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="16dp"
-                android:background="#55C7DDFF">
+                android:layout_height="?android:attr/actionBarSize">
 
+
+                <ImageView
+                    android:id="@+id/iv_itemclicked_toolbar_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_back"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="16dp"/>
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_centerInParent="true">
+
+                    <TextView
+                        android:id="@+id/tv_itemclicked_nickname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="morning"
+                        android:textSize="20sp"
+                        android:layout_gravity="center"
+                        android:gravity="center"/>
+
+                    <TextView
+                        android:id="@+id/tv_itemclicked_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="매일 아침 운동하기"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+
+            <soup.neumorphism.NeumorphCardView
+                style="@style/Widget.Neumorph.CardView"
+                android:layout_width="match_parent"
+                android:layout_height="380dp"
+                app:neumorph_shadowColorDark="#77999999"
+                app:neumorph_shadowColorLight="#77FFFFFF"
+                android:layout_gravity="center"
+                android:layout_marginRight="16dp"
+                android:layout_marginLeft="16dp">
+
+
+
+                <com.applandeo.materialcalendarview.CalendarView
+                    android:id="@+id/calendar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:overScrollMode="never"
+                    app:highlightedDaysLabelsColor="#FF9999FF"
+                    app:type="many_days_picker"
+                    app:headerColor="#FF9999FF"
+                    app:swipeEnabled="false"
+                    app:selectionColor="#FF9999FF"
+                    app:pagesColor="#55C7DDFF"
+                    app:abbreviationsBarColor="#55C7DDFF" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="32dp">
+                    android:layout_height="match_parent"
+                    android:clickable="true"/>
 
 
-                    <View
-                        android:id="@+id/viewcon"
-                        android:layout_width="1dp"
-                        android:layout_height="1dp"
-                        android:layout_centerInParent="true"/>
 
-                    <LinearLayout
-                        android:id="@+id/ll_workitem_clicked_timesum"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_centerVertical="true"
-                        android:layout_toRightOf="@id/viewcon"
-                        android:layout_marginLeft="24dp"
-                        android:visibility="visible">
+
+            </soup.neumorphism.NeumorphCardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp">
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:background="#55C7DDFF">
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp">
+
+
+
+                        <LinearLayout
+                            android:id="@+id/ll_workitem_clicked_timesum"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="12dp"
+                            android:visibility="invisible">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="total : "
+                                android:textSize="20sp"/>
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:cardCornerRadius="8dp"
+                                android:backgroundTint="#FF9999FF">
+
+                                <TextView
+                                    android:id="@+id/tv_workitem_clicked_timesum"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:paddingLeft="8dp"
+                                    android:paddingRight="8dp"
+                                    android:paddingTop="4dp"
+                                    android:paddingBottom="4dp"
+                                    android:textSize="16sp"
+                                    android:text="00:00" />
+
+                            </androidx.cardview.widget.CardView>
+
+
+                        </LinearLayout>
+
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="total : "
-                            android:textSize="20sp"/>
+                            android:text="Log"
+                            android:textSize="20sp"
+                            android:layout_centerVertical="true"/>
 
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:cardCornerRadius="8dp"
-                            android:backgroundTint="#FF9999FF">
+                    </RelativeLayout>
 
-                            <TextView
-                                android:id="@+id/tv_workitem_clicked_timesum"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="8dp"
-                                android:paddingRight="8dp"
-                                android:paddingTop="4dp"
-                                android:paddingBottom="4dp"
-                                android:textSize="16sp"
-                                android:text="122:30" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@drawable/mainbg_02"
+                        android:layout_marginTop="4dp"/>
 
-                        </androidx.cardview.widget.CardView>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="400dp"
+                        android:layout_marginTop="4dp"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        android:overScrollMode="never"
+                        android:orientation="vertical"/>
 
+                </LinearLayout>
 
-                    </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
+        </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Log"
-                        android:textSize="20sp"
-                        android:layout_centerVertical="true"/>
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="300dp"
+            android:indeterminateTint="#FF9999FF"/>
 
-                </RelativeLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@drawable/mainbg_02"
-                    android:layout_marginTop="4dp"/>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler"
-                    android:layout_width="match_parent"
-                    android:layout_height="400dp"
-                    android:layout_marginTop="4dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    android:overScrollMode="never"
-                    android:orientation="vertical"/>
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-    </LinearLayout>
-
-
+    </RelativeLayout>
 
 
 </ScrollView>

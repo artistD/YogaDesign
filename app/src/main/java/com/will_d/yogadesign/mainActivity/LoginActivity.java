@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.will_d.yogadesign.R;
+import com.will_d.yogadesign.service.ForcedTerminationService;
 import com.will_d.yogadesign.service.RetrofitHelper;
 import com.will_d.yogadesign.service.RetrofitService;
 

@@ -73,6 +73,8 @@ public class WorkTodayFragment extends Fragment {
     public static boolean isWorkItemAdd = false;
 
 
+    private WorkShopActivity workShopActivity;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,6 +115,8 @@ public class WorkTodayFragment extends Fragment {
 
         setcdAddBtnToPreventBlurring();
 
+        workShopActivity  = (WorkShopActivity) getActivity();
+
         cdAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,6 +143,9 @@ public class WorkTodayFragment extends Fragment {
         if (!(dayStr.equals(str))){
             workItems.clear();
             adapter.notifyDataSetChanged();
+            workShopActivity.getIvBnvBlur().setVisibility(View.VISIBLE);
+            cdAddBtn.setVisibility(View.INVISIBLE);
+            cdAddBtn2.setVisibility(View.INVISIBLE);
             recyclerView.setVisibility(View.INVISIBLE);
             progressBar.setVisibility(View.VISIBLE);
             workItemOnedayUpdateDB(); //여기서 isModify도 초기화 해주자 istimeFirst도 초기화해주자
@@ -147,6 +154,9 @@ public class WorkTodayFragment extends Fragment {
         }else {
             workItems.clear();
             adapter.notifyDataSetChanged();
+            workShopActivity.getIvBnvBlur().setVisibility(View.VISIBLE);
+            cdAddBtn.setVisibility(View.INVISIBLE);
+            cdAddBtn2.setVisibility(View.INVISIBLE);
             recyclerView.setVisibility(View.INVISIBLE);
             progressBar.setVisibility(View.VISIBLE);
             loadWorkTodayDataServer();
@@ -155,10 +165,10 @@ public class WorkTodayFragment extends Fragment {
         Log.i("asdfg", !(dayStr.equals(str))+"");
 
 
-        if (workItems.size()==0){
-            progressBar.setVisibility(View.INVISIBLE);
-            recyclerView.setVisibility(View.VISIBLE);
-        }
+//        if (workItems.size()==0){
+//            progressBar.setVisibility(View.INVISIBLE);
+//            recyclerView.setVisibility(View.VISIBLE);
+//        }
     }
 
 
@@ -190,6 +200,9 @@ public class WorkTodayFragment extends Fragment {
         if (isWorkItemAdd){
             workItems.clear();
             adapter.notifyDataSetChanged();
+            workShopActivity.getIvBnvBlur().setVisibility(View.VISIBLE);
+            cdAddBtn.setVisibility(View.INVISIBLE);
+            cdAddBtn2.setVisibility(View.INVISIBLE);
             recyclerView.setVisibility(View.INVISIBLE);
             progressBar.setVisibility(View.VISIBLE);
             loadWorkTodayDataServer();
@@ -197,10 +210,10 @@ public class WorkTodayFragment extends Fragment {
         }
 
 
-        if (workItems.size()==0){
-            progressBar.setVisibility(View.INVISIBLE);
-            recyclerView.setVisibility(View.VISIBLE);
-        }
+//        if (workItems.size()==0){
+//            progressBar.setVisibility(View.INVISIBLE);
+//            recyclerView.setVisibility(View.VISIBLE);
+//        }
 
     }
 
@@ -239,6 +252,9 @@ public class WorkTodayFragment extends Fragment {
             if (!(dayStr.equals(str))){
                 workItems.clear();
                 adapter.notifyDataSetChanged();
+                workShopActivity.getIvBnvBlur().setVisibility(View.VISIBLE);
+                cdAddBtn.setVisibility(View.INVISIBLE);
+                cdAddBtn2.setVisibility(View.INVISIBLE);
                 recyclerView.setVisibility(View.INVISIBLE);
                 progressBar.setVisibility(View.VISIBLE);
                 workItemOnedayUpdateDB();
@@ -247,6 +263,9 @@ public class WorkTodayFragment extends Fragment {
             }else {
                 workItems.clear();
                 adapter.notifyDataSetChanged();
+                workShopActivity.getIvBnvBlur().setVisibility(View.VISIBLE);
+                cdAddBtn.setVisibility(View.INVISIBLE);
+                cdAddBtn2.setVisibility(View.INVISIBLE);
                 recyclerView.setVisibility(View.INVISIBLE);
                 progressBar.setVisibility(View.VISIBLE);
                 loadWorkTodayDataServer();
@@ -255,10 +274,10 @@ public class WorkTodayFragment extends Fragment {
 
         }
 
-        if (workItems.size()==0){
-            progressBar.setVisibility(View.INVISIBLE);
-            recyclerView.setVisibility(View.VISIBLE);
-        }
+//        if (workItems.size()==0){
+//            progressBar.setVisibility(View.INVISIBLE);
+//            recyclerView.setVisibility(View.VISIBLE);
+//        }
 
     }
 
@@ -406,7 +425,11 @@ public class WorkTodayFragment extends Fragment {
 
                         workItems.add(0, new WorkItem(no, imgUrl, nickName, name, isGoalChecked, goalSet, isPreNotificationChecked, preNotificationTime, isLocalNotificationChecked, placeName, weeksData, isItemOnOff, completeNum, isDayOrTodaySelected, rlWorkitemDeleteDialog, tvWorkitemDeleteOK, tvWorkitemDeleteCancel, isLogModify, isTimeFirst));
                         adapter.notifyItemChanged(0);
+
                         recyclerView.setVisibility(View.VISIBLE);
+                        workShopActivity.getIvBnvBlur().setVisibility(View.INVISIBLE);
+                        cdAddBtn.setVisibility(View.VISIBLE);
+                        cdAddBtn2.setVisibility(View.VISIBLE);
 
                     }
 

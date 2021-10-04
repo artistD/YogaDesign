@@ -23,7 +23,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-
+            String s = "05";
+            int a = Integer.parseInt(s);
+            Toast.makeText(this, a + "", Toast.LENGTH_SHORT).show();
 
 
 

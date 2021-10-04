@@ -90,11 +90,14 @@ public interface RetrofitService {
     Call<String> calendarDataLoadFromServer(@Query("workItemNo") String workItemNo);
 
 
-    @GET("/YogaDesign2/timer/timeDataInsertDB.php")
-    Call<String> timeDataInsertDB(@Query("identifier") int identifier, @Query("workItemNo") String workItemNo, @Query("days") String days, @Query("time") String time, @Query("isTimeFirst") boolean isTimeFirst);
+    @GET("/YogaDesign2/timer/timeDataInserOrUpdatetDB.php")
+    Call<String> timeDataInserOrUpdatetDB(@Query("identifier") int identifier, @Query("workItemNo") String workItemNo, @Query("days") String days, @Query("time") String time, @Query("isTimeFirst") boolean isTimeFirst);
 
-    @GET("/YogaDesign2/timer/timeDataUpdateDB.php")
-    Call<String> timeDataUpdateDB(@Query("workItemNo") String workItemNo, @Query("days") String days, @Query("time") String time, @Query("isTimeFirst") boolean isTimeFirst);
+
+    @GET("/YogaDesign2/timer/timeDataGetDB.php")
+    Call<String> timeDataGetDB(@Query("workItemNO") String workItemNO, @Query("days") String days);
+
+
 
 
 

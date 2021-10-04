@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
@@ -55,6 +57,12 @@ public class WorkItemClickedActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
 
 
+
+    //프로그랬스바 영역임
+    private ProgressBar progressBar;
+    private LinearLayout ll;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +89,9 @@ public class WorkItemClickedActivity extends AppCompatActivity {
         adapter = new LogItemAdapter(this, logItems);
         recyclerView.setAdapter(adapter);
 
+        progressBar = findViewById(R.id.progress);
+        ll = findViewById(R.id.ll);
+
     }
 
     @Override
@@ -93,6 +104,12 @@ public class WorkItemClickedActivity extends AppCompatActivity {
         tvItemClickedname.setText(name);
         tvItemClickedNickname.setText(nickName);
         String workItemNo = intent.getStringExtra("workItemNo");
+
+
+
+        progressBar.setVisibility(View.VISIBLE);
+        ll.setVisibility(View.INVISIBLE);
+
         logLoadDataFromServer(workItemNo);
         calendarDataLoadFromServer(workItemNo);
 
@@ -137,6 +154,9 @@ public class WorkItemClickedActivity extends AppCompatActivity {
                } catch (JSONException e) {
                    e.printStackTrace();
                }
+
+               progressBar.setVisibility(View.INVISIBLE);
+               ll.setVisibility(View.VISIBLE);
 
            }
 
@@ -190,8 +210,9 @@ public class WorkItemClickedActivity extends AppCompatActivity {
                         int total = (hourSum + minuteSum);
                         int finalHour = total/60;
                         int finalMinut = total - (finalHour*60);
+                        String s = String.format("%02d:%02d", finalHour, finalMinut);
                         llWorkitemClickedTimeSum.setVisibility(View.VISIBLE);
-                        tvWorkitemClickedTimesum.setText(finalHour + ":" + finalMinut);
+                        tvWorkitemClickedTimesum.setText(s);
                     }else {
                         llWorkitemClickedTimeSum.setVisibility(View.INVISIBLE);
                     }
@@ -200,6 +221,9 @@ public class WorkItemClickedActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
+
+                progressBar.setVisibility(View.INVISIBLE);
+                ll.setVisibility(View.VISIBLE);
 
             }
 

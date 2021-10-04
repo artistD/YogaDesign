@@ -27,5 +27,8 @@ public class Global {
     //todolist와 workitem 동기를 위한 변수
     public static ArrayList<String> workItemIndextNo;
 
+    //timer null을 위한 글로벌 : 타이머가 초기화 되면 null을대입해야하는데 null을 대입하는 이유가 가비지 컬렉터가 없애라고 null을대입하는것임 근데 서로다른 참조변수가
+    //지금 하나의 객체를 참조하고있음 즉 한녀석에게만 null을 대입한다고 능사가 아니라는 것임
+
 
 }
