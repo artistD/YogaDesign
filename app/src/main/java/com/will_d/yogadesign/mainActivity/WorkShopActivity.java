@@ -161,6 +161,7 @@ public class WorkShopActivity extends AppCompatActivity {
 
     @Override
     public void onDestroy() {
+    if (fragments[1]!=null){
         TimeTimerFragment timeTimerFragment = (TimeTimerFragment) fragments[1];
         timeTimerFragment.isPlayAndPuase = false;
         timeTimerFragment.ivPlayAndPuase.setImageResource(R.drawable.ic_play);
@@ -173,6 +174,7 @@ public class WorkShopActivity extends AppCompatActivity {
             timeTimerFragment.editor.commit();
         }
         Toast.makeText(this, "qwdqwdqw", Toast.LENGTH_SHORT).show();
+    }
         super.onDestroy();
 
     }

@@ -18,6 +18,9 @@
         android:theme="@style/Theme.YogaDesign"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".mainActivity.ProfileSetActivity"
+            android:exported="true" />
+        <activity
             android:name=".worktoday.activity.WorkItemClickedActivity"
             android:exported="true" /> <!-- todo:이거 꼭질문 -->
         <meta-data
@@ -58,10 +61,9 @@
             android:exported="true"
             android:theme="@style/WorkShopActivity" />
 
-
-        <service android:name=".service.ForcedTerminationService"
-            android:stopWithTask="false"/>
-
+        <service
+            android:name=".service.ForcedTerminationService"
+            android:stopWithTask="false" />
     </application>
 
 </manifest>
