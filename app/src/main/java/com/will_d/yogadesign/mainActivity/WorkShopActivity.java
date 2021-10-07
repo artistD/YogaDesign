@@ -176,7 +176,6 @@ public class WorkShopActivity extends AppCompatActivity {
         Toast.makeText(this, "qwdqwdqw", Toast.LENGTH_SHORT).show();
     }
         super.onDestroy();
-
     }
 
 
