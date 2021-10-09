@@ -147,89 +147,26 @@ public class WorkShopTodolistFragment extends Fragment {
 
         tvTodolistCurrentTime.setText(getTime + ".(" + dayStr + ")");
 
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        String dayStr2 = sdf.format(date);
-        String s = sharedPreferences.getString("dayCompairisonTodo", "");
 
-        Log.i("zxcvb", s + " : " + dayStr2);
-        WorkShopActivity workShopActivity = (WorkShopActivity) getActivity();
-        if (!(dayStr2.equals(s))){
-            todolistItems.clear();
-            adapter.notifyDataSetChanged();
-            recyclerView.setVisibility(View.INVISIBLE);
-            progressBar.setVisibility(View.VISIBLE);
-            insertWorkitemTodolistBooleanStateInitDB();
-            editor.putString("dayCompairisonTodo", dayStr);
-            editor.commit();
-        }else if ((dayStr2.equals(s))&&workShopActivity.isCdTodolistClicked){
-            todolistItems.clear();
-            adapter.notifyDataSetChanged();
-            recyclerView.setVisibility(View.INVISIBLE);
-            progressBar.setVisibility(View.VISIBLE);
-
-            Global.workItemIndextNo.clear();
-            for (int i = 0; i< Global.workItems.size(); i++){
-                Global.workItemIndextNo.add(Global.workItems.get(i).getNo());
-                Log.i("workitemPostion", Global.workItems.get(i).getNo());
-            }
-            Log.i("workitemPostion", " -------- ");
-
-            Gson gson = new Gson();
-            String workItemIndexJsonStr = gson.toJson(Global.workItemIndextNo);
-            Log.i("workItemIndexJsonStr", workItemIndexJsonStr);
-            workItemPositionSetLoadToDB(workItemIndexJsonStr, Global.workItemIndextNo.size());
-
-        }
-        Log.i("asdfgh", !(dayStr2.equals(s))+"");
-
-//        if (todolistItems.size()==0){
-//            progressBar.setVisibility(View.INVISIBLE);
-//            recyclerView.setVisibility(View.VISIBLE);
-//        }
-
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-
-        WorkShopActivity workShopActivity = (WorkShopActivity) getActivity();
-
-        if (hidden){
-
-        }else if (!hidden && workShopActivity.isCdTodolistClicked){
+        if(Global.workItemIndextNo!=null){
             SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
+            String dayStr2 = sdf.format(date);
             String s = sharedPreferences.getString("dayCompairisonTodo", "");
 
-            long now = System.currentTimeMillis();
-            Date date = new Date(now);
-
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
-            String dayStr = sdf.format(date);
-
-            if (!(dayStr.equals(s))){
+            Log.i("zxcvb", s + " : " + dayStr2);
+            WorkShopActivity workShopActivity = (WorkShopActivity) getActivity();
+            if (!(dayStr2.equals(s))){
                 todolistItems.clear();
                 adapter.notifyDataSetChanged();
-                recyclerView.setVisibility(View.INVISIBLE);
-                progressBar.setVisibility(View.VISIBLE);
-
-                insertWorkitemTodolistBooleanStateInitDB(); //여기서 isModify도 초기화 해주자
+                loading();
+                insertWorkitemTodolistBooleanStateInitDB();
                 editor.putString("dayCompairisonTodo", dayStr);
                 editor.commit();
-            }else {
+            }else if ((dayStr2.equals(s))&&workShopActivity.isCdTodolistClicked){
                 todolistItems.clear();
                 adapter.notifyDataSetChanged();
-                recyclerView.setVisibility(View.INVISIBLE);
-                progressBar.setVisibility(View.VISIBLE);
+                loading();
 
                 Global.workItemIndextNo.clear();
                 for (int i = 0; i< Global.workItems.size(); i++){
@@ -242,9 +179,9 @@ public class WorkShopTodolistFragment extends Fragment {
                 String workItemIndexJsonStr = gson.toJson(Global.workItemIndextNo);
                 Log.i("workItemIndexJsonStr", workItemIndexJsonStr);
                 workItemPositionSetLoadToDB(workItemIndexJsonStr, Global.workItemIndextNo.size());
-            }
-            Log.i("asdfghKK", !(dayStr.equals(s))+"");
 
+            }
+            Log.i("asdfgh", !(dayStr2.equals(s))+"");
         }
 
 
@@ -253,6 +190,75 @@ public class WorkShopTodolistFragment extends Fragment {
 //            recyclerView.setVisibility(View.VISIBLE);
 //        }
 
+
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (Global.workItemIndextNo!=null){
+
+            WorkShopActivity workShopActivity = (WorkShopActivity) getActivity();
+
+            if (hidden){
+
+            }else if (!hidden && workShopActivity.isCdTodolistClicked){
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                String s = sharedPreferences.getString("dayCompairisonTodo", "");
+
+                long now = System.currentTimeMillis();
+                Date date = new Date(now);
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+                String dayStr = sdf.format(date);
+
+                if (!(dayStr.equals(s))){
+                    todolistItems.clear();
+                    adapter.notifyDataSetChanged();
+                    loading();
+
+                    insertWorkitemTodolistBooleanStateInitDB(); //여기서 isModify도 초기화 해주자
+                    editor.putString("dayCompairisonTodo", dayStr);
+                    editor.commit();
+                }else {
+                    todolistItems.clear();
+                    adapter.notifyDataSetChanged();
+                    loading();
+
+                    Global.workItemIndextNo.clear();
+                    for (int i = 0; i< Global.workItems.size(); i++){
+                        Global.workItemIndextNo.add(Global.workItems.get(i).getNo());
+                        Log.i("workitemPostion", Global.workItems.get(i).getNo());
+                    }
+                    Log.i("workitemPostion", " -------- ");
+
+                    Gson gson = new Gson();
+                    String workItemIndexJsonStr = gson.toJson(Global.workItemIndextNo);
+                    Log.i("workItemIndexJsonStr", workItemIndexJsonStr);
+                    workItemPositionSetLoadToDB(workItemIndexJsonStr, Global.workItemIndextNo.size());
+                }
+                Log.i("asdfghKK", !(dayStr.equals(s))+"");
+
+            }
+
+        }
+
+
+
+//        if (todolistItems.size()==0){
+//            progressBar.setVisibility(View.INVISIBLE);
+//            recyclerView.setVisibility(View.VISIBLE);
+//        }
+
+
+    }
+
+    public void loading(){
+        if (Global.workItems.size()!=0){
+            progressBar.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.INVISIBLE);
+        }
 
     }
 

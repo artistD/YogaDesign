@@ -133,7 +133,7 @@
 
 
                     <TextView
-                        android:id="@+id/tv_usersetting_name"
+                        android:id="@+id/tv_usersetting_state_msg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/tv_usersetting_nickname"

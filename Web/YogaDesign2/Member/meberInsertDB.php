@@ -26,7 +26,7 @@
     $conn = mysqli_connect("localhost","willd88","messid88!!","willd88");
     mysqli_query($conn, "set names utf8");
 
-    $sql ="INSERT INTO MemberYogaDesign(id, name, isUserPublic, frofile, date) VALUES('$id', '$ame', $isUerPublic, '$dstName', '$now')";
+    $sql ="INSERT INTO MemberYogaDesign(id, name, isUserPublic, frofile, date) VALUES('$id', '$name', $isUerPublic, '$dstName', '$now')";
     $result = mysqli_query($conn, $sql);
 
     if($result) echo "게시글 업로드 되었습니다.";

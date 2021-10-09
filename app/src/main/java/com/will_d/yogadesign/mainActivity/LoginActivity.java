@@ -53,8 +53,12 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etId;
     private EditText etName;
     private ImageView ivProfile;
+
+    private Uri uri;
     private String imgpath;
     private boolean isLogin = false;
+    private boolean isFirstProfileChecked = false;
+
     ArrayList<String> datas = new ArrayList<>();
 
     private boolean isSorationFirst = true;
@@ -72,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
 
         SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
         isLogin = pref.getBoolean("isLogin", false);
-
+        isFirstProfileChecked = pref.getBoolean("isFirstProfileChecked", true);
 
 
         //퍼미션 작업 수행
@@ -84,10 +88,15 @@ public class LoginActivity extends AppCompatActivity {
         memberLoadDb();
 
         Log.i("Login", isLogin+"");
-        if(isLogin) {
+        if (!isFirstProfileChecked){
+            Intent intent = new Intent(this, ProfileSetActivity.class);
+            startActivity(intent);
+            finish();
+        }else if(isLogin && isFirstProfileChecked) {
             startActivity(new Intent(this, WorkShopActivity.class));
             finish();
         }
+
 
     }
 
@@ -105,10 +114,18 @@ public class LoginActivity extends AppCompatActivity {
                 editor.putBoolean("isFirstCompair", true);
                 editor.commit();
 
+                isFirstProfileChecked = pref.getBoolean("isFirstProfileChecked", false);
                 Log.i("Global", datas.get(i));
-                Intent intent = new Intent(this, WorkShopActivity.class);
-                startActivity(intent);
-                LoginActivity.this.finish();
+                if (isFirstProfileChecked){
+                    Intent intent = new Intent(this, WorkShopActivity.class);
+                    startActivity(intent);
+                    LoginActivity.this.finish();
+                }else {
+                    Intent intent = new Intent(this, ProfileSetActivity.class);
+                    startActivity(intent);
+                    LoginActivity.this.finish();
+                }
+
                 break;
             }
         }
@@ -127,6 +144,12 @@ public class LoginActivity extends AppCompatActivity {
         String id = etId.getText().toString();
         String name = etName.getText().toString();
         boolean isUserPublic = true;
+
+        SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("ProfileUritoString", uri.toString());
+        editor.putString("ProfileName", name);
+        editor.commit();
 
         Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
         RetrofitService retrofitService = retrofit.create(RetrofitService.class);
@@ -233,7 +256,7 @@ public class LoginActivity extends AppCompatActivity {
         public void onActivityResult(ActivityResult result) {
             if (result.getResultCode() ==RESULT_OK){
                 Intent intent = result.getData();
-                Uri uri =intent.getData();
+                uri =intent.getData();
 
                 if (uri != null){
                     Glide.with(LoginActivity.this).load(uri).into(ivProfile);

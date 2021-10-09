@@ -31,7 +31,7 @@
         <entry key="app/src/main/res/layout/fragment_workshop_square.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_workshop_timer.xml" value="0.20765765765765765" />
         <entry key="app/src/main/res/layout/fragment_workshop_todolist.xml" value="0.12135416666666667" />
-        <entry key="app/src/main/res/layout/fragment_workshop_userset.xml" value="0.375" />
+        <entry key="app/src/main/res/layout/fragment_workshop_userset.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_workshop_work.xml" value="0.20765765765765765" />
         <entry key="app/src/main/res/layout/recycler_alarmitem.xml" value="0.24114583333333334" />
         <entry key="app/src/main/res/layout/recycler_logitem.xml" value="0.24114583333333334" />
