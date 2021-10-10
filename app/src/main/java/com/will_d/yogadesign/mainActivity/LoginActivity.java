@@ -165,6 +165,7 @@ public class LoginActivity extends AppCompatActivity {
         Map<String, String> dataPart = new HashMap<>();
         dataPart.put("id", id);
         dataPart.put("name", name);
+        dataPart.put("favoriteNum", String.valueOf(0));
         dataPart.put("isUserPublic", String.valueOf(isUserPublic));
 
         Call<String> call = retrofitService.memberPostDataToServer(dataPart, filePart);

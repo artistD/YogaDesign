@@ -1034,7 +1034,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
 
             dataPart.put("isLogModify", String.valueOf(isLogModify));
             dataPart.put("isTimeFirst", String.valueOf(isTimeFirst));
-
+            dataPart.put("timeSum", "00:00");
             Call<String> call = retrofitService.WorkItemPostDataToServer(dataPart, filePart);
             call.enqueue(new Callback<String>() {
                 @Override

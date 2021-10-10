@@ -16,6 +16,17 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.will_d.yogadesign.R;
+import com.will_d.yogadesign.service.RetrofitHelper;
+import com.will_d.yogadesign.service.RetrofitService;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Retrofit;
 
 public class ProfileSetActivity extends AppCompatActivity {
 
@@ -54,7 +65,9 @@ public class ProfileSetActivity extends AppCompatActivity {
         editor.putString("UserStateMsg", etUserStateMsg.getText().toString());
         editor.commit();
         startActivity(new Intent(this, WorkShopActivity.class));
+        finish();
     }
+
 
     public void clickChangeProfile(View view) {
         Intent intent = new Intent(Intent.ACTION_PICK);

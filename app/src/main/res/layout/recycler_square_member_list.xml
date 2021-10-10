@@ -115,15 +115,14 @@
                     android:layout_marginBottom="8dp"
                     android:layout_weight="1"
                     app:cardCornerRadius="8dp"
-                    android:visibility="invisible">
+                    android:visibility="visible">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/mainbg_02"
                         android:gravity="center"
-                        android:orientation="horizontal"
-                        >
+                        android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="wrap_content"

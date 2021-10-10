@@ -116,6 +116,21 @@ public interface RetrofitService {
     Call<String> sqareMemverListLoadDB(@Field("id") String id);
 
 
+    @Multipart
+    @POST("/YogaDesign2/member/memberProfileUpdateDB.php")
+    Call<String> memberProfileUpdateDB(@PartMap Map<String, String> datapart, @Part MultipartBody.Part filePart);
+
+
+    @GET("/YogaDesign2/workitem/workItemTimeSumUpdate.php")
+    Call<String> workItemTimeSumUpdate(@Query("no") String no, @Query("timeSum") String timeSum);
+
+
+
+
+
+
+
+
 
 
 }

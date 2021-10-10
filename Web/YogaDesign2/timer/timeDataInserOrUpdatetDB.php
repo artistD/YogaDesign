@@ -15,19 +15,28 @@
     if($identifier=='0'){
         $sql = "INSERT INTO LogDataYogaDesign(WorkItemNo, days, time) VALUES($workItemNo, '$days', '$time')";
         $sql2 = "UPDATE WorkItemYogaDesign SET isTimeFirst = $isTimeFirst WHERE no='$workItemNo'";
+        $sql3 = "SELECT * FROM WorkItemYogaDesign WHERE no='$workItemNo'";
     
     }else if($identifier=='1'){
         $sql = "UPDATE LogDataYogaDesign SET WorkItemNo = $workItemNo, days='$days', time='$time' WHERE days='$days' AND WorkItemNo = '$workItemNo'";
         $sql2 = "UPDATE WorkItemYogaDesign SET isTimeFirst = $isTimeFirst WHERE no='$workItemNo'";
+        $sql3 = "SELECT * FROM WorkItemYogaDesign WHERE no='$workItemNo'";
     }
 
 
     $result = mysqli_query($conn, $sql);
     $result2 = mysqli_query($conn, $sql2);
+    $result3 = mysqli_query($conn, $sql3);
 
+    $row_num = mysqli_num_rows($result3);
+
+    $rows = array();
+    for($i=0; $i<$row_num; $i++){
+        $row = mysqli_fetch_array($result3, MYSQLI_ASSOC);
+        $rows[$i] = $row;
+    }
     
-    if($result && $result2) echo "ㄱㅔ시글ㅣ 업로드 됬습니다";
-    else echo "다시 시도";
+    echo json_encode($rows);
 
     mysqli_close($conn);
 

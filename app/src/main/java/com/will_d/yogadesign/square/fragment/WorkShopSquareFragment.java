@@ -52,6 +52,7 @@ public class WorkShopSquareFragment extends Fragment {
     private String myId;
     private String myImgUrl;
     private String myNickName;
+    private String myUserStateMsg;
 
 
 
@@ -70,6 +71,7 @@ public class WorkShopSquareFragment extends Fragment {
 
     //****************************
     private String checkdeIdentifyId ="";
+    private boolean isFirst = false;
 
     //****************************
 
@@ -88,6 +90,8 @@ public class WorkShopSquareFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        isFirst = true;
 
         SharedPreferences pref = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
         String id = pref.getString("id","");
@@ -184,7 +188,7 @@ public class WorkShopSquareFragment extends Fragment {
                         String nickName = jsonObject.getString("nickName");
                         String name  = jsonObject.getString("name");
                         int counterNum = Integer.parseInt(jsonObject.getString("Completenum"));
-                        String timeSum = "";
+                        String timeSum = jsonObject.getString("timeSum");
                         String imgUrl = "http://willd88.dothome.co.kr/YogaDesign2/workitem/" + jsonObject.getString("dstName");
 
                         squareMemberItemListItems.add(0, new SquareMemberItemListItem(imgUrl, nickName, name, counterNum, timeSum));
@@ -237,16 +241,18 @@ public class WorkShopSquareFragment extends Fragment {
                         }else {
                             isUserPublic = false;
                         }
+                        String userMsg = jsonObject.getString("stateMsg");
 
 
                         if (id.equals(prefId)){
                             myId = id;
                             myImgUrl = imgUrl;
                             myNickName = nickName;
+                            myUserStateMsg = userMsg;
                             Log.i("myMemberId", myId);
                         }else {
                             if (isUserPublic){
-                                squareMemberItems.add(0, new SquareMemberItem(id, imgUrl, nickName));
+                                squareMemberItems.add(0, new SquareMemberItem(id, imgUrl, nickName, userMsg));
                                 squareMemberAdapter2.notifyItemChanged(0);
                                 Log.i("atherMerberId", id);
                             }
@@ -256,7 +262,7 @@ public class WorkShopSquareFragment extends Fragment {
 
                     }
 
-                    squareMemberItems.add(0, new SquareMemberItem(myId, myImgUrl, myNickName));
+                    squareMemberItems.add(0, new SquareMemberItem(myId, myImgUrl, myNickName, myUserStateMsg));
                     squareMemberAdapter2.notifyItemChanged(0);
 
 
@@ -267,9 +273,7 @@ public class WorkShopSquareFragment extends Fragment {
                             sqareMemverListLoadDB(item.getId());
                             Glide.with(getActivity()).load(item.getImgUrl()).into(civFrofile);
                             tvMemberName.setText(item.getMemberName());
-
-                            String userStateMsg = pref.getString("UserStateMsg", "");
-                            tvMemverMessage.setText(userStateMsg);
+                            tvMemverMessage.setText(item.getStateMsg());
                         }else {
                             continue;
                         }
@@ -294,7 +298,8 @@ public class WorkShopSquareFragment extends Fragment {
     }
 
     public class SquareMemberAdapter2 extends RecyclerView.Adapter<SquareMemberAdapter2.VH> {
-
+        private int oldPosition = -1;
+        private int selectedPosition = -1;
 
         @NonNull
         @Override
@@ -305,21 +310,73 @@ public class WorkShopSquareFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull VH holder, int position) {
+            final int finalPosition = position;
             SquareMemberItem squareMemberItem = squareMemberItems.get(position);
             Glide.with(getActivity()).load(squareMemberItem.getImgUrl()).into(holder.civFrofile);
             holder.tvMemberName.setText(squareMemberItem.getMemberName());
 
 
-            SharedPreferences pref = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
-            String id = pref.getString("id", "");
-            if (position ==0 && squareMemberItem.getId().equals(id)){
+            if (selectedPosition==finalPosition){
+                SquareMemberItem item = squareMemberItems.get(finalPosition);
                 holder.cdMemberBg.setVisibility(View.VISIBLE);
-                Log.i("BindMemberId", squareMemberItem.getId());
                 holder.ivMemberBg.setBackgroundColor(0xFF9999FF);
-
+                sqareMemverListLoadDB(item.getId());
+                Glide.with(getActivity()).load(item.getImgUrl()).into(civFrofile);
+                tvMemberName.setText(item.getMemberName());
+                tvMemverMessage.setText(item.getStateMsg());
             }else {
                 holder.cdMemberBg.setVisibility(View.INVISIBLE);
             }
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    oldPosition = selectedPosition;
+                    selectedPosition = finalPosition;
+                    notifyDataSetChanged();
+//                    SquareMemberItem item = squareMemberItems.get(finalPosition);
+//                    holder.cdMemberBg.setVisibility(View.VISIBLE);
+//                    holder.ivMemberBg.setBackgroundColor(0xFF9999FF);
+//                    sqareMemverListLoadDB(item.getId());
+//                    Glide.with(getActivity()).load(item.getImgUrl()).into(civFrofile);
+//                    tvMemberName.setText(item.getMemberName());
+//                    tvMemverMessage.setText(item.getStateMsg());
+
+//                        for (int i=0; i<squareMemberItems.size();i++){
+//                            SquareMemberItem item = squareMemberItems.get(i);
+//                            if (item.getId().equals(checkdeIdentifyId)){
+//                                sqareMemverListLoadDB(item.getId());
+//                                Glide.with(getActivity()).load(item.getImgUrl()).into(civFrofile);
+//                                tvMemberName.setText(item.getMemberName());
+//                                tvMemverMessage.setText(item.getStateMsg());
+//                            }else {
+//                                continue;
+//                            }
+//
+//                        }
+
+
+                }
+            });
+
+
+
+
+            if (isFirst){
+
+                SharedPreferences pref = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
+                String id = pref.getString("id", "");
+                if (position ==0 && squareMemberItem.getId().equals(id)){
+                    holder.cdMemberBg.setVisibility(View.VISIBLE);
+                    Log.i("BindMemberId", squareMemberItem.getId());
+                    holder.ivMemberBg.setBackgroundColor(0xFF9999FF);
+
+                }else {
+                    holder.cdMemberBg.setVisibility(View.INVISIBLE);
+                }
+                isFirst=false;
+            }
+
 
         }
 
@@ -340,9 +397,6 @@ public class WorkShopSquareFragment extends Fragment {
                 ivMemberBg= itemView.findViewById(R.id.iv_member_bg);
                 civFrofile = itemView.findViewById(R.id.civ_frofile);
                 tvMemberName = itemView.findViewById(R.id.tv_member_name);
-
-
-
             }
         }//#########################################
     }//class SquareMemberAdapter2
