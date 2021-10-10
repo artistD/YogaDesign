@@ -148,7 +148,7 @@ public class WorkShopTodolistFragment extends Fragment {
         tvTodolistCurrentTime.setText(getTime + ".(" + dayStr + ")");
 
 
-        if(Global.workItemIndextNo!=null){
+        if(Global.workItemIndextNo!=null &&Global.workItems!=null){
             SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             String dayStr2 = sdf.format(date);
@@ -196,7 +196,7 @@ public class WorkShopTodolistFragment extends Fragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (Global.workItemIndextNo!=null){
+        if (Global.workItemIndextNo!=null&&Global.workItems!=null){
 
             WorkShopActivity workShopActivity = (WorkShopActivity) getActivity();
 
@@ -255,7 +255,7 @@ public class WorkShopTodolistFragment extends Fragment {
     }
 
     public void loading(){
-        if (Global.workItems.size()!=0){
+        if (Global.workItems !=null&& Global.workItems.size()!=0){
             progressBar.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.INVISIBLE);
         }

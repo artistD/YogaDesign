@@ -99,6 +99,19 @@ public interface RetrofitService {
 
 
 
+    //private 모드 세팅하는곳임
+    @GET("/YogaDesign2/member/userSetPrivateModeUpdateDB.php")
+    Call<String> userSetPrivateModeUpdateDB(@Query("id") String workItemNO, @Query("days") String days);
+
+    @FormUrlEncoded
+    @POST("/YogaDesign2/member/userSetPrivateModeUpdateDB.php")
+    Call<String> userSetPrivateModeUpdateDB(@Field("id") String id, @Field("isPublic") boolean isPrivate);
+
+    @GET("/YogaDesign2/square/squareMemberLoadDB.php")
+    Call<String> squareMemberLoadDB();
+
+
+
 
 
 }

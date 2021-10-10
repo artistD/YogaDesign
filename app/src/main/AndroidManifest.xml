@@ -18,6 +18,9 @@
         android:theme="@style/Theme.YogaDesign"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".mainActivity.ProfileModifyActivity"
+            android:exported="true" />
+        <activity
             android:name=".mainActivity.ProfileSetActivity"
             android:exported="true" />
         <activity
