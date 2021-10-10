@@ -1,5 +1,7 @@
 package com.will_d.yogadesign.square.fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -46,6 +49,12 @@ public class WorkShopSquareFragment extends Fragment {
     private ArrayList<SquareMemberItem> squareMemberItems = new ArrayList<SquareMemberItem>();
     private SquareMemberAdapter2 squareMemberAdapter2;
 
+    private String myId;
+    private String myImgUrl;
+    private String myNickName;
+
+
+
     private CircleImageView civFrofile;
     private TextView tvMemberName;
     private TextView tvMemverMessage;
@@ -58,6 +67,11 @@ public class WorkShopSquareFragment extends Fragment {
     private RecyclerView recyclerViewMemberItem;
     private ArrayList<SquareMemberItemListItem> squareMemberItemListItems = new ArrayList<SquareMemberItemListItem>();
     private SquareMemberListAdapter squareMemberListAdapter;
+
+    //****************************
+    private String checkdeIdentifyId ="";
+
+    //****************************
 
     private RelativeLayout rlMemberChatting;
 
@@ -74,6 +88,12 @@ public class WorkShopSquareFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        SharedPreferences pref = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
+        String id = pref.getString("id","");
+        checkdeIdentifyId = id;
+
+
 
         llFriendSearch = view.findViewById(R.id.ll_friend_search);
         civFrofile = view.findViewById(R.id.civ_frofile);
@@ -106,19 +126,17 @@ public class WorkShopSquareFragment extends Fragment {
 
 
 
-        String imgUrl2 = "http://img2.sbs.co.kr/img/seditor/VD/2020/04/09/VD62139889_w640.jpg";
-
-        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, 32));
-        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, 32));
-        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, 32));
-        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, 32));
-        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, 32));
-        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, 32));
-        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, 32));
-        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, 32));
-        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, 32));
-
-
+//        String imgUrl2 = "http://img2.sbs.co.kr/img/seditor/VD/2020/04/09/VD62139889_w640.jpg";
+//
+//        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, "16:32"));
+//        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, "216:32"));
+//        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, "16:32"));
+//        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, "16:32"));
+//        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, "16:32"));
+//        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, "16:32"));
+//        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, "16:32"));
+//        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, "216:32"));
+//        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, "216:32"));
 
         recyclerViewMemberItem = view.findViewById(R.id.recycler_item);
         squareMemberListAdapter = new SquareMemberListAdapter(getActivity(), squareMemberItemListItems);
@@ -130,6 +148,59 @@ public class WorkShopSquareFragment extends Fragment {
     public void onResume() {
         super.onResume();
         squareMemberLoadDB();
+
+    }
+
+    //아이디로 구분해버리면 될거같은데
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden){
+
+        }else {
+            squareMemberLoadDB();
+        }
+
+
+    }
+
+    public void sqareMemverListLoadDB(String id){
+        Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
+        RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+
+
+        squareMemberItemListItems.clear();
+        squareMemberListAdapter.notifyDataSetChanged();
+        Call<String> call = retrofitService.sqareMemverListLoadDB(id);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                Log.i("sqareMemverListLoadDB", response.body());
+                String jsonStr = response.body();
+                try {
+                    JSONArray jsonArray  = new JSONArray(jsonStr);
+                    for (int i=0; i<jsonArray.length(); i++){
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        String nickName = jsonObject.getString("nickName");
+                        String name  = jsonObject.getString("name");
+                        int counterNum = Integer.parseInt(jsonObject.getString("Completenum"));
+                        String timeSum = "";
+                        String imgUrl = "http://willd88.dothome.co.kr/YogaDesign2/workitem/" + jsonObject.getString("dstName");
+
+                        squareMemberItemListItems.add(0, new SquareMemberItemListItem(imgUrl, nickName, name, counterNum, timeSum));
+                        squareMemberListAdapter.notifyItemChanged(0);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.i("sqareMemverListLoadDB", t.getMessage());
+            }
+        });
     }
 
     public void squareMemberLoadDB(){
@@ -137,6 +208,8 @@ public class WorkShopSquareFragment extends Fragment {
         RetrofitService retrofitService = retrofit.create(RetrofitService.class);
 
         Call<String> call = retrofitService.squareMemberLoadDB();
+
+        SharedPreferences pref = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
 
 
         squareMemberItems.clear();
@@ -150,14 +223,60 @@ public class WorkShopSquareFragment extends Fragment {
                     JSONArray  jsonArray = new JSONArray(jsonStr);
                     for (int i=0; i<jsonArray.length(); i++){
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
+
                         String nickName = jsonObject.getString("name");
                         String imgUrl = "http://willd88.dothome.co.kr/YogaDesign2/member/" +jsonObject.getString("frofile");
 
-                        Log.i("imgUrl", imgUrl);
-                        squareMemberItems.add(0, new SquareMemberItem(imgUrl, nickName));
-                        squareMemberAdapter2.notifyItemChanged(0);
+                        String id = jsonObject.getString("id");
+                        String prefId = pref.getString("id", "");
+
+                        String s = jsonObject.getString("isUserPublic");
+                        boolean isUserPublic =false;
+                        if (s.equals("1")){
+                            isUserPublic = true;
+                        }else {
+                            isUserPublic = false;
+                        }
+
+
+                        if (id.equals(prefId)){
+                            myId = id;
+                            myImgUrl = imgUrl;
+                            myNickName = nickName;
+                            Log.i("myMemberId", myId);
+                        }else {
+                            if (isUserPublic){
+                                squareMemberItems.add(0, new SquareMemberItem(id, imgUrl, nickName));
+                                squareMemberAdapter2.notifyItemChanged(0);
+                                Log.i("atherMerberId", id);
+                            }
+                        }
+
+
 
                     }
+
+                    squareMemberItems.add(0, new SquareMemberItem(myId, myImgUrl, myNickName));
+                    squareMemberAdapter2.notifyItemChanged(0);
+
+
+                    //todo: statemsg 작업이 끝나면 여기서 부터 작업을 해야함
+                    for (int i=0; i<squareMemberItems.size();i++){
+                        SquareMemberItem item = squareMemberItems.get(i);
+                        if (item.getId().equals(checkdeIdentifyId)){
+                            sqareMemverListLoadDB(item.getId());
+                            Glide.with(getActivity()).load(item.getImgUrl()).into(civFrofile);
+                            tvMemberName.setText(item.getMemberName());
+
+                            String userStateMsg = pref.getString("UserStateMsg", "");
+                            tvMemverMessage.setText(userStateMsg);
+                        }else {
+                            continue;
+                        }
+
+                    }
+
+
 
 
                 } catch (JSONException e) {
@@ -188,8 +307,19 @@ public class WorkShopSquareFragment extends Fragment {
         public void onBindViewHolder(@NonNull VH holder, int position) {
             SquareMemberItem squareMemberItem = squareMemberItems.get(position);
             Glide.with(getActivity()).load(squareMemberItem.getImgUrl()).into(holder.civFrofile);
-
             holder.tvMemberName.setText(squareMemberItem.getMemberName());
+
+
+            SharedPreferences pref = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
+            String id = pref.getString("id", "");
+            if (position ==0 && squareMemberItem.getId().equals(id)){
+                holder.cdMemberBg.setVisibility(View.VISIBLE);
+                Log.i("BindMemberId", squareMemberItem.getId());
+                holder.ivMemberBg.setBackgroundColor(0xFF9999FF);
+
+            }else {
+                holder.cdMemberBg.setVisibility(View.INVISIBLE);
+            }
 
         }
 
@@ -199,13 +329,19 @@ public class WorkShopSquareFragment extends Fragment {
         }
 
         class VH extends RecyclerView.ViewHolder {//#########################################
+            private ImageView ivMemberBg;
+            private CardView cdMemberBg;
             private CircleImageView civFrofile;
             private TextView tvMemberName;
 
             public VH(@NonNull View itemView) {
                 super(itemView);
+                cdMemberBg = itemView.findViewById(R.id.cd_member_bg);
+                ivMemberBg= itemView.findViewById(R.id.iv_member_bg);
                 civFrofile = itemView.findViewById(R.id.civ_frofile);
                 tvMemberName = itemView.findViewById(R.id.tv_member_name);
+
+
 
             }
         }//#########################################

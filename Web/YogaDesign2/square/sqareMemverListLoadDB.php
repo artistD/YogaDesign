@@ -1,12 +1,14 @@
 <?php
 
+    $id = $_POST['id'];
+
     header('Content-Type:application/json; charset=utf-8');
 
     $conn = mysqli_connect('localhost', 'willd88', 'messid88!!', 'willd88');
 
     mysqli_query($conn, "set names utf8");
 
-    $sql = "SELECT * FROM MemberYogaDesign ORDER BY isUserPublic DESC";
+    $sql = "SELECT * FROM WorkItemYogaDesign WHERE id ='$id' ORDER BY indexNo ASC";
     $result = mysqli_query($conn, $sql);
 
     $row_num = mysqli_num_rows($result);

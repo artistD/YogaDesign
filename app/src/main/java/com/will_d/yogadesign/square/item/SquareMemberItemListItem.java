@@ -8,10 +8,10 @@ public class SquareMemberItemListItem {
     private String name;
 
     private int counter;
-    private int timeSum;
+    private String timeSum;
 
 
-    public SquareMemberItemListItem(String imgUrl, String nickName, String name, int counter, int timeSum) {
+    public SquareMemberItemListItem(String imgUrl, String nickName, String name, int counter, String timeSum) {
         this.imgUrl = imgUrl;
         this.nickName = nickName;
         this.name = name;
@@ -35,7 +35,7 @@ public class SquareMemberItemListItem {
         return counter;
     }
 
-    public int getTimeSum() {
+    public String getTimeSum() {
         return timeSum;
     }
 }

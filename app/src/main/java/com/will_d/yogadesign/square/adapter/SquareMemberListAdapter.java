@@ -42,7 +42,7 @@ public class SquareMemberListAdapter extends RecyclerView.Adapter<SquareMemberLi
         holder.tvMemberListNickName.setText(item.getNickName());
         holder.tvMemberListName.setText(item.getName());
         holder.tvMemberListCounter.setText(item.getCounter()+"");
-        holder.tvMemberListTimeSum.setText(item.getTimeSum()+"");
+        holder.tvMemberListTimeSum.setText(item.getTimeSum());
 
     }
 

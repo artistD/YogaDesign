@@ -111,6 +111,10 @@ public interface RetrofitService {
     Call<String> squareMemberLoadDB();
 
 
+    @FormUrlEncoded
+    @POST("/YogaDesign2/square/sqareMemverListLoadDB.php")
+    Call<String> sqareMemverListLoadDB(@Field("id") String id);
+
 
 
 
