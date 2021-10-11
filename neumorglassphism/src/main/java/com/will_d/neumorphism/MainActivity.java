@@ -4,8 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import io.alterac.blurkit.BlurLayout;
 import soup.neumorphism.NeumorphButton;
@@ -26,6 +33,28 @@ public class MainActivity extends AppCompatActivity {
             String s = "05";
             int a = Integer.parseInt(s);
             Toast.makeText(this, a + "", Toast.LENGTH_SHORT).show();
+
+            ArrayList<String> dd = new ArrayList<>();
+            Log.i("arraysize", dd.size() +"");
+            Gson gson = new Gson();
+            String jsonStr = gson.toJson(dd);
+
+
+
+            String[] aa = gson.fromJson(jsonStr, String[].class);
+            ArrayList<String> ss = new ArrayList<String>(Arrays.asList(aa));
+
+
+            Log.i("jsonStr", jsonStr);
+
+            dd.add("a");
+            dd.add("b");
+            Log.i("Tag", dd.get(0));
+            Log.i("Tag", dd.get(1));
+
+            dd.remove("a");
+
+            Log.i("Remove", dd.get(0));
 
 
 

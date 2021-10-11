@@ -22,15 +22,15 @@
                 style="@style/Widget.Neumorph.ImageView"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
-                app:neumorph_shapeAppearance="@style/ShapeAppearance"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="16dp"
-                android:src="@drawable/ic_weeks"
+                android:clickable="true"
                 android:padding="16dp"
+                android:src="@drawable/ic_weeks"
+                android:visibility="visible"
                 app:neumorph_shadowColorDark="#77999999"
                 app:neumorph_shadowColorLight="#77FFFFFF"
-                android:visibility="visible"
-                android:clickable="true"/>
+                app:neumorph_shapeAppearance="@style/ShapeAppearance" />
 
 
             <de.hdodenhof.circleimageview.CircleImageView

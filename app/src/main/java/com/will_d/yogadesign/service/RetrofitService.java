@@ -125,6 +125,12 @@ public interface RetrofitService {
     Call<String> workItemTimeSumUpdate(@Query("no") String no, @Query("timeSum") String timeSum);
 
 
+    @GET("/YogaDesign2/square/squareMemberFavoriteCounterUpdateDB.php")
+    Call<String> squareMemberFavoriteCounterUpdateDB(@Query("favoriteCheckedId") String favoriteCheckedId, @Query("isFavorite") boolean isFavorite, @Query("favoriteCheckedUserList") String favoriteCheckedUserList);
+
+
+
+
 
 
 

@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.will_d.yogadesign.R;
 import com.will_d.yogadesign.service.ForcedTerminationService;
 import com.will_d.yogadesign.service.RetrofitHelper;
@@ -62,6 +63,11 @@ public class LoginActivity extends AppCompatActivity {
     ArrayList<String> datas = new ArrayList<>();
 
     private boolean isSorationFirst = true;
+
+    //*************************************************
+    private ArrayList<String> favoriteCheckedUserList = new ArrayList<>();
+
+    //*************************************************
 
 
 
@@ -167,6 +173,10 @@ public class LoginActivity extends AppCompatActivity {
         dataPart.put("name", name);
         dataPart.put("favoriteNum", String.valueOf(0));
         dataPart.put("isUserPublic", String.valueOf(isUserPublic));
+
+        Gson gson = new Gson();
+        String jsonStr = gson.toJson(favoriteCheckedUserList);
+        dataPart.put("favoriteCheckedUserList", jsonStr);
 
         Call<String> call = retrofitService.memberPostDataToServer(dataPart, filePart);
         call.enqueue(new Callback<String>() {
