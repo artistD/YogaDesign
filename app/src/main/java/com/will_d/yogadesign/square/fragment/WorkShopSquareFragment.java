@@ -1,6 +1,7 @@
 package com.will_d.yogadesign.square.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +28,7 @@ import com.google.gson.Gson;
 import com.will_d.yogadesign.R;
 import com.will_d.yogadesign.service.RetrofitHelper;
 import com.will_d.yogadesign.service.RetrofitService;
+import com.will_d.yogadesign.square.activity.ChattingActivity;
 import com.will_d.yogadesign.square.adapter.SquareMemberAdapter;
 import com.will_d.yogadesign.square.adapter.SquareMemberListAdapter;
 import com.will_d.yogadesign.square.item.SquareMemberItem;
@@ -54,6 +57,7 @@ public class WorkShopSquareFragment extends Fragment {
     private RecyclerView recyclerViewMember;
     private ArrayList<SquareMemberItem> squareMemberItems = new ArrayList<SquareMemberItem>();
     private SquareMemberAdapter2 squareMemberAdapter2;
+    private ProgressBar pgMember;
 
     private String myId;
     private String myImgUrl;
@@ -79,6 +83,7 @@ public class WorkShopSquareFragment extends Fragment {
     private RecyclerView recyclerViewMemberItem;
     private ArrayList<SquareMemberItemListItem> squareMemberItemListItems = new ArrayList<SquareMemberItemListItem>();
     private SquareMemberListAdapter squareMemberListAdapter;
+    private ProgressBar pgMemberList;
 
     //****************************
     private String checkdeIdentifyId ="";
@@ -94,6 +99,7 @@ public class WorkShopSquareFragment extends Fragment {
     private RelativeLayout calendarDialog;
     private CalendarView calendarView;
     private RelativeLayout calendarBlur;
+
 
 
 
@@ -137,44 +143,60 @@ public class WorkShopSquareFragment extends Fragment {
 
 
 
+        pgMember = view.findViewById(R.id.progress_member);
         recyclerViewMember = view.findViewById(R.id.recycler_member);
         squareMemberAdapter2 = new SquareMemberAdapter2();
         recyclerViewMember.setAdapter(squareMemberAdapter2);
 
 
 
+        pgMemberList = view.findViewById(R.id.progress_memberlist);
         recyclerViewMemberItem = view.findViewById(R.id.recycler_item);
         squareMemberListAdapter = new SquareMemberListAdapter(getActivity(), squareMemberItemListItems, calendarDialog, calendarView, calendarBlur);
         recyclerViewMemberItem.setAdapter(squareMemberListAdapter);
 
+
+        rlMemberChatting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ChattingActivity.class);
+                intent.putExtra("checkedId", favoriteCheckedId);
+                startActivity(intent);
+
+            }
+        });
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        memberLoading();
+        memberListLoading();
         squareMemberLoadDB();
 
     }
 
-    //아이디로 구분해버리면 될거같은데
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (hidden){
 
-        }else {
-            squareMemberLoadDB();
+    public void memberLoading(){
+        if (squareMemberItems.size()!=0){
+            pgMember.setVisibility(View.VISIBLE);
+            recyclerViewMember.setVisibility(View.INVISIBLE);
         }
-
-
     }
 
-    public  void squareMemberFavoriteCounterUpdateDB(String favoriteCheckedId, boolean isFavorite, String favoriteCheckedUserList, int finalPosition){
+    public void memberListLoading(){
+        if (squareMemberItemListItems.size()!=0){
+            pgMemberList.setVisibility(View.VISIBLE);
+            recyclerViewMemberItem.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    public  void squareMemberFavoriteCounterUpdateDB(String myId, String favoriteCheckedId, boolean isFavorite, String favoriteCheckedUserList, int finalPosition){
         Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
         RetrofitService retrofitService = retrofit.create(RetrofitService.class);
 
-        Call<String> call = retrofitService.squareMemberFavoriteCounterUpdateDB(favoriteCheckedId, isFavorite, favoriteCheckedUserList);
+        Call<String> call = retrofitService.squareMemberFavoriteCounterUpdateDB(myId, favoriteCheckedId, isFavorite, favoriteCheckedUserList);
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
@@ -187,10 +209,11 @@ public class WorkShopSquareFragment extends Fragment {
                    Glide.with(getActivity()).load(R.drawable.ic_empty_favorite).into(ivMemberFavorite);
                    tvFavoriteMemberCount.setText(favoriteNum);
                }
+
                SquareMemberItem squareMemberItem = squareMemberItems.get(finalPosition);
                squareMemberItem.favoriteNum = Integer.parseInt(favoriteNum);
-               //todo:이거 교수님한테 질문해야할거같음...... 해결이 안됨 : ui 갱신이 안되는것으로 보임!!!!! 아답터의 함문제를 80%의심
                squareMemberAdapter2.notifyItemChanged(finalPosition);
+                Toast.makeText(getActivity(), finalPosition+":" + squareMemberItem.favoriteNum, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -226,6 +249,9 @@ public class WorkShopSquareFragment extends Fragment {
 
                         squareMemberItemListItems.add(0, new SquareMemberItemListItem(no, imgUrl, nickName, name, counterNum, timeSum));
                         squareMemberListAdapter.notifyItemChanged(0);
+
+                        pgMemberList.setVisibility(View.INVISIBLE);
+                        recyclerViewMemberItem.setVisibility(View.VISIBLE);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -288,7 +314,6 @@ public class WorkShopSquareFragment extends Fragment {
                         Log.i("aaarrrr", arr);
                         Gson gson = new Gson();
                         String[] myChekedfavoriteUserArr = gson.fromJson(arr, String[].class);
-                        //todo: 여기서 캐스트 예외가 발생하는데 이유를 모르겠넹
                         ArrayList<String> favoriteCheckedUserList= new ArrayList<String>(Arrays.asList(myChekedfavoriteUserArr));
 
 
@@ -315,12 +340,16 @@ public class WorkShopSquareFragment extends Fragment {
                     squareMemberItems.add(0, new SquareMemberItem(myId, myImgUrl, myNickName, myUserStateMsg, myFavoriteNum, myFavoriteCheckedUserList));
                     squareMemberAdapter2.notifyItemChanged(0);
 
+                    pgMember.setVisibility(View.INVISIBLE);
+                    recyclerViewMember.setVisibility(View.VISIBLE);
+
 
                     if (isFirst){
                         //todo: statemsg 작업이 끝나면 여기서 부터 작업을 해야함
                         for (int i=0; i<squareMemberItems.size();i++){
                             SquareMemberItem item = squareMemberItems.get(i);
                             if (item.getId().equals(checkdeIdentifyId)){
+                                memberListLoading();
                                 sqareMemverListLoadDB(item.getId());
                                 Glide.with(getActivity()).load(item.getImgUrl()).into(civFrofile);
                                 tvMemberName.setText(item.getMemberName());
@@ -329,15 +358,14 @@ public class WorkShopSquareFragment extends Fragment {
 
 
 
-                                favoriteCheckedUserList = myFavoriteCheckedUserList;
 
-                                if (favoriteCheckedUserList.size() ==0){
+                                if (myFavoriteCheckedUserList.size() ==0){
                                     isFavorite = false;
                                     Glide.with(getActivity()).load(R.drawable.ic_empty_favorite).into(ivMemberFavorite);
                                 }else {
 
-                                    for (int j=0; j<favoriteCheckedUserList.size(); j++){
-                                        if (favoriteCheckedUserList.get(j).equals(favoriteCheckedId)){
+                                    for (int j=0; j<myFavoriteCheckedUserList.size(); j++){
+                                        if (myFavoriteCheckedUserList.get(j).equals(favoriteCheckedId)){
                                             isFavorite = true;
                                             Glide.with(getActivity()).load(R.drawable.ic_baseline_favorite_24).into(ivMemberFavorite);
                                             break;
@@ -397,13 +425,16 @@ public class WorkShopSquareFragment extends Fragment {
             if (selectedPosition==finalPosition){
                 holder.cdMemberBg.setVisibility(View.VISIBLE);
                 holder.ivMemberBg.setBackgroundColor(0xFF9999FF);
+
+                memberListLoading();
                 sqareMemverListLoadDB(squareMemberItem.getId());
 
 
                 Glide.with(getActivity()).load(squareMemberItem.getImgUrl()).into(civFrofile);
                 tvMemberName.setText(squareMemberItem.getMemberName());
                 tvMemverMessage.setText(squareMemberItem.getStateMsg());
-                tvFavoriteMemberCount.setText(squareMemberItem.favoriteNum + "");
+                holder.squareFavoiteNumLoadDB(squareMemberItem.getId());
+//                tvFavoriteMemberCount.setText(squareMemberItem.favoriteNum + "");
 
 
 
@@ -411,21 +442,22 @@ public class WorkShopSquareFragment extends Fragment {
                 favoriteCheckedUserList = squareMemberItem.getFavoriteCheckedUserList();
 
 
-                if (squareMemberItem.getFavoriteCheckedUserList().size() ==0){
+                if (myFavoriteCheckedUserList.size() ==0){
                     isFavorite = false;
                     Glide.with(getActivity()).load(R.drawable.ic_empty_favorite).into(ivMemberFavorite);
                 }else {
 
-                    for (int j=0; j<squareMemberItem.getFavoriteCheckedUserList().size(); j++){
-                        if (squareMemberItem.getFavoriteCheckedUserList().get(j).equals(favoriteCheckedId)){
+                    for (int j=0; j<myFavoriteCheckedUserList.size(); j++){
+                        if (myFavoriteCheckedUserList.get(j).equals(favoriteCheckedId)){
                             isFavorite = true;
                             Glide.with(getActivity()).load(R.drawable.ic_baseline_favorite_24).into(ivMemberFavorite);
+                            Log.i("squareMemberItemdd", myFavoriteCheckedUserList.size()+"");
                             break;
 
                         }else {
                             isFavorite = false;
                             Glide.with(getActivity()).load(R.drawable.ic_empty_favorite).into(ivMemberFavorite);
-
+                            Log.i("squareMemberItemaa", myFavoriteCheckedUserList.size()+"");
                         }
                     }
                 }
@@ -438,6 +470,8 @@ public class WorkShopSquareFragment extends Fragment {
                 holder.cdMemberBg.setVisibility(View.INVISIBLE);
             }
 
+
+            //todo:버튼클릭할떄마다 서버에서 불러들어오게 작업해야한다 숫자를
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -463,18 +497,25 @@ public class WorkShopSquareFragment extends Fragment {
             ivMemberFavorite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    SharedPreferences pref = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
+                    String myId = pref.getString("id","");
+
                     isFavorite=!isFavorite;
                     String jsonStr;
+                    ArrayList<String> arr = squareMemberItem.getFavoriteCheckedUserList();
                     if (isFavorite){
-                        favoriteCheckedUserList.add(favoriteCheckedId);
+                        arr.add(favoriteCheckedId);
                         Gson gson = new Gson();
-                        jsonStr = gson.toJson(favoriteCheckedUserList);
+                        jsonStr = gson.toJson(arr);
+                        myFavoriteCheckedUserList.add(favoriteCheckedId);
                     }else {
-                        favoriteCheckedUserList.remove(favoriteCheckedId);
+                        arr.remove(favoriteCheckedId);
                         Gson gson = new Gson();
-                        jsonStr = gson.toJson(favoriteCheckedUserList);
+                        jsonStr = gson.toJson(arr);
+                        myFavoriteCheckedUserList.remove(favoriteCheckedId);
                     }
-                    squareMemberFavoriteCounterUpdateDB(favoriteCheckedId, isFavorite, jsonStr, finalPosition);
+
+                    squareMemberFavoriteCounterUpdateDB(myId, favoriteCheckedId, isFavorite, jsonStr, finalPosition);
 
                 }
             });
@@ -508,6 +549,26 @@ public class WorkShopSquareFragment extends Fragment {
                 tvMemberName = itemView.findViewById(R.id.tv_member_name);
             }
 
+            public void squareFavoiteNumLoadDB(String id){
+                Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
+                RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+
+                Call<String> call = retrofitService.squareFavoiteNumLoadDB(id);
+                call.enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        String favoriteNum = response.body();
+                        tvFavoriteMemberCount.setText(String.valueOf(favoriteNum));
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+
+                    }
+                });
+
+            }
 
 
 

@@ -126,7 +126,10 @@ public interface RetrofitService {
 
 
     @GET("/YogaDesign2/square/squareMemberFavoriteCounterUpdateDB.php")
-    Call<String> squareMemberFavoriteCounterUpdateDB(@Query("favoriteCheckedId") String favoriteCheckedId, @Query("isFavorite") boolean isFavorite, @Query("favoriteCheckedUserList") String favoriteCheckedUserList);
+    Call<String> squareMemberFavoriteCounterUpdateDB(@Query("myId")String myId, @Query("favoriteCheckedId") String favoriteCheckedId, @Query("isFavorite") boolean isFavorite, @Query("favoriteCheckedUserList") String favoriteCheckedUserList);
+
+    @GET("/YogaDesign2/square/squareFavoiteNumLoadDB.php")
+    Call<String> squareFavoiteNumLoadDB(@Query("userId") String userId);
 
 
 
