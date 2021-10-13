@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingTop="8dp"
+    android:paddingRight="12dp"
+    android:paddingLeft="12dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
+    android:background="#C7DDFF">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/civ_profile"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/bg_maincontents03"/>
+
+    <TextView
+        android:id="@+id/tv_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_toRightOf="@id/civ_profile"
+        android:text="nickName"
+        android:textColor="#FF666666"/>
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2021.10.13"
+        android:textSize="12sp"
+        android:gravity="center"
+        android:textColor="#FF999999"
+        android:layout_toRightOf="@id/tv_nickname"
+        android:layout_marginLeft="12dp"
+        android:layout_alignBottom="@id/tv_nickname"/>
+
+
+
+    <soup.neumorphism.NeumorphCardView
+        android:id="@+id/ncd"
+        style="@style/Widget.Neumorph.CardView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:neumorph_shadowColorDark="#77999999"
+        app:neumorph_shadowColorLight="#44FFFFFF"
+        app:neumorph_shapeAppearance="@style/ShapeAppearance2"
+        android:layout_alignTop="@id/civ_profile"
+        android:layout_toRightOf="@id/civ_profile"
+        android:layout_marginTop="12dp">
+
+        <ImageView
+            android:id="@+id/iv_message_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"/>
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="qwdqwdqwdqwdqwddqwd"
+                android:maxWidth="256dp"
+                android:textSize="16sp"
+                android:padding="12dp"/>
+
+        </RelativeLayout>
+
+    </soup.neumorphism.NeumorphCardView>
+
+
+</RelativeLayout>

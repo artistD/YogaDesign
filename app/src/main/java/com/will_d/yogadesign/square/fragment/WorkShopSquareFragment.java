@@ -16,6 +16,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
@@ -156,15 +160,6 @@ public class WorkShopSquareFragment extends Fragment {
         recyclerViewMemberItem.setAdapter(squareMemberListAdapter);
 
 
-        rlMemberChatting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ChattingActivity.class);
-                intent.putExtra("checkedId", favoriteCheckedId);
-                startActivity(intent);
-
-            }
-        });
 
     }
 
@@ -422,10 +417,28 @@ public class WorkShopSquareFragment extends Fragment {
             holder.tvMemberName.setText(squareMemberItem.getMemberName());
 
 
+
+            //todo:왜 갱신이 안되는지 모르겠다
+            rlMemberChatting.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                   SquareMemberItem squareMemberItem1 =  squareMemberItems.get(holder.memberPosition);
+                    Intent intent = new Intent(getActivity(), ChattingActivity.class);
+                    intent.putExtra("checkedId", favoriteCheckedId);
+                    Log.i("ChattingActivityData", favoriteCheckedId);
+//                    Log.i("ChattingActivityData", squareMemberItem1.getId());
+                    Log.i("ChattingActivityData", finalPosition+"");
+//                    intent.putExtra("userNickName", squareMemberItem1.getMemberName());
+                    startActivity(intent);
+
+                }
+            });
+
+
             if (selectedPosition==finalPosition){
                 holder.cdMemberBg.setVisibility(View.VISIBLE);
                 holder.ivMemberBg.setBackgroundColor(0xFF9999FF);
-
+                Log.i("ChattingActivityData", finalPosition+"");
                 memberListLoading();
                 sqareMemverListLoadDB(squareMemberItem.getId());
 
@@ -528,6 +541,8 @@ public class WorkShopSquareFragment extends Fragment {
 
 
 
+
+
         }
 
         @Override
@@ -540,7 +555,6 @@ public class WorkShopSquareFragment extends Fragment {
             private CardView cdMemberBg;
             private CircleImageView civFrofile;
             private TextView tvMemberName;
-
             public VH(@NonNull View itemView) {
                 super(itemView);
                 cdMemberBg = itemView.findViewById(R.id.cd_member_bg);

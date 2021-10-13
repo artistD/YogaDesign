@@ -21,7 +21,7 @@
             android:layout_centerInParent="true">
 
             <TextView
-                android:id="@+id/tv_today"
+                android:id="@+id/tv_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
@@ -30,7 +30,6 @@
                 android:textSize="16sp" />
 
             <View
-                android:id="@+id/view_line_today"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:background="@drawable/mainbg_02"
@@ -50,14 +49,32 @@
     </RelativeLayout>
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:orientation="vertical"
-        android:overScrollMode="never"
-        android:layout_weight="1"/>
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ListView
+            android:id="@+id/listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:transcriptMode="alwaysScroll"
+            android:visibility="visible"
+            android:divider="#C7DDFF"
+            android:dividerHeight="0dp"
+            android:overScrollMode="never"/>
+
+
+        <ProgressBar
+            android:id="@+id/progress_chatting"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_centerInParent="true"
+            android:indeterminateTint="#FF9999FF"
+            android:visibility="invisible" />
+
+    </RelativeLayout>
+
 
 
 
@@ -105,18 +122,18 @@
                         android:layout_gravity="center">
 
                         <EditText
-                            android:id="@+id/et_name"
+                            android:id="@+id/et_chatting"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:textSize="20sp"
-                            android:textColorHint="#FF666666"
-                            android:inputType="textMultiLine"
-                            android:maxLines="5"
-                            android:background="@drawable/bg_edit"
                             android:layout_marginLeft="8dp"
                             android:layout_marginRight="4dp"
+                            android:background="@drawable/bg_edit"
+                            android:inputType="textMultiLine"
+                            android:maxLines="5"
+                            android:paddingLeft="8dp"
                             android:paddingRight="8dp"
-                            android:paddingLeft="8dp"/>
+                            android:textColorHint="#FF666666"
+                            android:textSize="20sp" />
 
 
                     </RelativeLayout>
