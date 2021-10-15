@@ -5,17 +5,22 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.loader.content.CursorLoader;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
 import com.will_d.yogadesign.R;
+import com.will_d.yogadesign.service.Global;
 import com.will_d.yogadesign.service.RetrofitHelper;
 import com.will_d.yogadesign.service.RetrofitService;
 
@@ -34,6 +39,10 @@ public class ProfileSetActivity extends AppCompatActivity {
     EditText etUserNickName;
     EditText etUserStateMsg;
 
+    //넣어줘야함
+    private String uriToString;
+    private String imgPath;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,12 +52,12 @@ public class ProfileSetActivity extends AppCompatActivity {
         etUserNickName = findViewById(R.id.et_user_nickname);
         etUserStateMsg = findViewById(R.id.et_state_msg);
 
-        SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
-        String uriToString = pref.getString("ProfileUritoString", "");
-        String userNickName = pref.getString("ProfileName", "");
-
-        Glide.with(this).load(Uri.parse(uriToString)).into(ivProfile);
-        etUserNickName.setText(userNickName);
+//        SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
+//        String uriToString = pref.getString("ProfileUritoString", "");
+//        String userNickName = pref.getString("ProfileName", "");
+//
+//        Glide.with(this).load(Uri.parse(uriToString)).into(ivProfile);
+//        etUserNickName.setText(userNickName);
 
 
     }
@@ -61,8 +70,10 @@ public class ProfileSetActivity extends AppCompatActivity {
         SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         editor.putBoolean("isFirstProfileChecked", true);
-        editor.putString("ProfileName",etUserNickName.getText().toString());
-        editor.putString("UserStateMsg", etUserStateMsg.getText().toString());
+        editor.putString("myNickName", etUserNickName.getText().toString());
+        editor.putString("myStateMsg", etUserStateMsg.getText().toString());
+        editor.putString("myImgToStringUri", uriToString);
+        editor.putString("myImgRealPathUrl", imgPath);
         editor.commit();
         startActivity(new Intent(this, WorkShopActivity.class));
         finish();
@@ -82,12 +93,25 @@ public class ProfileSetActivity extends AppCompatActivity {
             if (result.getResultCode() == RESULT_OK){
                 Intent intent = result.getData();
                 Uri uri = intent.getData();
-                SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
-                SharedPreferences.Editor editor = pref.edit();
-                editor.putString("ProfileUritoString", uri.toString());
-                editor.commit();
+
+                uriToString = uri.toString();
+                imgPath = getRealPathFromUri(uri);
+
                 Glide.with(ProfileSetActivity.this).load(uri).into(ivProfile);
             }
         }
     });
+
+
+    //Uri -- > 절대경로로 바꿔서 리턴시켜주는 메소드
+    String getRealPathFromUri(Uri uri){
+        String[] proj= {MediaStore.Images.Media.DATA};
+        CursorLoader loader= new CursorLoader(this, uri, proj, null, null, null);
+        Cursor cursor= loader.loadInBackground();
+        int column_index= cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String result= cursor.getString(column_index);
+        cursor.close();
+        return  result;
+    }
 }

@@ -60,13 +60,10 @@ public class LoginActivity extends AppCompatActivity {
     private boolean isLogin = false;
     private boolean isFirstProfileChecked = false;
 
-    ArrayList<String> datas = new ArrayList<>();
-
-    private boolean isSorationFirst = true;
+    private ArrayList<String> datas = new ArrayList<>();
 
     //*************************************************
     private ArrayList<String> favoriteCheckedUserList = new ArrayList<>();
-
     //*************************************************
 
 
@@ -150,12 +147,6 @@ public class LoginActivity extends AppCompatActivity {
         String id = etId.getText().toString();
         String name = etName.getText().toString();
         boolean isUserPublic = true;
-
-        SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putString("ProfileUritoString", uri.toString());
-        editor.putString("ProfileName", name);
-        editor.commit();
 
         Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
         RetrofitService retrofitService = retrofit.create(RetrofitService.class);

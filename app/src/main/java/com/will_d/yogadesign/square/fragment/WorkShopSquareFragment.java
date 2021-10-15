@@ -30,6 +30,7 @@ import com.applandeo.materialcalendarview.CalendarView;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.will_d.yogadesign.R;
+import com.will_d.yogadesign.service.Global;
 import com.will_d.yogadesign.service.RetrofitHelper;
 import com.will_d.yogadesign.service.RetrofitService;
 import com.will_d.yogadesign.square.activity.ChattingActivity;
@@ -91,7 +92,7 @@ public class WorkShopSquareFragment extends Fragment {
 
     //****************************
     private String checkdeIdentifyId ="";
-    private boolean isFirst = false;
+//    public static boolean isFirst = false;
     private boolean isMemberBackgroundFirst=false;
     //****************************
 
@@ -103,6 +104,11 @@ public class WorkShopSquareFragment extends Fragment {
     private RelativeLayout calendarDialog;
     private CalendarView calendarView;
     private RelativeLayout calendarBlur;
+
+
+    //chatting을 할때 파라미터를 전달해야함 그들을 위한 데이터들이 필요함
+    private String userName;
+
 
 
 
@@ -119,7 +125,7 @@ public class WorkShopSquareFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        isFirst = true;
+        Global.isFirst = true;
         isMemberBackgroundFirst = true;
         SharedPreferences pref = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
         String id = pref.getString("id","");
@@ -160,6 +166,16 @@ public class WorkShopSquareFragment extends Fragment {
         recyclerViewMemberItem.setAdapter(squareMemberListAdapter);
 
 
+        rlMemberChatting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ChattingActivity.class);
+                intent.putExtra("checkedId", favoriteCheckedId);
+                intent.putExtra("userNickName", userName);
+                startActivity(intent);
+
+            }
+        });
 
     }
 
@@ -172,6 +188,21 @@ public class WorkShopSquareFragment extends Fragment {
 
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden){
+            return;
+        }else {
+            if (Global.isFirst){
+                memberLoading();
+                memberListLoading();
+                squareMemberLoadDB();
+            }else {
+                return;
+            }
+        }
+    }
 
     public void memberLoading(){
         if (squareMemberItems.size()!=0){
@@ -269,8 +300,6 @@ public class WorkShopSquareFragment extends Fragment {
 
         SharedPreferences pref = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
 
-
-
         squareMemberItems.clear();
         squareMemberAdapter2.notifyDataSetChanged();
         call.enqueue(new Callback<String>() {
@@ -339,7 +368,7 @@ public class WorkShopSquareFragment extends Fragment {
                     recyclerViewMember.setVisibility(View.VISIBLE);
 
 
-                    if (isFirst){
+                    if (Global.isFirst){
                         //todo: statemsg 작업이 끝나면 여기서 부터 작업을 해야함
                         for (int i=0; i<squareMemberItems.size();i++){
                             SquareMemberItem item = squareMemberItems.get(i);
@@ -379,7 +408,7 @@ public class WorkShopSquareFragment extends Fragment {
                             }
 
                         }
-                        isFirst=false;
+                        Global.isFirst=false;
                     }
 
 
@@ -418,23 +447,6 @@ public class WorkShopSquareFragment extends Fragment {
 
 
 
-            //todo:왜 갱신이 안되는지 모르겠다
-            rlMemberChatting.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-//                   SquareMemberItem squareMemberItem1 =  squareMemberItems.get(holder.memberPosition);
-                    Intent intent = new Intent(getActivity(), ChattingActivity.class);
-                    intent.putExtra("checkedId", favoriteCheckedId);
-                    Log.i("ChattingActivityData", favoriteCheckedId);
-//                    Log.i("ChattingActivityData", squareMemberItem1.getId());
-                    Log.i("ChattingActivityData", finalPosition+"");
-//                    intent.putExtra("userNickName", squareMemberItem1.getMemberName());
-                    startActivity(intent);
-
-                }
-            });
-
-
             if (selectedPosition==finalPosition){
                 holder.cdMemberBg.setVisibility(View.VISIBLE);
                 holder.ivMemberBg.setBackgroundColor(0xFF9999FF);
@@ -447,12 +459,13 @@ public class WorkShopSquareFragment extends Fragment {
                 tvMemberName.setText(squareMemberItem.getMemberName());
                 tvMemverMessage.setText(squareMemberItem.getStateMsg());
                 holder.squareFavoiteNumLoadDB(squareMemberItem.getId());
-//                tvFavoriteMemberCount.setText(squareMemberItem.favoriteNum + "");
+
 
 
 
                 favoriteCheckedId = squareMemberItem.getId();
                 favoriteCheckedUserList = squareMemberItem.getFavoriteCheckedUserList();
+                userName = squareMemberItem.getMemberName();
 
 
                 if (myFavoriteCheckedUserList.size() ==0){

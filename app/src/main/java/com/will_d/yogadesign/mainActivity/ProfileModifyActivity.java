@@ -20,7 +20,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
 import com.will_d.yogadesign.R;
+import com.will_d.yogadesign.service.Global;
 import com.will_d.yogadesign.service.RetrofitHelper;
 import com.will_d.yogadesign.service.RetrofitService;
 
@@ -43,37 +45,38 @@ public class ProfileModifyActivity extends AppCompatActivity {
     private EditText etUserNickName;
     private EditText etUserStateMsg;
 
-    private String profileToString;
+    private String uriToString;
     private String imgPath="";
 
     private String profileName;
     private String userStateMsg;
-    SharedPreferences pref;
 
     private boolean isPhotoChecked =false;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_modify);
 
-
-
         ivProfile = findViewById(R.id.iv_profile);
         etUserNickName = findViewById(R.id.et_user_nickname);
         etUserStateMsg = findViewById(R.id.et_state_msg);
 
-        pref = getSharedPreferences("Data", MODE_PRIVATE);
-        profileToString = pref.getString("ProfileUritoString", "");
-        profileName = pref.getString("ProfileName", "");
-        userStateMsg = pref.getString("UserStateMsg", "");
+    }
 
-        Log.i("profileToString", profileToString);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
+        String myNickName = pref.getString("myNickName", "");
+        String myStateMsg = pref.getString("myStateMsg", "");
+        Uri myImgUri = Uri.parse(pref.getString("myImgToStringUri", ""));
 
-        Glide.with(this).load(Uri.parse(profileToString)).into(ivProfile);
-        etUserNickName.setText(profileName);
-        etUserStateMsg.setText(userStateMsg);
-        Toast.makeText(this, "qwd", Toast.LENGTH_SHORT).show();
+        Glide.with(this).load(myImgUri).into(ivProfile);
+        etUserNickName.setText(myNickName);
+        etUserStateMsg.setText(myStateMsg);
     }
 
     public void clickClose(View view) {
@@ -83,11 +86,16 @@ public class ProfileModifyActivity extends AppCompatActivity {
     public void clickSave(View view) {
         profileName = etUserNickName.getText().toString();
         userStateMsg = etUserStateMsg.getText().toString();
+
+        SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
-        editor.putString("ProfileUritoString", profileToString);
-        editor.putString("ProfileName", profileName);
-        editor.putString("UserStateMsg", userStateMsg);
+        editor.putString("myNickName", profileName);
+        editor.putString("myStateMsg", userStateMsg);
+        editor.putString("myImgToStringUri", uriToString);
+        editor.putString("myImgRealPathUrl", imgPath);
         editor.commit();
+
+        Global.isFirst = true;
         String id =pref.getString("id","");
         memberProfileUpdateDB(id, profileName, userStateMsg, isPhotoChecked);
         finish();
@@ -136,10 +144,13 @@ public class ProfileModifyActivity extends AppCompatActivity {
             if (result.getResultCode()==RESULT_OK){
                 Intent intent = result.getData();
                 Uri uri = intent.getData();
+
+                uriToString = uri.toString();
                 imgPath = getRealPathFromUri(uri);
-                profileToString = uri.toString();
                 isPhotoChecked = true;
+                Log.i("uriToString", uri.toString());
                 Glide.with(ProfileModifyActivity.this).load(uri).into(ivProfile);
+
             }else {
                 isPhotoChecked = false;
             }
