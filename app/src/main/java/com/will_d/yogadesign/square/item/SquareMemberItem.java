@@ -1,11 +1,12 @@
 package com.will_d.yogadesign.square.item;
 
-
 import java.util.ArrayList;
 
 public class SquareMemberItem {
     private String id;
+
     private String imgUrl;
+
     private String memberName;
     private String stateMsg;
     public int favoriteNum;
@@ -45,8 +46,4 @@ public class SquareMemberItem {
         return favoriteCheckedUserList;
     }
 
-
-    public void setFavoriteNum(int favoriteNum) {
-        this.favoriteNum = favoriteNum;
-    }
 }

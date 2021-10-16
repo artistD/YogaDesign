@@ -45,13 +45,8 @@ public class ProfileModifyActivity extends AppCompatActivity {
     private EditText etUserNickName;
     private EditText etUserStateMsg;
 
-    private String uriToString;
-    private String imgPath="";
-
-    private String profileName;
-    private String userStateMsg;
-
     private boolean isPhotoChecked =false;
+
 
 
 
@@ -64,19 +59,22 @@ public class ProfileModifyActivity extends AppCompatActivity {
         etUserNickName = findViewById(R.id.et_user_nickname);
         etUserStateMsg = findViewById(R.id.et_state_msg);
 
+
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
-        String myNickName = pref.getString("myNickName", "");
-        String myStateMsg = pref.getString("myStateMsg", "");
-        Uri myImgUri = Uri.parse(pref.getString("myImgToStringUri", ""));
 
-        Glide.with(this).load(myImgUri).into(ivProfile);
-        etUserNickName.setText(myNickName);
-        etUserStateMsg.setText(myStateMsg);
+
+            Glide.with(this).load(Global.myRealImgUrl).into(ivProfile);
+
+
+
+        etUserNickName.setText(Global.myNickName);
+        etUserStateMsg.setText(Global.myStateMsg);
+
     }
 
     public void clickClose(View view) {
@@ -84,20 +82,21 @@ public class ProfileModifyActivity extends AppCompatActivity {
     }
 
     public void clickSave(View view) {
-        profileName = etUserNickName.getText().toString();
-        userStateMsg = etUserStateMsg.getText().toString();
+        Global.myNickName = etUserNickName.getText().toString();
+        Global.myStateMsg = etUserStateMsg.getText().toString();
 
         SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
-        editor.putString("myNickName", profileName);
-        editor.putString("myStateMsg", userStateMsg);
-        editor.putString("myImgToStringUri", uriToString);
-        editor.putString("myImgRealPathUrl", imgPath);
+        editor.putString("myNickName", Global.myNickName);
+        editor.putString("myStateMsg", Global.myStateMsg);
+        editor.putString("myImgRealPathUrl", Global.myRealImgUrl);
         editor.commit();
 
-        Global.isFirst = true;
+        Global.isPrifileChanged = true;
         String id =pref.getString("id","");
-        memberProfileUpdateDB(id, profileName, userStateMsg, isPhotoChecked);
+
+        Log.i("isPhotoChecked", isPhotoChecked+"");
+        memberProfileUpdateDB(id, Global.myNickName, Global.myStateMsg, isPhotoChecked);
         finish();
     }
 
@@ -107,7 +106,7 @@ public class ProfileModifyActivity extends AppCompatActivity {
 
         MultipartBody.Part filePart = null;
         if (isPhotoChecked){
-            File file = new File(imgPath);
+            File file = new File(Global.myRealImgUrl);
             RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
             filePart = MultipartBody.Part.createFormData("img", file.getName(), requestBody);
         }
@@ -122,7 +121,7 @@ public class ProfileModifyActivity extends AppCompatActivity {
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                Log.i("memberProfileUpdateDB", response.body());
+                Log.i("ehrherherehrerh", response.body());
             }
 
             @Override
@@ -144,15 +143,11 @@ public class ProfileModifyActivity extends AppCompatActivity {
             if (result.getResultCode()==RESULT_OK){
                 Intent intent = result.getData();
                 Uri uri = intent.getData();
-
-                uriToString = uri.toString();
-                imgPath = getRealPathFromUri(uri);
+                Global.myRealImgUrl = getRealPathFromUri(uri);
                 isPhotoChecked = true;
-                Log.i("uriToString", uri.toString());
-                Glide.with(ProfileModifyActivity.this).load(uri).into(ivProfile);
-
             }else {
                 isPhotoChecked = false;
+
             }
 
         }

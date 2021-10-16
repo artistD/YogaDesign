@@ -46,9 +46,6 @@ public class WorkShopUserSetFragment extends Fragment {
     private NeumorphImageView nivUserSettingModify;
     private Switch swPrivateMode;
 
-
-
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -64,6 +61,8 @@ public class WorkShopUserSetFragment extends Fragment {
         nivUserSettingModify = view.findViewById(R.id.niv_usersetting_modify);
         btn = view.findViewById(R.id.btn);
         swPrivateMode = view.findViewById(R.id.sw_private_mode);
+
+
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,17 +105,14 @@ public class WorkShopUserSetFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
         SharedPreferences pref = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
-
         boolean isUserPrivateMode = pref.getBoolean("isUserPrivateMode", false);
-        String myNickName = pref.getString("myNickName", "");
-        String myStateMsg = pref.getString("myStateMsg","");
-        Uri myUri = Uri.parse(pref.getString("myImgToStringUri",""));
-
         swPrivateMode.setChecked(isUserPrivateMode);
-        Glide.with(getActivity()).load(myUri).into(civUserSettingProfile);
-        tvUserSettingNickName.setText(myNickName);
-        tvUserSettingStateMsg.setText(myStateMsg);
+
+        Glide.with(getActivity()).load(Global.myRealImgUrl).into(civUserSettingProfile);
+        tvUserSettingNickName.setText(Global.myNickName);
+        tvUserSettingStateMsg.setText(Global.myStateMsg);
     }
 
     public void userSetPrivateModeUpdateDB(boolean isPublic){

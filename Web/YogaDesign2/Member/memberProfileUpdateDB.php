@@ -9,7 +9,7 @@
     $isPhotoChecked = $_POST['isPhotoChecked'];
 
 
-    if($isPhotoChecekd == 'true'){
+    if($isPhotoChecked=='true'){
         $file = $_FILES['img'];
 
         $srcName = $file['name'];
@@ -31,7 +31,7 @@
     $conn = mysqli_connect("localhost", "willd88", "messid88!!", "willd88");
     mysqli_query($conn, "set names utf8");
 
-    if($isPhotoChecekd == 'true'){
+    if($isPhotoChecked=='true'){
         $sql = "UPDATE MemberYogaDesign SET name = '$name', frofile='$dstName', stateMsg='$userStateMsg', date='$now' WHERE id='$id'";
 
     }else{
@@ -40,12 +40,9 @@
 
     $result = mysqli_query($conn, $sql);
 
-    if($result) echo "ㄱㅔ시글ㅣ 업로드 됬습니다";
+    if($result) echo $isPhotoChecked;
     else echo "다시 시도";
 
     mysqli_close($conn);
-
-
-
 
 ?>

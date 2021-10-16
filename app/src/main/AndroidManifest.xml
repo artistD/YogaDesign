@@ -45,18 +45,21 @@
             android:name=".mainActivity.IntroActivity"
             android:exported="true"
             android:theme="@style/IntroActivity"
-            android:windowSoftInputMode="adjustUnspecified" />
-        <activity
-            android:name=".mainActivity.LoginActivity"
-            android:exported="true"
-            android:theme="@style/LoginActivity"
             android:windowSoftInputMode="adjustUnspecified">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+        <activity
+            android:name=".mainActivity.LoginActivity"
+            android:exported="true"
+            android:theme="@style/LoginActivity"
+            android:windowSoftInputMode="adjustUnspecified"/>
+
         <activity
             android:name=".worktoday.activity.WokrDataSetActivity"
             android:exported="true"

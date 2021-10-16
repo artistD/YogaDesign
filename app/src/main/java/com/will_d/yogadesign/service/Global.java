@@ -30,7 +30,7 @@ public class Global {
     public static ArrayList<String> workItemIndextNo;
 
 
-    public static boolean isFirst = false;
+    public static boolean isPrifileChanged = false;
 
     public static String myRealImgUrl;
     public static Uri myImgUri;

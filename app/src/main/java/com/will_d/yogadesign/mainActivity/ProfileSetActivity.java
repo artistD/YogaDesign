@@ -18,26 +18,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.squareup.picasso.Picasso;
 import com.will_d.yogadesign.R;
 import com.will_d.yogadesign.service.Global;
-import com.will_d.yogadesign.service.RetrofitHelper;
-import com.will_d.yogadesign.service.RetrofitService;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-import retrofit2.Retrofit;
 
 public class ProfileSetActivity extends AppCompatActivity {
 
-    ImageView ivProfile;
-    EditText etUserNickName;
-    EditText etUserStateMsg;
+    private ImageView ivProfile;
+    private EditText etUserNickName;
+    private EditText etUserStateMsg;
 
     //넣어줘야함
     private String uriToString;
@@ -67,13 +56,15 @@ public class ProfileSetActivity extends AppCompatActivity {
     }
 
     public void clickStart(View view) {
+        Global.myNickName = etUserNickName.getText().toString();
+        Global.myStateMsg = etUserStateMsg.getText().toString();
+
         SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         editor.putBoolean("isFirstProfileChecked", true);
-        editor.putString("myNickName", etUserNickName.getText().toString());
-        editor.putString("myStateMsg", etUserStateMsg.getText().toString());
-        editor.putString("myImgToStringUri", uriToString);
-        editor.putString("myImgRealPathUrl", imgPath);
+        editor.putString("myNickName", Global.myNickName);
+        editor.putString("myStateMsg", Global.myStateMsg);
+        editor.putString("myImgRealPathUrl", Global.myRealImgUrl);
         editor.commit();
         startActivity(new Intent(this, WorkShopActivity.class));
         finish();
@@ -93,9 +84,7 @@ public class ProfileSetActivity extends AppCompatActivity {
             if (result.getResultCode() == RESULT_OK){
                 Intent intent = result.getData();
                 Uri uri = intent.getData();
-
-                uriToString = uri.toString();
-                imgPath = getRealPathFromUri(uri);
+                Global.myRealImgUrl = getRealPathFromUri(uri);
 
                 Glide.with(ProfileSetActivity.this).load(uri).into(ivProfile);
             }

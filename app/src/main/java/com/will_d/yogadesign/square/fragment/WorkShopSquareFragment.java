@@ -28,7 +28,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.applandeo.materialcalendarview.CalendarView;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.maps.model.Circle;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 import com.will_d.yogadesign.R;
 import com.will_d.yogadesign.service.Global;
 import com.will_d.yogadesign.service.RetrofitHelper;
@@ -63,6 +65,7 @@ public class WorkShopSquareFragment extends Fragment {
     private ArrayList<SquareMemberItem> squareMemberItems = new ArrayList<SquareMemberItem>();
     private SquareMemberAdapter2 squareMemberAdapter2;
     private ProgressBar pgMember;
+    private LinearLayout llStateBlur;
 
     private String myId;
     private String myImgUrl;
@@ -110,7 +113,7 @@ public class WorkShopSquareFragment extends Fragment {
     private String userName;
 
 
-
+    private  boolean isFirst = false;
 
 
     @Nullable
@@ -125,7 +128,7 @@ public class WorkShopSquareFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Global.isFirst = true;
+        isFirst = true;
         isMemberBackgroundFirst = true;
         SharedPreferences pref = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
         String id = pref.getString("id","");
@@ -154,6 +157,7 @@ public class WorkShopSquareFragment extends Fragment {
 
 
         pgMember = view.findViewById(R.id.progress_member);
+        llStateBlur = view.findViewById(R.id.ll_state_blur);
         recyclerViewMember = view.findViewById(R.id.recycler_member);
         squareMemberAdapter2 = new SquareMemberAdapter2();
         recyclerViewMember.setAdapter(squareMemberAdapter2);
@@ -177,6 +181,7 @@ public class WorkShopSquareFragment extends Fragment {
             }
         });
 
+
     }
 
     @Override
@@ -185,28 +190,34 @@ public class WorkShopSquareFragment extends Fragment {
         memberLoading();
         memberListLoading();
         squareMemberLoadDB();
-
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (hidden){
-            return;
+
         }else {
-            if (Global.isFirst){
-                memberLoading();
-                memberListLoading();
-                squareMemberLoadDB();
-            }else {
-                return;
+            if (Global.isPrifileChanged){
+               squareMemberItems.remove(0);
+               squareMemberAdapter2.notifyItemRemoved(0);
+               squareMemberItems.add(0, new SquareMemberItem(myId, Global.myRealImgUrl, Global.myNickName, Global.myStateMsg, myFavoriteNum, myFavoriteCheckedUserList));
+               squareMemberAdapter2.notifyItemChanged(0);
+
+               Glide.with(getActivity()).load(Global.myRealImgUrl).into(civFrofile);
+               tvMemberName.setText(Global.myNickName);
+               tvMemverMessage.setText(Global.myStateMsg);
+               Global.isPrifileChanged = false;
+
             }
         }
+
     }
 
     public void memberLoading(){
         if (squareMemberItems.size()!=0){
             pgMember.setVisibility(View.VISIBLE);
+            llStateBlur.setVisibility(View.INVISIBLE);
             recyclerViewMember.setVisibility(View.INVISIBLE);
         }
     }
@@ -364,11 +375,12 @@ public class WorkShopSquareFragment extends Fragment {
                     squareMemberItems.add(0, new SquareMemberItem(myId, myImgUrl, myNickName, myUserStateMsg, myFavoriteNum, myFavoriteCheckedUserList));
                     squareMemberAdapter2.notifyItemChanged(0);
 
+                    llStateBlur.setVisibility(View.VISIBLE);
                     pgMember.setVisibility(View.INVISIBLE);
                     recyclerViewMember.setVisibility(View.VISIBLE);
 
 
-                    if (Global.isFirst){
+                    if (isFirst){
                         //todo: statemsg 작업이 끝나면 여기서 부터 작업을 해야함
                         for (int i=0; i<squareMemberItems.size();i++){
                             SquareMemberItem item = squareMemberItems.get(i);
@@ -408,7 +420,7 @@ public class WorkShopSquareFragment extends Fragment {
                             }
 
                         }
-                        Global.isFirst=false;
+                        isFirst = false;
                     }
 
 
@@ -442,10 +454,11 @@ public class WorkShopSquareFragment extends Fragment {
         public void onBindViewHolder(@NonNull VH holder, int position) {
             final int finalPosition = position;
             SquareMemberItem squareMemberItem = squareMemberItems.get(finalPosition);
+
             Glide.with(getActivity()).load(squareMemberItem.getImgUrl()).into(holder.civFrofile);
+
+
             holder.tvMemberName.setText(squareMemberItem.getMemberName());
-
-
 
             if (selectedPosition==finalPosition){
                 holder.cdMemberBg.setVisibility(View.VISIBLE);
@@ -454,6 +467,8 @@ public class WorkShopSquareFragment extends Fragment {
                 memberListLoading();
                 sqareMemverListLoadDB(squareMemberItem.getId());
 
+
+                Glide.with(getActivity()).load(squareMemberItem.getImgUrl()).into(civFrofile);
 
                 Glide.with(getActivity()).load(squareMemberItem.getImgUrl()).into(civFrofile);
                 tvMemberName.setText(squareMemberItem.getMemberName());
@@ -528,19 +543,15 @@ public class WorkShopSquareFragment extends Fragment {
 
                     isFavorite=!isFavorite;
                     String jsonStr;
-                    ArrayList<String> arr = squareMemberItem.getFavoriteCheckedUserList();
                     if (isFavorite){
-                        arr.add(favoriteCheckedId);
-                        Gson gson = new Gson();
-                        jsonStr = gson.toJson(arr);
                         myFavoriteCheckedUserList.add(favoriteCheckedId);
-                    }else {
-                        arr.remove(favoriteCheckedId);
                         Gson gson = new Gson();
-                        jsonStr = gson.toJson(arr);
+                        jsonStr = gson.toJson(myFavoriteCheckedUserList);
+                    }else {
                         myFavoriteCheckedUserList.remove(favoriteCheckedId);
+                        Gson gson = new Gson();
+                        jsonStr = gson.toJson(myFavoriteCheckedUserList);
                     }
-
                     squareMemberFavoriteCounterUpdateDB(myId, favoriteCheckedId, isFavorite, jsonStr, finalPosition);
 
                 }
