@@ -21,7 +21,7 @@
             android:name=".square.activity.ChattingActivity"
             android:exported="true" />
         <activity
-            android:name=".mainActivity.ProfileModifyActivity"
+            android:name=".set.ProfileModifyActivity"
             android:exported="true" />
         <activity
             android:name=".mainActivity.ProfileSetActivity"

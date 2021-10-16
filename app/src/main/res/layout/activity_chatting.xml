@@ -146,6 +146,7 @@
             </RelativeLayout>
 
             <soup.neumorphism.NeumorphCardView
+                android:id="@+id/ncd_send_message"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 app:neumorph_shapeAppearance="@style/ShapeAppearance3"

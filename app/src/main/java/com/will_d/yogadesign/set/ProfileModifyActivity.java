@@ -1,4 +1,4 @@
-package com.will_d.yogadesign.mainActivity;
+package com.will_d.yogadesign.set;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;

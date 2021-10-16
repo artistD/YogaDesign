@@ -131,6 +131,15 @@ public interface RetrofitService {
     @GET("/YogaDesign2/square/squareFavoiteNumLoadDB.php")
     Call<String> squareFavoiteNumLoadDB(@Query("userId") String userId);
 
+    @Multipart
+    @POST("/YogaDesign2/member/memberSendMessageInsertDB.php")
+    Call<String> memberSendMessageInsertDB(@PartMap Map<String, String> datapart, @Part MultipartBody.Part filePart);
+
+
+    @FormUrlEncoded
+    @POST("/YogaDesign2/member/memberChattingMessageLoadToDB.php")
+    Call<String> memberChattingMessageLoadToDB(@Field("checkedId") String checkedId);
+
 
 
 
