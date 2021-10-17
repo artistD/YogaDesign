@@ -5,7 +5,9 @@
     
     $id = $_POST['id'];
     $name = $_POST['name'];
+    $favoriteNum = $_POST['favoriteNum'];
     $isUerPublic = $_POST['isUserPublic'];
+    $favoriteCheckedUserList = $_POST['favoriteCheckedUserList'];
 
 
 
@@ -26,7 +28,7 @@
     $conn = mysqli_connect("localhost","willd88","messid88!!","willd88");
     mysqli_query($conn, "set names utf8");
 
-    $sql ="INSERT INTO MemberYogaDesign(id, name, isUserPublic, frofile, date) VALUES('$id', '$ame', $isUerPublic, '$dstName', '$now')";
+    $sql ="INSERT INTO MemberYogaDesign(id, name, isUserPublic, frofile, favoriteNum, favoriteCheckedUserList, date) VALUES('$id', '$name', $isUerPublic, '$dstName', '$favoriteNum' ,'$favoriteCheckedUserList', '$now')";
     $result = mysqli_query($conn, $sql);
 
     if($result) echo "게시글 업로드 되었습니다.";

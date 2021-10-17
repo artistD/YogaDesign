@@ -129,116 +129,7 @@ public class WorkTodayFragment extends Fragment {
         });
 
 
-        long now = System.currentTimeMillis();
-        Date date = new Date(now);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
-        String dayStr = sdf.format(date);
-
-        SharedPreferences pref = getActivity().getSharedPreferences("Data", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        String str = pref.getString("dayCompairison", "");
-
-        //todo: 일단 이기능이 제대로 동작을 안함.
-        if (!(dayStr.equals(str))){
-            workItems.clear();
-            adapter.notifyDataSetChanged();
-            workShopActivity.getIvBnvBlur().setVisibility(View.VISIBLE);
-            cdAddBtn.setVisibility(View.INVISIBLE);
-            cdAddBtn2.setVisibility(View.INVISIBLE);
-            recyclerView.setVisibility(View.INVISIBLE);
-            progressBar.setVisibility(View.VISIBLE);
-            workItemOnedayUpdateDB(); //여기서 isModify도 초기화 해주자 istimeFirst도 초기화해주자
-            editor.putString("dayCompairison", dayStr);
-            editor.commit();
-        }else {
-            workItems.clear();
-            adapter.notifyDataSetChanged();
-            workShopActivity.getIvBnvBlur().setVisibility(View.VISIBLE);
-            cdAddBtn.setVisibility(View.INVISIBLE);
-            cdAddBtn2.setVisibility(View.INVISIBLE);
-            recyclerView.setVisibility(View.INVISIBLE);
-            progressBar.setVisibility(View.VISIBLE);
-            loadWorkTodayDataServer();
-        }
-
-        Log.i("asdfg", !(dayStr.equals(str))+"");
-
-
-//        if (workItems.size()==0){
-//            progressBar.setVisibility(View.INVISIBLE);
-//            recyclerView.setVisibility(View.VISIBLE);
-//        }
-    }
-
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        WorkShopActivity workShopActivity = (WorkShopActivity) getActivity();
-        if (!(workShopActivity.isCdTodolistClicked)&& isFirst){
-            workItemIndextNo.clear();
-            for (int i=0; i<workItems.size(); i++){
-                workItemIndextNo.add(workItems.get(i).getNo());
-                Log.i("workitemPostion", workItems.get(i).getNo());
-            }
-            Log.i("workitemPostion", " -------- ");
-
-            Gson gson = new Gson();
-            String workItemIndexJsonStr = gson.toJson(workItemIndextNo);
-            Log.i("workItemIndexJsonStr", workItemIndexJsonStr);
-            workItemPositionSetLoadToDB(workItemIndexJsonStr, workItemIndextNo.size());
-            Global.workItemIndextNo = workItemIndextNo;
-            isFirst = false;
-        }
-
-
-
-        Log.i("nmn", isWorkItemAdd + "");
-        if (isWorkItemAdd){
-            workItems.clear();
-            adapter.notifyDataSetChanged();
-            workShopActivity.getIvBnvBlur().setVisibility(View.VISIBLE);
-            cdAddBtn.setVisibility(View.INVISIBLE);
-            cdAddBtn2.setVisibility(View.INVISIBLE);
-            recyclerView.setVisibility(View.INVISIBLE);
-            progressBar.setVisibility(View.VISIBLE);
-            loadWorkTodayDataServer();
-            isWorkItemAdd =false;
-        }
-
-
-//        if (workItems.size()==0){
-//            progressBar.setVisibility(View.INVISIBLE);
-//            recyclerView.setVisibility(View.VISIBLE);
-//        }
-
-    }
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-
-        //숨겨지면 true
-        //다시 나타나면 false
-        WorkShopActivity workShopActivity = (WorkShopActivity) getActivity();
-        if (hidden && !(workShopActivity.isCdTodolistClicked)){
-            workItemIndextNo.clear();
-            for (int i=0; i<workItems.size(); i++){
-                workItemIndextNo.add(workItems.get(i).getNo());
-                Log.i("workitemPostion", workItems.get(i).getNo());
-            }
-            Log.i("workitemPostion", " -------- ");
-
-            Gson gson = new Gson();
-            String workItemIndexJsonStr = gson.toJson(workItemIndextNo);
-            Log.i("workItemIndexJsonStr", workItemIndexJsonStr);
-            workItemPositionSetLoadToDB(workItemIndexJsonStr, workItemIndextNo.size());
-            Global.workItemIndextNo = workItemIndextNo;
-
-        }else if(!hidden){
             long now = System.currentTimeMillis();
             Date date = new Date(now);
 
@@ -248,59 +139,135 @@ public class WorkTodayFragment extends Fragment {
             SharedPreferences pref = getActivity().getSharedPreferences("Data", MODE_PRIVATE);
             SharedPreferences.Editor editor = pref.edit();
             String str = pref.getString("dayCompairison", "");
+
             //todo: 일단 이기능이 제대로 동작을 안함.
+
+
             if (!(dayStr.equals(str))){
                 workItems.clear();
                 adapter.notifyDataSetChanged();
-                workShopActivity.getIvBnvBlur().setVisibility(View.VISIBLE);
-                cdAddBtn.setVisibility(View.INVISIBLE);
-                cdAddBtn2.setVisibility(View.INVISIBLE);
-                recyclerView.setVisibility(View.INVISIBLE);
-                progressBar.setVisibility(View.VISIBLE);
-                workItemOnedayUpdateDB();
+                loading();
+                workItemOnedayUpdateDB(); //여기서 isModify도 초기화 해주자 istimeFirst도 초기화해주자
                 editor.putString("dayCompairison", dayStr);
                 editor.commit();
             }else {
                 workItems.clear();
                 adapter.notifyDataSetChanged();
-                workShopActivity.getIvBnvBlur().setVisibility(View.VISIBLE);
-                cdAddBtn.setVisibility(View.INVISIBLE);
-                cdAddBtn2.setVisibility(View.INVISIBLE);
-                recyclerView.setVisibility(View.INVISIBLE);
-                progressBar.setVisibility(View.VISIBLE);
+                loading();
                 loadWorkTodayDataServer();
             }
 
 
-        }
 
-//        if (workItems.size()==0){
-//            progressBar.setVisibility(View.INVISIBLE);
-//            recyclerView.setVisibility(View.VISIBLE);
-//        }
+
+
+    }
+
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+
+                WorkShopActivity workShopActivity = (WorkShopActivity) getActivity();
+                if (!(workShopActivity.isCdTodolistClicked)&& isFirst){
+                    workItemIndextNo.clear();
+                    for (int i=0; i<workItems.size(); i++){
+                        workItemIndextNo.add(workItems.get(i).getNo());
+                        Log.i("workitemPostion", workItems.get(i).getNo());
+                    }
+                    Log.i("workitemPostion", " -------- ");
+
+                    Gson gson = new Gson();
+                    String workItemIndexJsonStr = gson.toJson(workItemIndextNo);
+                    Log.i("workItemIndexJsonStr", workItemIndexJsonStr);
+                    workItemPositionSetLoadToDB(workItemIndexJsonStr, workItemIndextNo.size());
+                    Global.workItemIndextNo = workItemIndextNo;
+                    isFirst = false;
+                }
+
+
+
+            Log.i("nmn", isWorkItemAdd + "");
+            if (isWorkItemAdd){
+                workItems.clear();
+                adapter.notifyDataSetChanged();
+                loading();
+                loadWorkTodayDataServer();
+                isWorkItemAdd =false;
+            }
+
 
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        //강제종료를 하거나 뒤로가기를 눌러서 끄면 onStop()이 발동
-//        workItemIndextNo.clear();
-//        for (int i=0; i<workItems.size(); i++){
-//            workItemIndextNo.add(workItems.get(i).getNo());
-//            Log.i("workitemPostion", workItems.get(i).getNo());
-//        }
-//        Log.i("workitemPostion", " -------- ");
-//
-//        Gson gson = new Gson();
-//        String workItemIndexJsonStr = gson.toJson(workItemIndextNo);
-//        Log.i("workItemIndexJsonStr", workItemIndexJsonStr);
-//        workItemPositionSetLoadToDB(workItemIndexJsonStr, workItemIndextNo.size());
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+
+
+            //숨겨지면 true
+            //다시 나타나면 false
+            WorkShopActivity workShopActivity = (WorkShopActivity) getActivity();
+            if (hidden && !(workShopActivity.isCdTodolistClicked)){
+                workItemIndextNo.clear();
+                for (int i=0; i<workItems.size(); i++){
+                    workItemIndextNo.add(workItems.get(i).getNo());
+                    Log.i("workitemPostion", workItems.get(i).getNo());
+                }
+                Log.i("workitemPostion", " -------- ");
+
+                Gson gson = new Gson();
+                String workItemIndexJsonStr = gson.toJson(workItemIndextNo);
+                Log.i("workItemIndexJsonStr", workItemIndexJsonStr);
+                workItemPositionSetLoadToDB(workItemIndexJsonStr, workItemIndextNo.size());
+                Global.workItemIndextNo = workItemIndextNo;
+
+            }else if(!hidden){
+                long now = System.currentTimeMillis();
+                Date date = new Date(now);
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+                String dayStr = sdf.format(date);
+
+                SharedPreferences pref = getActivity().getSharedPreferences("Data", MODE_PRIVATE);
+                SharedPreferences.Editor editor = pref.edit();
+                String str = pref.getString("dayCompairison", "");
+                //todo: 일단 이기능이 제대로 동작을 안함.
+                if (!(dayStr.equals(str))){
+                    workItems.clear();
+                    adapter.notifyDataSetChanged();
+                    loading();
+                    workItemOnedayUpdateDB();
+                    editor.putString("dayCompairison", dayStr);
+                    editor.commit();
+                }else {
+                    workItems.clear();
+                    adapter.notifyDataSetChanged();
+                    loading();
+                    loadWorkTodayDataServer();
+                }
+
+
+            }
+
+
+
     }
 
     public void setcdAddBtnToPreventBlurring() {
         cdAddBtn.setBackgroundColor(0xFFC7DDFF);
         cdAddBtn2.setBackgroundColor(0xFFC7DDFF);
+
+    }
+    public void loading(){
+        if (workItems.size()!=0){
+            workShopActivity.getIvBnvBlur().setVisibility(View.VISIBLE);
+            cdAddBtn.setVisibility(View.INVISIBLE);
+            cdAddBtn2.setVisibility(View.INVISIBLE);
+            recyclerView.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -388,12 +355,12 @@ public class WorkTodayFragment extends Fragment {
                             isItemOnOff = false;
                         }
 
-                        String isItemP = jsonObject.getString("isItemPublic");
-                        boolean isItemPublic = false;
+                        String isItemP = jsonObject.getString("isItemPrivate");
+                        boolean isItemPrivate = false;
                         if (isItemP.equals("1")){
-                            isItemPublic = true;
+                            isItemPrivate = true;
                         }else if(isItemP.equals("0")){
-                            isItemPublic = false;
+                            isItemPrivate = false;
                         }
 
                         String cNum = jsonObject.getString("Completenum");
@@ -423,7 +390,7 @@ public class WorkTodayFragment extends Fragment {
 
                         progressBar.setVisibility(View.INVISIBLE);
 
-                        workItems.add(0, new WorkItem(no, imgUrl, nickName, name, isGoalChecked, goalSet, isPreNotificationChecked, preNotificationTime, isLocalNotificationChecked, placeName, weeksData, isItemOnOff, completeNum, isDayOrTodaySelected, rlWorkitemDeleteDialog, tvWorkitemDeleteOK, tvWorkitemDeleteCancel, isLogModify, isTimeFirst));
+                        workItems.add(0, new WorkItem(no, imgUrl, nickName, name, isGoalChecked, goalSet, isPreNotificationChecked, preNotificationTime, isLocalNotificationChecked, placeName, weeksData, isItemOnOff, completeNum, isDayOrTodaySelected, rlWorkitemDeleteDialog, tvWorkitemDeleteOK, tvWorkitemDeleteCancel, isLogModify, isTimeFirst, isItemPrivate));
                         adapter.notifyItemChanged(0);
 
                         recyclerView.setVisibility(View.VISIBLE);
@@ -499,5 +466,7 @@ public class WorkTodayFragment extends Fragment {
 
         }
     });
+
+
 
 }

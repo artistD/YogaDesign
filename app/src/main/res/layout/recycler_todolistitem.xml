@@ -23,22 +23,22 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginBottom="4dp">
+                android:layout_marginBottom="4dp"
+                android:layout_weight="1">
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cd"
                     android:layout_width="8dp"
                     android:layout_height="8dp"
-                    app:cardCornerRadius="8dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="4dp">
+                    android:layout_marginRight="4dp"
+                    app:cardCornerRadius="8dp">
 
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/mainbg_03"
-                        android:layout_gravity="center"/>
+                        android:layout_gravity="center"
+                        android:background="@drawable/mainbg_03" />
 
                 </androidx.cardview.widget.CardView>
 
@@ -55,29 +55,25 @@
                     android:id="@+id/cd_timeSet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="4dp"
-                    android:layout_marginLeft="8dp"
-                    android:backgroundTint="#FF9999FF"
-                    android:layout_toRightOf="@id/nickName"
                     android:layout_centerVertical="true"
-                    android:visibility="invisible">
+                    android:layout_marginLeft="8dp"
+                    android:layout_toRightOf="@id/nickName"
+                    android:backgroundTint="#FF9999FF"
+                    android:visibility="invisible"
+                    app:cardCornerRadius="4dp">
 
                     <TextView
                         android:id="@+id/tv_timeSet"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:padding="4dp"
                         android:text="03:30"
                         android:textColor="#FFeeeeee"
-                        android:textSize="12dp"
-                        android:padding="4dp"
-                        android:layout_gravity="center"
-                        android:gravity="center"/>
+                        android:textSize="12dp" />
 
                 </androidx.cardview.widget.CardView>
-
-
-
-
 
 
             </RelativeLayout>
@@ -94,14 +90,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:layout_marginLeft="4dp"
                     android:text="매일아침 운동하기"
-                    android:textSize="16sp"
-                    android:layout_marginLeft="4dp"/>
-
+                    android:textSize="16sp" />
 
 
             </RelativeLayout>
-
 
 
         </LinearLayout>
@@ -120,7 +114,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="Mission Complete!!"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
 
         </RelativeLayout>
 
@@ -233,9 +227,9 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cd_today_work"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="8dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        app:cardCornerRadius="16dp"
         android:backgroundTint="#FFFFFFFF"
         android:layout_marginLeft="4dp"
         android:visibility="invisible">
@@ -243,14 +237,15 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="오늘 하루만"
+            android:text="T"
             android:textSize="12sp"
             android:paddingRight="12dp"
             android:paddingLeft="12dp"
             android:paddingTop="4dp"
             android:paddingBottom="4dp"
             android:layout_gravity="center"
-            android:gravity="center" />
+            android:gravity="center"
+            android:background="@drawable/mainbg_03"/>
 
 
 

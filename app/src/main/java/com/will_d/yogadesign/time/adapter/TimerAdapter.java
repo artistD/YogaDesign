@@ -141,28 +141,19 @@ public class TimerAdapter extends RecyclerView.Adapter<TimerAdapter.VH> {
                 }
 
                 if (timeThread !=null){
-
                     if (isLogModify){   // 정확히는 수정할수 있다는것임
                         Log.i("timeTest2", isTimeFirst + "");
                         if (isTimeFirst){
                             //이떄는 추가해주는 코드를 써야
                             Log.i("getWorkItemNoA", item.getWorkItemNo() + ":" + days);
                             holder.timeDataGetDB(item.getWorkItemNo(), days);
-
-                            workShopActivity.getIvBnvBlur().setVisibility(View.VISIBLE);
-                            rlClickSaveDialog.setVisibility(View.INVISIBLE);
-                            timeTimerFragment.rl.setVisibility(View.VISIBLE);
-                            timeTimerFragment.progressBar.setVisibility(View.VISIBLE);
+                            loading();
                             Toast.makeText(context, "시간이 저장됬습니다. 시간을 확인해보세요", Toast.LENGTH_SHORT).show();
 
                         }else {
                             String time = String.format("%02d:%02d", timeThread.time, timeThread.min);
                             holder.timeDataInserOrUpdatetDB(1, item.getWorkItemNo(), days, time, true);
-
-                            workShopActivity.getIvBnvBlur().setVisibility(View.VISIBLE);
-                            rlClickSaveDialog.setVisibility(View.INVISIBLE);
-                            timeTimerFragment.rl.setVisibility(View.VISIBLE);
-                            timeTimerFragment.progressBar.setVisibility(View.VISIBLE);
+                            loading();
                             Toast.makeText(context, "시간이 저장됬습니다. 시간을 확인해보세요", Toast.LENGTH_SHORT).show();
 
                         }
@@ -174,22 +165,14 @@ public class TimerAdapter extends RecyclerView.Adapter<TimerAdapter.VH> {
                             //어떻게 하냐면 기존에있던 코드를 가져오면됨
                             Log.i("getWorkItemNoA", item.getWorkItemNo() + ":" + days);
                             holder.timeDataGetDB(item.getWorkItemNo(), days);
-
-                            workShopActivity.getIvBnvBlur().setVisibility(View.VISIBLE);
-                            rlClickSaveDialog.setVisibility(View.INVISIBLE);
-                            timeTimerFragment.rl.setVisibility(View.VISIBLE);
-                            timeTimerFragment.progressBar.setVisibility(View.VISIBLE);
+                            loading();
                             Toast.makeText(context, "시간이 저장됬습니다. 시간을 확인해보세요", Toast.LENGTH_SHORT).show();
 
                         }else {
                             Log.i("getWorkItemNoB", item.getWorkItemNo() + ":" + days);
                             String time = String.format("%02d:%02d", timeThread.time, timeThread.min);
                             holder.timeDataInserOrUpdatetDB(0, item.getWorkItemNo(), days, time, true);
-
-                            workShopActivity.getIvBnvBlur().setVisibility(View.VISIBLE);
-                            rlClickSaveDialog.setVisibility(View.INVISIBLE);
-                            timeTimerFragment.rl.setVisibility(View.VISIBLE);
-                            timeTimerFragment.progressBar.setVisibility(View.VISIBLE);
+                            loading();
                             Toast.makeText(context, "시간이 저장됬습니다. 시간을 확인해보세요", Toast.LENGTH_SHORT).show();
 
                         }
@@ -207,6 +190,13 @@ public class TimerAdapter extends RecyclerView.Adapter<TimerAdapter.VH> {
             }
         });
 
+    }
+
+    public void loading(){
+        workShopActivity.getIvBnvBlur().setVisibility(View.VISIBLE);
+        rlClickSaveDialog.setVisibility(View.INVISIBLE);
+        timeTimerFragment.rl.setVisibility(View.VISIBLE);
+        timeTimerFragment.progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -236,27 +226,64 @@ public class TimerAdapter extends RecyclerView.Adapter<TimerAdapter.VH> {
             call.enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
-                    Log.i("timeTestA", "ddda");
-                    timeThread.stopThread();
-                    timeThread.time=0;
-                    timeThread.min=0;
-                    timeThread.sec=0;
 
-                    SharedPreferences pref = context.getSharedPreferences("Data", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = pref.edit();
-                    editor.putInt("hour", timeThread.time);
-                    editor.putInt("min", timeThread.min);
-                    editor.putInt("sec", timeThread.sec);
-                    editor.commit();
 
-                    tvTime.setText("00:00:00");
-                    timeThread = null;
-                    timeTimerFragment.timeThread = null;
-                    notifyDataSetChanged();
+                    //todo: 여기서 에코받고 작업하면 될거같은데.....
 
                     timeTimerFragment.rl.setVisibility(View.INVISIBLE);
                     timeTimerFragment.progressBar.setVisibility(View.INVISIBLE);
                     workShopActivity.getIvBnvBlur().setVisibility(View.INVISIBLE);
+
+
+                    int addHour = (timeThread.time)*60;
+                    int addMin = timeThread.min;
+                    Log.i("addHourMinTest", addHour  + ":" + addMin );
+
+
+                    String jsonStr = response.body();
+                    Log.i("timeSumTest", jsonStr);
+                    try {
+                        JSONArray jsonArray = new JSONArray(jsonStr);
+                        JSONObject jsonObject = jsonArray.getJSONObject(0);
+                        String time = jsonObject.getString("timeSum");
+
+                        String[] arr = time.split(":");
+                        int hour = (Integer.parseInt(arr[0])*60);
+                        int min = Integer.parseInt(arr[1]);
+                        int total = ((addHour+hour) + (addMin+min));
+                        int finalHour = total/60;
+                        int finalMin = total - (finalHour*60);
+                        String timeSum = String.format("%02d:%02d", finalHour, finalMin);
+
+                        workItemTimeSumUpdate(workItemNo, timeSum);
+
+
+
+                        Log.i("timeTestA", "ddda");
+                        timeThread.stopThread();
+                        timeThread.time=0;
+                        timeThread.min=0;
+                        timeThread.sec=0;
+
+                        SharedPreferences pref = context.getSharedPreferences("Data", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = pref.edit();
+                        editor.putInt("hour", timeThread.time);
+                        editor.putInt("min", timeThread.min);
+                        editor.putInt("sec", timeThread.sec);
+                        editor.commit();
+
+                        tvTime.setText("00:00:00");
+                        timeThread = null;
+                        timeTimerFragment.timeThread = null;
+                        notifyDataSetChanged();
+
+
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
 
                 }
 
@@ -305,6 +332,26 @@ public class TimerAdapter extends RecyclerView.Adapter<TimerAdapter.VH> {
                 }
             });
         }
+
+        public void workItemTimeSumUpdate(String workItemNo, String timeSum){
+            Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
+            RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+            Call<String> call = retrofitService.workItemTimeSumUpdate(workItemNo, timeSum);
+
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                  Log.i("workItemTimeSumUpdate", response.body());
+                }
+
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Log.i("workItemTimeSumUpdate", t.getMessage());
+                }
+            });
+
+        }
+
 
     }//################################################################
 }

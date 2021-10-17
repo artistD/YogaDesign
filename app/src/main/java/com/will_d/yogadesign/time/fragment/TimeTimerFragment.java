@@ -203,83 +203,7 @@ public class TimeTimerFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
 
-        items.clear();
-        adapter.notifyDataSetChanged();
-        for (int i=0; i<Global.workItems.size(); i++){
-            WorkItem workItem = Global.workItems.get(i);
-            boolean[] weeksData = workItem.getIsweeks();
-
-            Calendar cal = Calendar.getInstance();
-            int day_of_week = cal.get(Calendar.DAY_OF_WEEK);
-            switch (day_of_week){
-                case 1://일
-                    if (weeksData[6]){
-                        items.add(0, new TimerItem(workItem.getNo(), workItem.getNickName()));
-                        adapter.notifyItemInserted(0);
-
-                    }
-                    break;
-
-                case 2://월
-                    if (weeksData[0]){
-                        items.add(0, new TimerItem(workItem.getNo(), workItem.getNickName()));
-                        adapter.notifyItemInserted(0);
-                    }
-                    break;
-
-                case 3://화
-                    if (weeksData[1]){
-                        items.add(0, new TimerItem(workItem.getNo(), workItem.getNickName()));
-                        adapter.notifyItemInserted(0);
-                    }
-                    break;
-
-                case 4://수
-                    if (weeksData[2]){
-                        items.add(0, new TimerItem(workItem.getNo(), workItem.getNickName()));
-                        adapter.notifyItemInserted(0);
-                    }
-                    break;
-
-                case 5://목
-                    if (weeksData[3]){
-                        items.add(0, new TimerItem(workItem.getNo(), workItem.getNickName()));
-                        adapter.notifyItemInserted(0);
-                    }
-                    break;
-
-                case 6://금
-                    if (weeksData[4]){
-                        items.add(0, new TimerItem(workItem.getNo(), workItem.getNickName()));
-                        adapter.notifyItemInserted(0);
-                    }
-                    break;
-
-                case 7://토
-                    if (weeksData[5]){
-                        items.add(0, new TimerItem(workItem.getNo(), workItem.getNickName()));
-                        adapter.notifyItemInserted(0);
-                    }
-                    break;
-            }
-        }
-
-    }
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (hidden){
-
-        }else {
-            if (!isPlayAndPuase){
-                int hour = pref.getInt("hour", 0);
-                int min  = pref.getInt("min", 0);
-                int sec = pref.getInt("sec", 0);
-                String time = String.format("%02d:%02d:%02d", hour, min, sec);
-                tvTime.setText(time);
-            }
-
+        if (Global.workItems!=null){
 
 
             items.clear();
@@ -342,7 +266,95 @@ public class TimeTimerFragment extends Fragment {
                         break;
                 }
             }
+
         }
+
+
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (Global.workItems!=null){
+
+            if (hidden){
+
+            }else {
+                if (!isPlayAndPuase){
+                    int hour = pref.getInt("hour", 0);
+                    int min  = pref.getInt("min", 0);
+                    int sec = pref.getInt("sec", 0);
+                    String time = String.format("%02d:%02d:%02d", hour, min, sec);
+                    tvTime.setText(time);
+                }
+
+
+
+                items.clear();
+                adapter.notifyDataSetChanged();
+                for (int i=0; i<Global.workItems.size(); i++){
+                    WorkItem workItem = Global.workItems.get(i);
+                    boolean[] weeksData = workItem.getIsweeks();
+
+                    Calendar cal = Calendar.getInstance();
+                    int day_of_week = cal.get(Calendar.DAY_OF_WEEK);
+                    switch (day_of_week){
+                        case 1://일
+                            if (weeksData[6]){
+                                items.add(0, new TimerItem(workItem.getNo(), workItem.getNickName()));
+                                adapter.notifyItemInserted(0);
+
+                            }
+                            break;
+
+                        case 2://월
+                            if (weeksData[0]){
+                                items.add(0, new TimerItem(workItem.getNo(), workItem.getNickName()));
+                                adapter.notifyItemInserted(0);
+                            }
+                            break;
+
+                        case 3://화
+                            if (weeksData[1]){
+                                items.add(0, new TimerItem(workItem.getNo(), workItem.getNickName()));
+                                adapter.notifyItemInserted(0);
+                            }
+                            break;
+
+                        case 4://수
+                            if (weeksData[2]){
+                                items.add(0, new TimerItem(workItem.getNo(), workItem.getNickName()));
+                                adapter.notifyItemInserted(0);
+                            }
+                            break;
+
+                        case 5://목
+                            if (weeksData[3]){
+                                items.add(0, new TimerItem(workItem.getNo(), workItem.getNickName()));
+                                adapter.notifyItemInserted(0);
+                            }
+                            break;
+
+                        case 6://금
+                            if (weeksData[4]){
+                                items.add(0, new TimerItem(workItem.getNo(), workItem.getNickName()));
+                                adapter.notifyItemInserted(0);
+                            }
+                            break;
+
+                        case 7://토
+                            if (weeksData[5]){
+                                items.add(0, new TimerItem(workItem.getNo(), workItem.getNickName()));
+                                adapter.notifyItemInserted(0);
+                            }
+                            break;
+                    }
+                }
+            }
+
+
+        }
+
 
 
     }

@@ -1,28 +1,59 @@
 package com.will_d.yogadesign.square.fragment;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.applandeo.materialcalendarview.CalendarView;
+import com.bumptech.glide.Glide;
+import com.google.android.gms.maps.model.Circle;
+import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 import com.will_d.yogadesign.R;
+import com.will_d.yogadesign.service.Global;
+import com.will_d.yogadesign.service.RetrofitHelper;
+import com.will_d.yogadesign.service.RetrofitService;
+import com.will_d.yogadesign.square.activity.ChattingActivity;
 import com.will_d.yogadesign.square.adapter.SquareMemberAdapter;
 import com.will_d.yogadesign.square.adapter.SquareMemberListAdapter;
 import com.will_d.yogadesign.square.item.SquareMemberItem;
 import com.will_d.yogadesign.square.item.SquareMemberItemListItem;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class WorkShopSquareFragment extends Fragment {
 
@@ -32,23 +63,57 @@ public class WorkShopSquareFragment extends Fragment {
     //리사이클러뷰는 한텀으로 끝내장
     private RecyclerView recyclerViewMember;
     private ArrayList<SquareMemberItem> squareMemberItems = new ArrayList<SquareMemberItem>();
-    private SquareMemberAdapter squareMemberAdapter;
+    private SquareMemberAdapter2 squareMemberAdapter2;
+    private ProgressBar pgMember;
+    private LinearLayout llStateBlur;
+
+    private String myId;
+    private String myImgUrl;
+    private String myNickName;
+    private String myUserStateMsg;
+    private int myFavoriteNum;
+    private ArrayList<String> myFavoriteCheckedUserList;
+
+
 
     private CircleImageView civFrofile;
     private TextView tvMemberName;
     private TextView tvMemverMessage;
 
     private ImageView ivMemberFavorite;
-    private TextView tvMemberCount;
+    private boolean isFavorite=false;
+    private String favoriteCheckedId="";
+    private TextView tvFavoriteMemberCount;
+    private ArrayList<String> favoriteCheckedUserList;
 
 
     //리사이클러뷰는 한텀으로 끝내장
     private RecyclerView recyclerViewMemberItem;
     private ArrayList<SquareMemberItemListItem> squareMemberItemListItems = new ArrayList<SquareMemberItemListItem>();
     private SquareMemberListAdapter squareMemberListAdapter;
+    private ProgressBar pgMemberList;
+
+    //****************************
+    private String checkdeIdentifyId ="";
+//    public static boolean isFirst = false;
+    private boolean isMemberBackgroundFirst=false;
+    //****************************
 
     private RelativeLayout rlMemberChatting;
 
+
+
+    //칼렌다를 제어하기 위한 친구임
+    private RelativeLayout calendarDialog;
+    private CalendarView calendarView;
+    private RelativeLayout calendarBlur;
+
+
+    //chatting을 할때 파라미터를 전달해야함 그들을 위한 데이터들이 필요함
+    private String userName;
+
+
+    private  boolean isFirst = false;
 
 
     @Nullable
@@ -63,61 +128,513 @@ public class WorkShopSquareFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        llFriendSearch = view.findViewById(R.id.ll_friend_search);
+        isFirst = true;
+        isMemberBackgroundFirst = true;
+        SharedPreferences pref = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
+        String id = pref.getString("id","");
+        checkdeIdentifyId = id;
+        favoriteCheckedId = id;
+        userName = Global.myNickName;
+
+        Log.i("favoriteCheckedId", id);
+
+
         civFrofile = view.findViewById(R.id.civ_frofile);
         tvMemberName = view.findViewById(R.id.tv_member_name);
         tvMemverMessage = view.findViewById(R.id.tv_member_message);
 
         ivMemberFavorite = view.findViewById(R.id.iv_member_favorite);
-        tvMemberCount = view.findViewById(R.id.tv_member_favorite_count);
+        tvFavoriteMemberCount = view.findViewById(R.id.tv_member_favorite_count);
 
         rlMemberChatting = view.findViewById(R.id.rl_member_chatting);
 
-
-        String imgUrl = "data:image/jpeg;base64,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";
-        squareMemberItems.add(new SquareMemberItem(imgUrl, "messi"));
-
-        squareMemberItems.add(new SquareMemberItem(imgUrl, "messi"));
-        squareMemberItems.add(new SquareMemberItem(imgUrl, "messi"));
-        squareMemberItems.add(new SquareMemberItem(imgUrl, "messi"));
-        squareMemberItems.add(new SquareMemberItem(imgUrl, "messi"));
-        squareMemberItems.add(new SquareMemberItem(imgUrl, "messi"));
-        squareMemberItems.add(new SquareMemberItem(imgUrl, "messi"));
-        squareMemberItems.add(new SquareMemberItem(imgUrl, "messi"));
-        squareMemberItems.add(new SquareMemberItem(imgUrl, "messi"));
-        squareMemberItems.add(new SquareMemberItem(imgUrl, "messi"));
+        //칼렌다를 제어하기 위찬 친구임
+        calendarDialog = view.findViewById(R.id.rl_calendar_dialog);
+        calendarView = view.findViewById(R.id.calendar);
+        calendarBlur = view.findViewById(R.id.calendarBlur);
 
 
 
-
+        pgMember = view.findViewById(R.id.progress_member);
+        llStateBlur = view.findViewById(R.id.ll_state_blur);
         recyclerViewMember = view.findViewById(R.id.recycler_member);
-        squareMemberAdapter = new SquareMemberAdapter(getActivity(), squareMemberItems);
-        recyclerViewMember.setAdapter(squareMemberAdapter);
+        squareMemberAdapter2 = new SquareMemberAdapter2();
+        recyclerViewMember.setAdapter(squareMemberAdapter2);
 
 
 
-        String imgUrl2 = "http://img2.sbs.co.kr/img/seditor/VD/2020/04/09/VD62139889_w640.jpg";
-
-        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, 32));
-        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, 32));
-        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, 32));
-        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, 32));
-        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, 32));
-        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, 32));
-        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, 32));
-        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, 32));
-        squareMemberItemListItems.add(new SquareMemberItemListItem(imgUrl2, "morning", "매일아침 운동하기", 42, 32));
-
-
-
+        pgMemberList = view.findViewById(R.id.progress_memberlist);
         recyclerViewMemberItem = view.findViewById(R.id.recycler_item);
-        squareMemberListAdapter = new SquareMemberListAdapter(getActivity(), squareMemberItemListItems);
+        squareMemberListAdapter = new SquareMemberListAdapter(getActivity(), squareMemberItemListItems, calendarDialog, calendarView, calendarBlur);
         recyclerViewMemberItem.setAdapter(squareMemberListAdapter);
 
 
+        rlMemberChatting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ChattingActivity.class);
+                intent.putExtra("checkedId", favoriteCheckedId);
+                intent.putExtra("userNickName", userName);
+                startActivity(intent);
 
-
+            }
+        });
 
 
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (isFirst){
+            memberLoading();
+            memberListLoading();
+            squareMemberLoadDB();
+        }
+
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden){
+
+        }else {
+            if (Global.isPrifileChanged){
+
+               squareMemberItems.remove(0);
+               squareMemberItems.add(0, new SquareMemberItem(myId, Global.myRealImgUrl, Global.myNickName, Global.myStateMsg, myFavoriteNum, myFavoriteCheckedUserList));
+               squareMemberAdapter2.notifyItemChanged(0);
+               squareMemberAdapter2.notifyItemMoved(0,0);
+
+               Glide.with(getActivity()).load(Global.myRealImgUrl).into(civFrofile);
+               tvMemberName.setText(Global.myNickName);
+               tvMemverMessage.setText(Global.myStateMsg);
+               Global.isPrifileChanged = false;
+            }
+        }
+
+    }
+
+    public void memberLoading(){
+
+            pgMember.setVisibility(View.VISIBLE);
+            llStateBlur.setVisibility(View.INVISIBLE);
+            recyclerViewMember.setVisibility(View.INVISIBLE);
+
+    }
+
+    public void memberListLoading(){
+
+            pgMemberList.setVisibility(View.VISIBLE);
+            recyclerViewMemberItem.setVisibility(View.INVISIBLE);
+
+    }
+
+    public  void squareMemberFavoriteCounterUpdateDB(String myId, String favoriteCheckedId, boolean isFavorite, String favoriteCheckedUserList, int finalPosition){
+        Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
+        RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+
+        Call<String> call = retrofitService.squareMemberFavoriteCounterUpdateDB(myId, favoriteCheckedId, isFavorite, favoriteCheckedUserList);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                String favoriteNum = response.body();
+                Log.i("squareMemberFavoriteCounterUpdateDB", response.body());
+               if (isFavorite){
+                   Glide.with(getActivity()).load(R.drawable.ic_baseline_favorite_24).into(ivMemberFavorite);
+                   tvFavoriteMemberCount.setText(favoriteNum);
+               }else {
+                   Glide.with(getActivity()).load(R.drawable.ic_empty_favorite).into(ivMemberFavorite);
+                   tvFavoriteMemberCount.setText(favoriteNum);
+               }
+
+               SquareMemberItem squareMemberItem = squareMemberItems.get(finalPosition);
+               squareMemberItem.favoriteNum = Integer.parseInt(favoriteNum);
+               squareMemberAdapter2.notifyItemChanged(finalPosition);
+                Toast.makeText(getActivity(), finalPosition+":" + squareMemberItem.favoriteNum, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.i("squareMemberFavoriteCounterUpdateDB", t.getMessage());
+            }
+        });
+    }
+
+    public void sqareMemverListLoadDB(String id){
+        Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
+        RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+
+
+        squareMemberItemListItems.clear();
+        squareMemberListAdapter.notifyDataSetChanged();
+        Call<String> call = retrofitService.sqareMemverListLoadDB(id);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                pgMemberList.setVisibility(View.INVISIBLE);
+                recyclerViewMemberItem.setVisibility(View.VISIBLE);
+                String jsonStr = response.body();
+                try {
+                    JSONArray jsonArray  = new JSONArray(jsonStr);
+                    for (int i=0; i<jsonArray.length(); i++){
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        String no = jsonObject.getString("no");
+                        String nickName = jsonObject.getString("nickName");
+                        String name  = jsonObject.getString("name");
+                        int counterNum = Integer.parseInt(jsonObject.getString("Completenum"));
+                        String timeSum = jsonObject.getString("timeSum");
+                        String imgUrl = "http://willd88.dothome.co.kr/YogaDesign2/workitem/" + jsonObject.getString("dstName");
+
+                        squareMemberItemListItems.add(0, new SquareMemberItemListItem(no, imgUrl, nickName, name, counterNum, timeSum));
+                        squareMemberListAdapter.notifyItemChanged(0);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.i("sqareMemverListLoadDB", t.getMessage()); }
+        });
+    }
+
+    public void squareMemberLoadDB(){
+        Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
+        RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+
+        Call<String> call = retrofitService.squareMemberLoadDB();
+
+        SharedPreferences pref = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
+
+        squareMemberItems.clear();
+        squareMemberAdapter2.notifyDataSetChanged();
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                String jsonStr = response.body();
+                Log.i("qwghrtjyuuilofgd", response.body());
+                llStateBlur.setVisibility(View.VISIBLE);
+                pgMember.setVisibility(View.INVISIBLE);
+                recyclerViewMember.setVisibility(View.VISIBLE);
+                try {
+                    JSONArray  jsonArray = new JSONArray(jsonStr);
+                    for (int i=0; i<jsonArray.length(); i++){
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                        String nickName = jsonObject.getString("name");
+                        String imgUrl = "http://willd88.dothome.co.kr/YogaDesign2/member/" +jsonObject.getString("frofile");
+
+                        String id = jsonObject.getString("id");
+                        String prefId = pref.getString("id", "");
+
+                        String ss = jsonObject.getString("isLogin");
+                        boolean isLogin =false;
+                        if (ss.equals("1")){
+                            isLogin = true;
+                        }else {
+                            isLogin = false;
+                        }
+
+                        String s = jsonObject.getString("isUserPublic");
+                        boolean isUserPublic =false;
+                        if (s.equals("1")){
+                            isUserPublic = true;
+                        }else {
+                            isUserPublic = false;
+                        }
+
+                        String userMsg = jsonObject.getString("stateMsg");
+                        if(userMsg.equals("null")){
+                            userMsg = "아직 상태메세지가 없어요!";
+                        }
+
+                        String fav = jsonObject.getString("favoriteNum");
+                        Log.i("favoriteNum", fav);
+                        int favoriteNum = Integer.parseInt(fav);
+
+                        String arr = jsonObject.getString("favoriteCheckedUserList");
+                        Log.i("aaarrrr", arr);
+                        Gson gson = new Gson();
+                        String[] myChekedfavoriteUserArr = gson.fromJson(arr, String[].class);
+                        ArrayList<String> favoriteCheckedUserList= new ArrayList<String>(Arrays.asList(myChekedfavoriteUserArr));
+
+
+                        if (id.equals(prefId)){
+                            myId = id;
+                            myImgUrl = imgUrl;
+                            myNickName = nickName;
+                            myUserStateMsg = userMsg;
+                            myFavoriteNum = favoriteNum;
+                            myFavoriteCheckedUserList = favoriteCheckedUserList;
+                            Log.i("myMemberId", myId);
+                        }else {
+                            if(isLogin){
+
+                                if (isUserPublic){
+                                    squareMemberItems.add(0, new SquareMemberItem(id, imgUrl, nickName, userMsg, favoriteNum, favoriteCheckedUserList));
+                                    squareMemberAdapter2.notifyItemChanged(0);
+                                    Log.i("atherMerberId", id);
+                                }
+
+                            }
+
+                        }
+
+
+
+                    }
+
+                    squareMemberItems.add(0, new SquareMemberItem(myId, myImgUrl, myNickName, myUserStateMsg, myFavoriteNum, myFavoriteCheckedUserList));
+                    squareMemberAdapter2.notifyItemChanged(0);
+
+                    if (isFirst){
+                        //todo: statemsg 작업이 끝나면 여기서 부터 작업을 해야함
+                        for (int i=0; i<squareMemberItems.size();i++){
+                            SquareMemberItem item = squareMemberItems.get(i);
+                            if (item.getId().equals(checkdeIdentifyId)){
+                                memberListLoading();
+                                sqareMemverListLoadDB(item.getId());
+                                Glide.with(getActivity()).load(item.getImgUrl()).into(civFrofile);
+                                tvMemberName.setText(item.getMemberName());
+                                tvMemverMessage.setText(item.getStateMsg());
+                                tvFavoriteMemberCount.setText(item.getFavoriteNum()+"");
+
+
+
+
+                                if (myFavoriteCheckedUserList.size() ==0){
+                                    isFavorite = false;
+                                    Glide.with(getActivity()).load(R.drawable.ic_empty_favorite).into(ivMemberFavorite);
+                                }else {
+
+                                    for (int j=0; j<myFavoriteCheckedUserList.size(); j++){
+                                        if (myFavoriteCheckedUserList.get(j).equals(favoriteCheckedId)){
+                                            isFavorite = true;
+                                            Glide.with(getActivity()).load(R.drawable.ic_baseline_favorite_24).into(ivMemberFavorite);
+                                            break;
+                                        }else {
+                                            isFavorite = false;
+                                            Glide.with(getActivity()).load(R.drawable.ic_empty_favorite).into(ivMemberFavorite);
+                                        }
+                                    }
+
+                                }
+
+
+
+                            }else {
+                                continue;
+                            }
+
+                        }
+                        isFirst = false;
+                    }
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.i("squareMemberLoadDB", t.getMessage());
+            }
+        });
+
+    }
+
+    public class SquareMemberAdapter2 extends RecyclerView.Adapter<SquareMemberAdapter2.VH> {
+        private int oldPosition = -1;
+        private int selectedPosition = -1;
+
+        @NonNull
+        @Override
+        public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(getActivity()).inflate(R.layout.recycler_square_member, parent, false);
+            return new VH(itemView);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull VH holder, int position) {
+            final int finalPosition = position;
+            SquareMemberItem squareMemberItem = squareMemberItems.get(finalPosition);
+            Glide.with(getActivity()).load(squareMemberItem.getImgUrl()).into(holder.civFrofile);
+            holder.tvMemberName.setText(squareMemberItem.getMemberName());
+
+
+            //todo:이거 교수님한테 질문해야함 !!!!
+            for (int i=0; i<myFavoriteCheckedUserList.size(); i++){
+                String myFav = myFavoriteCheckedUserList.get(i);
+                if (myFav.equals(squareMemberItem.getId())){
+                    holder.ivMemberFavoriteState.setVisibility(View.VISIBLE);
+
+                }else {
+                    holder.ivMemberFavoriteState.setVisibility(View.INVISIBLE);
+
+                }
+            }
+
+            if (selectedPosition==finalPosition){
+                holder.cdMemberBg.setVisibility(View.VISIBLE);
+                holder.ivMemberBg.setBackgroundColor(0xFF9999FF);
+                Log.i("ChattingActivityData", finalPosition+"");
+                memberListLoading();
+                sqareMemverListLoadDB(squareMemberItem.getId());
+
+
+                Glide.with(getActivity()).load(squareMemberItem.getImgUrl()).into(civFrofile);
+
+                Glide.with(getActivity()).load(squareMemberItem.getImgUrl()).into(civFrofile);
+                tvMemberName.setText(squareMemberItem.getMemberName());
+                tvMemverMessage.setText(squareMemberItem.getStateMsg());
+                holder.squareFavoiteNumLoadDB(squareMemberItem.getId());
+
+
+
+
+                favoriteCheckedId = squareMemberItem.getId();
+                favoriteCheckedUserList = squareMemberItem.getFavoriteCheckedUserList();
+                userName = squareMemberItem.getMemberName();
+
+
+                if (myFavoriteCheckedUserList.size() ==0){
+                    isFavorite = false;
+                    Glide.with(getActivity()).load(R.drawable.ic_empty_favorite).into(ivMemberFavorite);
+                }else {
+
+                    for (int j=0; j<myFavoriteCheckedUserList.size(); j++){
+                        if (myFavoriteCheckedUserList.get(j).equals(favoriteCheckedId)){
+                            isFavorite = true;
+                            Glide.with(getActivity()).load(R.drawable.ic_baseline_favorite_24).into(ivMemberFavorite);
+                            Log.i("squareMemberItemdd", myFavoriteCheckedUserList.size()+"");
+                            break;
+
+                        }else {
+                            isFavorite = false;
+                            Glide.with(getActivity()).load(R.drawable.ic_empty_favorite).into(ivMemberFavorite);
+                            Log.i("squareMemberItemaa", myFavoriteCheckedUserList.size()+"");
+                        }
+                    }
+                }
+
+
+
+
+                Log.i("favoriteCheckedId", squareMemberItem.getId());
+            }else {
+                holder.cdMemberBg.setVisibility(View.INVISIBLE);
+            }
+
+
+            //todo:버튼클릭할떄마다 서버에서 불러들어오게 작업해야한다 숫자를
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    oldPosition = selectedPosition;
+                    selectedPosition = finalPosition;
+                    notifyDataSetChanged();
+
+                }
+            });
+
+            if (isMemberBackgroundFirst){
+                if (finalPosition==0){
+                    holder.cdMemberBg.setVisibility(View.VISIBLE);
+                    Log.i("BindMemberId", squareMemberItem.getId());
+                    holder.ivMemberBg.setBackgroundColor(0xFF9999FF);
+                    isMemberBackgroundFirst = false;
+                }
+            }
+
+
+
+
+            ivMemberFavorite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SharedPreferences pref = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
+                    String myId = pref.getString("id","");
+
+                    isFavorite=!isFavorite;
+                    String jsonStr;
+                    if (isFavorite){
+                        myFavoriteCheckedUserList.add(favoriteCheckedId);
+                        Gson gson = new Gson();
+                        jsonStr = gson.toJson(myFavoriteCheckedUserList);
+                    }else {
+                        myFavoriteCheckedUserList.remove(favoriteCheckedId);
+                        Gson gson = new Gson();
+                        jsonStr = gson.toJson(myFavoriteCheckedUserList);
+                    }
+                    squareMemberFavoriteCounterUpdateDB(myId, favoriteCheckedId, isFavorite, jsonStr, finalPosition);
+
+                }
+            });
+
+
+
+
+
+
+
+
+
+
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return squareMemberItems.size();
+        }
+
+        class VH extends RecyclerView.ViewHolder {//#########################################
+            private ImageView ivMemberBg;
+            private CardView cdMemberBg;
+            private CircleImageView civFrofile;
+            private TextView tvMemberName;
+            private ImageView ivMemberFavoriteState;
+            public VH(@NonNull View itemView) {
+                super(itemView);
+                cdMemberBg = itemView.findViewById(R.id.cd_member_bg);
+                ivMemberBg= itemView.findViewById(R.id.iv_member_bg);
+                civFrofile = itemView.findViewById(R.id.civ_frofile);
+                tvMemberName = itemView.findViewById(R.id.tv_member_name);
+                ivMemberFavoriteState = itemView.findViewById(R.id.iv_member_favorite_state);
+            }
+
+            public void squareFavoiteNumLoadDB(String id){
+                Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
+                RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+
+                Call<String> call = retrofitService.squareFavoiteNumLoadDB(id);
+                call.enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        String favoriteNum = response.body();
+                        tvFavoriteMemberCount.setText(String.valueOf(favoriteNum));
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+
+                    }
+                });
+
+            }
+
+
+
+        }//#########################################
+    }//class SquareMemberAdapter2
+
+
 }

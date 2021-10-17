@@ -2,21 +2,26 @@ package com.will_d.yogadesign.square.item;
 
 public class SquareMemberItemListItem {
 
-
+    private String no;
     private String imgUrl;
     private String nickName;
     private String name;
 
     private int counter;
-    private int timeSum;
+    private String timeSum;
 
 
-    public SquareMemberItemListItem(String imgUrl, String nickName, String name, int counter, int timeSum) {
+    public SquareMemberItemListItem(String no, String imgUrl, String nickName, String name, int counter, String timeSum) {
+        this.no= no;
         this.imgUrl = imgUrl;
         this.nickName = nickName;
         this.name = name;
         this.counter = counter;
         this.timeSum = timeSum;
+    }
+
+    public String getNo() {
+        return no;
     }
 
     public String getImgUrl() {
@@ -35,7 +40,7 @@ public class SquareMemberItemListItem {
         return counter;
     }
 
-    public int getTimeSum() {
+    public String getTimeSum() {
         return timeSum;
     }
 }

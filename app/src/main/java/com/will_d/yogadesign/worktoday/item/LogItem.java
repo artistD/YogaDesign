@@ -1,3 +1,5 @@
+
+
 package com.will_d.yogadesign.worktoday.item;
 
 public class LogItem {

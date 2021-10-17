@@ -1,5 +1,7 @@
 package com.will_d.yogadesign.service;
 
+import android.net.Uri;
+
 import androidx.cardview.widget.CardView;
 
 import com.will_d.yogadesign.worktoday.item.WorkItem;
@@ -27,8 +29,21 @@ public class Global {
     //todolist와 workitem 동기를 위한 변수
     public static ArrayList<String> workItemIndextNo;
 
-    //timer null을 위한 글로벌 : 타이머가 초기화 되면 null을대입해야하는데 null을 대입하는 이유가 가비지 컬렉터가 없애라고 null을대입하는것임 근데 서로다른 참조변수가
-    //지금 하나의 객체를 참조하고있음 즉 한녀석에게만 null을 대입한다고 능사가 아니라는 것임
+
+
+    //프로필 변경됬을때 판단기준임
+    public static boolean isPrifileChanged = false;
+
+    //자신의 데이터에 관한거임
+    public static String myRealImgUrl;
+    public static String myNickName;
+    public static String myStateMsg;
+
+
+    //시간이 변경되거나 아이템 이 변경될떄도 제어해야될게필요함 : 근데 이건 지금 할게 아님
+//    public static boolean isWorkItemChanged = false;
+
+
 
 
 }

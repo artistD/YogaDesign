@@ -49,12 +49,12 @@
 
 
                 <ImageView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/ic_modify"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="16dp"/>
+                    android:layout_marginRight="16dp"
+                    android:src="@drawable/ic_modify" />
 
             </RelativeLayout>
 
@@ -72,19 +72,19 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="delete"
-                    android:textSize="16sp"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="16dp"/>
+                    android:layout_marginLeft="16dp"
+                    android:text="Delete"
+                    android:textSize="16sp" />
 
 
                 <ImageView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/ic_delete"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="16dp"/>
+                    android:layout_marginRight="16dp"
+                    android:src="@drawable/ic_delete" />
 
             </RelativeLayout>
 
@@ -94,7 +94,7 @@
                 android:background="@drawable/mainbg_01"/>
 
             <RelativeLayout
-                android:id="@+id/rl_itempublic"
+                android:id="@+id/rl_itemprivate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
@@ -102,7 +102,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="itemPublic"
+                    android:text="Private"
                     android:textSize="16sp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="16dp"/>
@@ -116,11 +116,12 @@
                     android:layout_marginRight="12dp"
                     android:layout_alignParentRight="true"
                     app:cardCornerRadius="8dp">
+
                     <TextView
-                        android:id="@+id/tv_itempublic"
+                        android:id="@+id/tv_itemprivate"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="on"
+                        android:text="off"
                         android:textSize="16sp"
                         android:gravity="center"
                         android:layout_gravity="center"

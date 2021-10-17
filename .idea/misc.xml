@@ -3,16 +3,19 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../../../layout/custom_preview.xml" value="0.3211963589076723" />
         <entry key="app/src/main/res/drawable/bg_edit.xml" value="0.2212962962962963" />
         <entry key="app/src/main/res/drawable/ic_baseline_favorite_24.xml" value="0.13854166666666667" />
         <entry key="app/src/main/res/drawable/ic_empty_favorite.xml" value="0.13854166666666667" />
         <entry key="app/src/main/res/layout/activity_alarm.xml" value="0.24114583333333334" />
         <entry key="app/src/main/res/layout/activity_alarm_data_set.xml" value="0.24114583333333334" />
+        <entry key="app/src/main/res/layout/activity_chatting.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_intro.xml" value="0.2048888888888889" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.24010416666666667" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2630535251058521" />
         <entry key="app/src/main/res/layout/activity_music.xml" value="0.24114583333333334" />
-        <entry key="app/src/main/res/layout/activity_profile_set.xml" value="0.24322916666666666" />
+        <entry key="app/src/main/res/layout/activity_profile_modify.xml" value="0.228125" />
+        <entry key="app/src/main/res/layout/activity_profile_set.xml" value="0.16111111111111112" />
         <entry key="app/src/main/res/layout/activity_square.xml" value="0.24114583333333334" />
         <entry key="app/src/main/res/layout/activity_timer.xml" value="0.24114583333333334" />
         <entry key="app/src/main/res/layout/activity_traffic.xml" value="0.1" />
@@ -28,16 +31,20 @@
         <entry key="app/src/main/res/layout/fragment_work_today.xml" value="0.165" />
         <entry key="app/src/main/res/layout/fragment_work_work.xml" value="0.30512820512820515" />
         <entry key="app/src/main/res/layout/fragment_workshop_music.xml" value="0.20765765765765765" />
-        <entry key="app/src/main/res/layout/fragment_workshop_square.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_workshop_square.xml" value="0.21428571428571427" />
         <entry key="app/src/main/res/layout/fragment_workshop_timer.xml" value="0.20765765765765765" />
-        <entry key="app/src/main/res/layout/fragment_workshop_todolist.xml" value="0.12135416666666667" />
-        <entry key="app/src/main/res/layout/fragment_workshop_userset.xml" value="0.375" />
+        <entry key="app/src/main/res/layout/fragment_workshop_todolist.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_workshop_userset.xml" value="0.125" />
         <entry key="app/src/main/res/layout/fragment_workshop_work.xml" value="0.20765765765765765" />
+        <entry key="app/src/main/res/layout/listview_chatting.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/listview_chatting_my_mesage.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/listview_chatting_other_message.xml" value="0.335" />
         <entry key="app/src/main/res/layout/recycler_alarmitem.xml" value="0.24114583333333334" />
         <entry key="app/src/main/res/layout/recycler_logitem.xml" value="0.24114583333333334" />
         <entry key="app/src/main/res/layout/recycler_square_member.xml" value="0.45" />
         <entry key="app/src/main/res/layout/recycler_square_member_list.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/recycler_todolistitem.xml" value="0.24102564102564103" />
+        <entry key="app/src/main/res/layout/recycler_timeritem.xml" value="0.2421875" />
+        <entry key="app/src/main/res/layout/recycler_todolistitem.xml" value="0.335" />
         <entry key="app/src/main/res/layout/recycler_workitem.xml" value="0.20765765765765765" />
         <entry key="app/src/main/res/layout/recycler_workitem2.xml" value="0.25" />
         <entry key="app/src/main/res/layout/workitem_popupmenu.xml" value="0.20765765765765765" />

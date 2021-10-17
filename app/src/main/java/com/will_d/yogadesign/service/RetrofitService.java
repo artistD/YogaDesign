@@ -70,8 +70,8 @@ public interface RetrofitService {
     @POST("/YogaDesign2/workitem/workTodayModifyUpdateToServer.php")
     Call<String> workTodayModifyUpdateToServer(@PartMap Map<String, String> dataPart, @Part MultipartBody.Part filePart);
 
-    @GET("/YogaDesign2/workitem/workItemPublicUpdate.php")
-    Call<String> workItemPublicUpdate(@Query("no") String no, @Query("isItemPublic") boolean isItemPublic);
+    @GET("/YogaDesign2/workitem/workItemPrivateUpdateDB.php")
+    Call<String> workItemPrivateUpdateDB(@Query("no") String no, @Query("isItemPrivate") boolean isItemPrivate);
 
 
     @FormUrlEncoded
@@ -96,6 +96,65 @@ public interface RetrofitService {
 
     @GET("/YogaDesign2/timer/timeDataGetDB.php")
     Call<String> timeDataGetDB(@Query("workItemNO") String workItemNO, @Query("days") String days);
+
+
+
+    //private 모드 세팅하는곳임
+    @GET("/YogaDesign2/member/userSetPrivateModeUpdateDB.php")
+    Call<String> userSetPrivateModeUpdateDB(@Query("id") String workItemNO, @Query("days") String days);
+
+    @FormUrlEncoded
+    @POST("/YogaDesign2/member/userSetPrivateModeUpdateDB.php")
+    Call<String> userSetPrivateModeUpdateDB(@Field("id") String id, @Field("isPublic") boolean isPrivate);
+
+    @GET("/YogaDesign2/square/squareMemberLoadDB.php")
+    Call<String> squareMemberLoadDB();
+
+
+    @FormUrlEncoded
+    @POST("/YogaDesign2/square/sqareMemverListLoadDB.php")
+    Call<String> sqareMemverListLoadDB(@Field("id") String id);
+
+
+    @Multipart
+    @POST("/YogaDesign2/member/memberProfileUpdateDB.php")
+    Call<String> memberProfileUpdateDB(@PartMap Map<String, String> datapart, @Part MultipartBody.Part filePart);
+
+
+    @GET("/YogaDesign2/workitem/workItemTimeSumUpdate.php")
+    Call<String> workItemTimeSumUpdate(@Query("no") String no, @Query("timeSum") String timeSum);
+
+
+    @GET("/YogaDesign2/square/squareMemberFavoriteCounterUpdateDB.php")
+    Call<String> squareMemberFavoriteCounterUpdateDB(@Query("myId")String myId, @Query("favoriteCheckedId") String favoriteCheckedId, @Query("isFavorite") boolean isFavorite, @Query("favoriteCheckedUserList") String favoriteCheckedUserList);
+
+    @GET("/YogaDesign2/square/squareFavoiteNumLoadDB.php")
+    Call<String> squareFavoiteNumLoadDB(@Query("userId") String userId);
+
+    @Multipart
+    @POST("/YogaDesign2/member/memberSendMessageInsertDB.php")
+    Call<String> memberSendMessageInsertDB(@PartMap Map<String, String> datapart, @Part MultipartBody.Part filePart);
+
+
+    @FormUrlEncoded
+    @POST("/YogaDesign2/member/memberChattingMessageLoadToDB.php")
+    Call<String> memberChattingMessageLoadToDB(@Field("checkedId") String checkedId);
+
+
+
+    @GET("/YogaDesign2/member/memberMyMessageDeleteDB.php")
+    Call<String> memberMyMessageDeleteDB(@Query("no") String no);
+
+    @FormUrlEncoded
+    @POST("/YogaDesign2/member/memberLoginStateUpdateDB.php")
+    Call<String> memberLoginStateUpdateDB(@Field("myId") String myId);
+
+
+
+
+
+
+
 
 
 

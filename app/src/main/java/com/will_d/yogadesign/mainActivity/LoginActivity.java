@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.will_d.yogadesign.R;
 import com.will_d.yogadesign.service.ForcedTerminationService;
 import com.will_d.yogadesign.service.RetrofitHelper;
@@ -53,11 +54,17 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etId;
     private EditText etName;
     private ImageView ivProfile;
+
+    private Uri uri;
     private String imgpath;
     private boolean isLogin = false;
-    ArrayList<String> datas = new ArrayList<>();
+    private boolean isFirstProfileChecked = false;
 
-    private boolean isSorationFirst = true;
+    private ArrayList<String> datas = new ArrayList<>();
+
+    //*************************************************
+    private ArrayList<String> favoriteCheckedUserList = new ArrayList<>();
+    //*************************************************
 
 
 
@@ -72,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
 
         SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
         isLogin = pref.getBoolean("isLogin", false);
-
+        isFirstProfileChecked = pref.getBoolean("isFirstProfileChecked", true);
 
 
         //퍼미션 작업 수행
@@ -84,10 +91,15 @@ public class LoginActivity extends AppCompatActivity {
         memberLoadDb();
 
         Log.i("Login", isLogin+"");
-        if(isLogin) {
+        if (!isFirstProfileChecked){
+            Intent intent = new Intent(this, ProfileSetActivity.class);
+            startActivity(intent);
+            finish();
+        }else if(isLogin && isFirstProfileChecked) {
             startActivity(new Intent(this, WorkShopActivity.class));
             finish();
         }
+
 
     }
 
@@ -105,10 +117,18 @@ public class LoginActivity extends AppCompatActivity {
                 editor.putBoolean("isFirstCompair", true);
                 editor.commit();
 
+                isFirstProfileChecked = pref.getBoolean("isFirstProfileChecked", false);
                 Log.i("Global", datas.get(i));
-                Intent intent = new Intent(this, WorkShopActivity.class);
-                startActivity(intent);
-                LoginActivity.this.finish();
+                if (isFirstProfileChecked){
+                    Intent intent = new Intent(this, WorkShopActivity.class);
+                    startActivity(intent);
+                    LoginActivity.this.finish();
+                }else {
+                    Intent intent = new Intent(this, ProfileSetActivity.class);
+                    startActivity(intent);
+                    LoginActivity.this.finish();
+                }
+
                 break;
             }
         }
@@ -142,7 +162,12 @@ public class LoginActivity extends AppCompatActivity {
         Map<String, String> dataPart = new HashMap<>();
         dataPart.put("id", id);
         dataPart.put("name", name);
+        dataPart.put("favoriteNum", String.valueOf(0));
         dataPart.put("isUserPublic", String.valueOf(isUserPublic));
+
+        Gson gson = new Gson();
+        String jsonStr = gson.toJson(favoriteCheckedUserList);
+        dataPart.put("favoriteCheckedUserList", jsonStr);
 
         Call<String> call = retrofitService.memberPostDataToServer(dataPart, filePart);
         call.enqueue(new Callback<String>() {
@@ -233,7 +258,7 @@ public class LoginActivity extends AppCompatActivity {
         public void onActivityResult(ActivityResult result) {
             if (result.getResultCode() ==RESULT_OK){
                 Intent intent = result.getData();
-                Uri uri =intent.getData();
+                uri =intent.getData();
 
                 if (uri != null){
                     Glide.with(LoginActivity.this).load(uri).into(ivProfile);

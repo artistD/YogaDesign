@@ -54,12 +54,24 @@
 
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/tv_hello"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="반가워요 사용자들과 공감을\n나눌 자신의 프로필을\n설정해주세요!"
+        android:gravity="center"
+        android:textSize="24sp"
+        android:layout_marginLeft="48dp"
+        android:layout_marginRight="48dp"
+        android:layout_marginBottom="16dp"
+        android:layout_above="@id/co"/>
+
 
     <RelativeLayout
+        android:id="@+id/co"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true">
-
 
         <RelativeLayout
             android:id="@+id/rl_profile"

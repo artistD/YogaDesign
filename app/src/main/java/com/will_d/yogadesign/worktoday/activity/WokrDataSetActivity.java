@@ -168,7 +168,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
     private double latitude=37.560955;
     private double longitude=127.034721;
     private boolean isItemOnOff = true;
-    private boolean isItemPublic =true;
+    private boolean isItemPrivate = false;
     private int completeNum = 0;
     private boolean[] todolistBooleanState = new boolean[] {false,false,false};
     private boolean[] isDayOrTodaySelected = new boolean[2];
@@ -1020,7 +1020,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
             dataPart.put("latitude", String.valueOf(latitude));
             dataPart.put("longitude", String.valueOf(longitude));
             dataPart.put("isItemOnOff", String.valueOf(isItemOnOff));
-            dataPart.put("isItemPublic", String.valueOf(isItemPublic));
+            dataPart.put("isItemPrivate", String.valueOf(isItemPrivate));
 
             String todolistBooleanJsonStr = gson.toJson(todolistBooleanState);
             Log.i("TAGBoolean", todolistBooleanJsonStr);
@@ -1034,7 +1034,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
 
             dataPart.put("isLogModify", String.valueOf(isLogModify));
             dataPart.put("isTimeFirst", String.valueOf(isTimeFirst));
-
+            dataPart.put("timeSum", "00:00");
             Call<String> call = retrofitService.WorkItemPostDataToServer(dataPart, filePart);
             call.enqueue(new Callback<String>() {
                 @Override
@@ -1096,7 +1096,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
             dataPart.put("latitude", String.valueOf(latitude));
             dataPart.put("longitude", String.valueOf(longitude));
             dataPart.put("isItemOnOff", String.valueOf(isItemOnOff));
-            dataPart.put("isItemPublic", String.valueOf(isItemPublic));
+            dataPart.put("isItemPrivate", String.valueOf(isItemPrivate));
 
             String todolistBooleanJsonStr = gson.toJson(todolistBooleanState);
             Log.i("TAGBoolean", todolistBooleanJsonStr);
@@ -1201,11 +1201,11 @@ public class WokrDataSetActivity extends AppCompatActivity {
                         isItemOnOff = false;
                     }
 
-                    String isItemP = jsonObject.getString("isItemPublic");
+                    String isItemP = jsonObject.getString("isItemPrivate");
                     if (isItemP.equals("1")){
-                        isItemPublic = true;
+                        isItemPrivate = true;
                     }else if(isItemP.equals("0")){
-                        isItemPublic = false;
+                        isItemPrivate = false;
                     }
 
                     String cNum = jsonObject.getString("Completenum");

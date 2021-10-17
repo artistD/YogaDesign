@@ -11,7 +11,8 @@
     <RelativeLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize">
+        android:layout_height="?android:attr/actionBarSize"
+        android:layout_marginTop="4dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -133,7 +134,7 @@
 
 
                     <TextView
-                        android:id="@+id/tv_usersetting_name"
+                        android:id="@+id/tv_usersetting_state_msg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/tv_usersetting_nickname"
@@ -177,13 +178,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Public mode"
+                android:text="Private Mode"
                 android:textSize="16sp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="8dp"/>
 
             <Switch
-                android:id="@+id/sw_puclick_mode"
+                android:id="@+id/sw_private_mode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
