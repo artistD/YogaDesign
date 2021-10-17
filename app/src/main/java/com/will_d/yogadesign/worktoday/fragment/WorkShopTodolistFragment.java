@@ -185,10 +185,6 @@ public class WorkShopTodolistFragment extends Fragment {
         }
 
 
-//        if (todolistItems.size()==0){
-//            progressBar.setVisibility(View.INVISIBLE);
-//            recyclerView.setVisibility(View.VISIBLE);
-//        }
 
 
     }
@@ -245,11 +241,6 @@ public class WorkShopTodolistFragment extends Fragment {
         }
 
 
-
-//        if (todolistItems.size()==0){
-//            progressBar.setVisibility(View.INVISIBLE);
-//            recyclerView.setVisibility(View.VISIBLE);
-//        }
 
 
     }

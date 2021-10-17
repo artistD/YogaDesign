@@ -13,6 +13,8 @@ public class SquareMemberItem {
     private ArrayList<String> favoriteCheckedUserList;
 
 
+
+
     public SquareMemberItem(String id, String imgUrl, String memberName, String stateMsg, int favoriteNum, ArrayList<String> favoriteCheckedUserList) {
         this.id = id;
         this.imgUrl = imgUrl;
@@ -21,6 +23,7 @@ public class SquareMemberItem {
         this.favoriteNum = favoriteNum;
         this.favoriteCheckedUserList = favoriteCheckedUserList;
     }
+
 
     public String getId() {
         return id;

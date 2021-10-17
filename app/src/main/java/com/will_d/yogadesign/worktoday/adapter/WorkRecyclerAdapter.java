@@ -48,7 +48,7 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
     private String no;
 
     //아이템 퍼블릭의 불린값임
-    boolean popupIsItemPublick = true;
+    boolean popupIsItemPrivate = false;
 
     public WorkRecyclerAdapter(Context context, ArrayList<WorkItem> items) {
         this.context = context;
@@ -132,7 +132,6 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
         }else {
             holder.cdTodayWork.setVisibility(View.INVISIBLE);
         }
-
 
         holder.sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -220,6 +219,7 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
         private CardView cdTodayWork;
 
 
+
         public Switch getSw() {//####################getter
             return sw;
         }
@@ -286,8 +286,17 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
             RelativeLayout popupRlModify =  popupView.findViewById(R.id.rl_modify);
             RelativeLayout popupRlDelete = popupView.findViewById(R.id.rl_delete);
-            RelativeLayout popupRlPublick = popupView.findViewById(R.id.rl_itempublic);
-            TextView tvItemPublic = popupView.findViewById(R.id.tv_itempublic);
+            RelativeLayout popupRlPrivate = popupView.findViewById(R.id.rl_itemprivate);
+            TextView tvItemPrivate = popupView.findViewById(R.id.tv_itemprivate);
+
+            WorkItem item = items.get(getAdapterPosition());
+            if (item.getIsPrivate()){
+                popupIsItemPrivate = true;
+                tvItemPrivate.setText("On");
+            }else {
+                popupIsItemPrivate = false;
+                tvItemPrivate.setText("Off");
+            }
 
 
             int width = RelativeLayout.LayoutParams.WRAP_CONTENT;
@@ -352,15 +361,15 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
             });
 
 
-            popupRlPublick.setOnClickListener(new View.OnClickListener() {
+            popupRlPrivate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    popupIsItemPublick = !popupIsItemPublick;
+                    popupIsItemPrivate = !popupIsItemPrivate;
                     Toast.makeText(context, "qwfqwffqw", Toast.LENGTH_SHORT).show();
-                    if (popupIsItemPublick) tvItemPublic.setText("on");
-                    else tvItemPublic.setText("off");
+                    if (popupIsItemPrivate) tvItemPrivate.setText("on");
+                    else tvItemPrivate.setText("off");
                     WorkItem workItem = items.get(finalPosition);
-                    workItemPublicUpdate(workItem.getNo(), popupIsItemPublick);
+                    workItemPrivateUpdateDB(workItem.getNo(), popupIsItemPrivate);
                     notifyDataSetChanged();
                 }
             });
@@ -414,11 +423,11 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
         }
 
-        public void workItemPublicUpdate(String no, boolean isItemPublic){
+        public void workItemPrivateUpdateDB(String no, boolean isItemPublic){
             Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
             RetrofitService retrofitServic= retrofit.create(RetrofitService.class);
 
-            Call<String> call = retrofitServic.workItemPublicUpdate(no, isItemPublic);
+            Call<String> call = retrofitServic.workItemPrivateUpdateDB(no, isItemPublic);
             call.enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {

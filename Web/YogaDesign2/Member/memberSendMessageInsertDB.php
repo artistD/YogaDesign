@@ -30,7 +30,18 @@
     $sql ="INSERT INTO ChattingYogaDesign(id, userCheckedId, myNickName, dstName, myMsg, day) VALUES('$id', '$userCheckedId', '$myNickName', '$dstName', '$myMsg' ,'$day')";
     $result = mysqli_query($conn, $sql);
 
-    if($result) echo "게시글 업로드 되었습니다.";
+    $sql2 = "SELECT no FROM ChattingYogaDesign WHERE id ='$id' ORDER BY no ASC";
+    $result2 = mysqli_query($conn, $sql2);
+    
+    $row_num = mysqli_num_rows($result2);
+
+    $rows = array();
+    for($i=0; $i<$row_num; $i++){
+        $row = mysqli_fetch_array($result2, MYSQLI_ASSOC);
+        $rows[$i] = $row;
+    }
+
+    if($result) echo json_encode($rows);
     else echo "게시글 업로드에 실패하였습니다. \n 다시시도해주세요.";
 
     mysqli_close($conn);

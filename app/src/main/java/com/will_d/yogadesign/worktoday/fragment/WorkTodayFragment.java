@@ -355,12 +355,12 @@ public class WorkTodayFragment extends Fragment {
                             isItemOnOff = false;
                         }
 
-                        String isItemP = jsonObject.getString("isItemPublic");
-                        boolean isItemPublic = false;
+                        String isItemP = jsonObject.getString("isItemPrivate");
+                        boolean isItemPrivate = false;
                         if (isItemP.equals("1")){
-                            isItemPublic = true;
+                            isItemPrivate = true;
                         }else if(isItemP.equals("0")){
-                            isItemPublic = false;
+                            isItemPrivate = false;
                         }
 
                         String cNum = jsonObject.getString("Completenum");
@@ -390,7 +390,7 @@ public class WorkTodayFragment extends Fragment {
 
                         progressBar.setVisibility(View.INVISIBLE);
 
-                        workItems.add(0, new WorkItem(no, imgUrl, nickName, name, isGoalChecked, goalSet, isPreNotificationChecked, preNotificationTime, isLocalNotificationChecked, placeName, weeksData, isItemOnOff, completeNum, isDayOrTodaySelected, rlWorkitemDeleteDialog, tvWorkitemDeleteOK, tvWorkitemDeleteCancel, isLogModify, isTimeFirst));
+                        workItems.add(0, new WorkItem(no, imgUrl, nickName, name, isGoalChecked, goalSet, isPreNotificationChecked, preNotificationTime, isLocalNotificationChecked, placeName, weeksData, isItemOnOff, completeNum, isDayOrTodaySelected, rlWorkitemDeleteDialog, tvWorkitemDeleteOK, tvWorkitemDeleteCancel, isLogModify, isTimeFirst, isItemPrivate));
                         adapter.notifyItemChanged(0);
 
                         recyclerView.setVisibility(View.VISIBLE);

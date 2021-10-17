@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.will_d.yogadesign.R;
@@ -51,6 +53,11 @@ public class ChattingActivity extends AppCompatActivity {
     private ArrayList<MessageItem> items = new ArrayList<>();
     private ListView listView;
     private ChattingAdapter adapter;
+    private ProgressBar pgChatting;
+
+    private RelativeLayout rlChattingDeleteDialog;
+    private TextView tvChattingDeleteOk;
+    private TextView tvChattingDeleteCancel;
 
 
     @Override
@@ -62,21 +69,26 @@ public class ChattingActivity extends AppCompatActivity {
         etChatting = findViewById(R.id.et_chatting);
         ncdSendMessage = findViewById(R.id.ncd_send_message);
 
+        rlChattingDeleteDialog = findViewById(R.id.rl_chatting_delete_dialog);
+        tvChattingDeleteOk = findViewById(R.id.tv_chatting_delete_ok);
+        tvChattingDeleteCancel = findViewById(R.id.tv_chatting_delete_cancel);
+
         //todo: Intent를 여러마리 보내면 구분은 어떻게 하지????
         Intent intent = getIntent();
         checkedId = intent.getStringExtra("checkedId");
         String userNickName = intent.getStringExtra("userNickName");
 
+        Log.i("TWGa", userNickName);
         userName.setText(userNickName);
 
-        memberChattingMessageLoadToDB(checkedId);
-
+//        String id  = "willd88";
+//
 //        String imgUrl = "https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg";
 //        String imgUrl2 = "http://image.newsis.com/2021/04/14/NISI20210414_0017347131_web.jpg";
 //
-//        items.add(new MessageItem(id, "messi", "dqwqwfqwfqwfqwgqwgqwgqwqwg", "2021.10.12", imgUrl));
+//        items.add(new MessageItem(id, "messi", "dqwqwfqwfq", "2021.10.12", imgUrl));
 //        items.add(new MessageItem("", "neymar", "dqwqwfqwfqwfqwgqwgqwgqwqwg", "2021.10.12", imgUrl2));
-//        items.add(new MessageItem(id, "messi", "dqwqwfqwfqwfqwgqwgqwgqwqwg", "2021.10.12", imgUrl));
+//        items.add(new MessageItem(id, "messi", "dqwqwfqwfqwfqdwqwdqwdqwfqwfqwfqwfqwfqwdqwfqwfqwfqwfqwfqwfqwfqwfqwfqwfqwfqwfqwfqwfqwqwgqwgqwgqwqwg", "2021.10.12", imgUrl));
 //        items.add(new MessageItem(id, "messi", "dqwqwfqwfqwfqwgqwgqwgqwqwg", "2021.10.12", imgUrl));
 //        items.add(new MessageItem("", "neymar", "dqwqwfqwfqwfqwgqwgqwgqwqwg", "2021.10.12", imgUrl2));
 //        items.add(new MessageItem(id, "messi", "dqwqwfqwfqwfqwgqwgqwgqwqwg", "2021.10.12", imgUrl));
@@ -89,8 +101,14 @@ public class ChattingActivity extends AppCompatActivity {
 
 
         listView = findViewById(R.id.listview);
-        adapter = new ChattingAdapter(this, items);
+        adapter = new ChattingAdapter(this, items, rlChattingDeleteDialog, tvChattingDeleteOk, tvChattingDeleteCancel);
         listView.setAdapter(adapter);
+        pgChatting = findViewById(R.id.progress_chatting);
+
+
+
+        loading();
+        memberChattingMessageLoadToDB(checkedId);
 
 
         //진행방향이 어떻게 진행되어야 하냐면
@@ -118,18 +136,21 @@ public class ChattingActivity extends AppCompatActivity {
                 SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy.MM.dd");
                 String getTime = simpleDate.format(date);
 
-                items.add(new MessageItem(id, Global.myNickName, myMsg, getTime, Global.myRealImgUrl));
-
                 memberSendMessageInsertDB(id, myMsg, getTime);
-
 
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                 imm.showSoftInputFromInputMethod(getCurrentFocus().getWindowToken(), 0);
                 etChatting.setText("");
+
             }
         });
 
+    }
+
+    public void loading(){
+        listView.setVisibility(View.INVISIBLE);
+        pgChatting.setVisibility(View.VISIBLE);
     }
 
 
@@ -144,11 +165,13 @@ public class ChattingActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 String jsonStr = response.body();
-                Log.i("jsonStr", jsonStr);
+                listView.setVisibility(View.VISIBLE);
+                pgChatting.setVisibility(View.INVISIBLE);
                 try {
                     JSONArray jsonArray = new JSONArray(jsonStr);
                     for (int i=0; i<jsonArray.length(); i++){
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        String no = jsonObject.getString("no");
                         String id = jsonObject.getString("id");
                         String nickName = jsonObject.getString("myNickName");
                         String dstName = jsonObject.getString("dstName");
@@ -156,7 +179,7 @@ public class ChattingActivity extends AppCompatActivity {
                         String myMsg = jsonObject.getString("myMsg");
                         String day = jsonObject.getString("day");
 
-                        items.add(new MessageItem(id, nickName, myMsg, day, imgUrl));
+                        items.add(new MessageItem(no, id, nickName, myMsg, day, imgUrl));
                         adapter.notifyDataSetChanged();
                         listView.setSelection(items.size()-1);
                     }
@@ -200,12 +223,25 @@ public class ChattingActivity extends AppCompatActivity {
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                Log.i("memberSendMessageInsertDB", response.body());
+                Log.i("wpqkfqhrhtlvek", response.body());
+                String jsonStr = response.body();
+                try {
+                    JSONArray jsonArray = new JSONArray(jsonStr);
+                    JSONObject jsonObject = jsonArray.getJSONObject(jsonArray.length()-1);
+                    String no = jsonObject.getString("no");
+                    Log.i("twefgwgwegw", no);
+                    items.add(new MessageItem(no, id, Global.myNickName, myMsg, getTime, Global.myRealImgUrl));
+                    listView.setSelection(items.size()-1);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                Log.i("memberSendMessageInsertDB", t.getMessage());
+                Log.i("wpqkfqhrhtlvek", t.getMessage());
             }
         });
 

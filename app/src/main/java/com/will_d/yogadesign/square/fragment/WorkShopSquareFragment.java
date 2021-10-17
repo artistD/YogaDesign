@@ -134,12 +134,11 @@ public class WorkShopSquareFragment extends Fragment {
         String id = pref.getString("id","");
         checkdeIdentifyId = id;
         favoriteCheckedId = id;
+        userName = Global.myNickName;
 
         Log.i("favoriteCheckedId", id);
 
 
-
-        llFriendSearch = view.findViewById(R.id.ll_friend_search);
         civFrofile = view.findViewById(R.id.civ_frofile);
         tvMemberName = view.findViewById(R.id.tv_member_name);
         tvMemverMessage = view.findViewById(R.id.tv_member_message);
@@ -187,9 +186,12 @@ public class WorkShopSquareFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        memberLoading();
-        memberListLoading();
-        squareMemberLoadDB();
+        if (isFirst){
+            memberLoading();
+            memberListLoading();
+            squareMemberLoadDB();
+        }
+
     }
 
     @Override
@@ -199,34 +201,34 @@ public class WorkShopSquareFragment extends Fragment {
 
         }else {
             if (Global.isPrifileChanged){
+
                squareMemberItems.remove(0);
-               squareMemberAdapter2.notifyItemRemoved(0);
                squareMemberItems.add(0, new SquareMemberItem(myId, Global.myRealImgUrl, Global.myNickName, Global.myStateMsg, myFavoriteNum, myFavoriteCheckedUserList));
                squareMemberAdapter2.notifyItemChanged(0);
+               squareMemberAdapter2.notifyItemMoved(0,0);
 
                Glide.with(getActivity()).load(Global.myRealImgUrl).into(civFrofile);
                tvMemberName.setText(Global.myNickName);
                tvMemverMessage.setText(Global.myStateMsg);
                Global.isPrifileChanged = false;
-
             }
         }
 
     }
 
     public void memberLoading(){
-        if (squareMemberItems.size()!=0){
+
             pgMember.setVisibility(View.VISIBLE);
             llStateBlur.setVisibility(View.INVISIBLE);
             recyclerViewMember.setVisibility(View.INVISIBLE);
-        }
+
     }
 
     public void memberListLoading(){
-        if (squareMemberItemListItems.size()!=0){
+
             pgMemberList.setVisibility(View.VISIBLE);
             recyclerViewMemberItem.setVisibility(View.INVISIBLE);
-        }
+
     }
 
     public  void squareMemberFavoriteCounterUpdateDB(String myId, String favoriteCheckedId, boolean isFavorite, String favoriteCheckedUserList, int finalPosition){
@@ -271,7 +273,8 @@ public class WorkShopSquareFragment extends Fragment {
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                Log.i("sqareMemverListLoadDB", response.body());
+                pgMemberList.setVisibility(View.INVISIBLE);
+                recyclerViewMemberItem.setVisibility(View.VISIBLE);
                 String jsonStr = response.body();
                 try {
                     JSONArray jsonArray  = new JSONArray(jsonStr);
@@ -286,9 +289,6 @@ public class WorkShopSquareFragment extends Fragment {
 
                         squareMemberItemListItems.add(0, new SquareMemberItemListItem(no, imgUrl, nickName, name, counterNum, timeSum));
                         squareMemberListAdapter.notifyItemChanged(0);
-
-                        pgMemberList.setVisibility(View.INVISIBLE);
-                        recyclerViewMemberItem.setVisibility(View.VISIBLE);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -298,8 +298,7 @@ public class WorkShopSquareFragment extends Fragment {
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                Log.i("sqareMemverListLoadDB", t.getMessage());
-            }
+                Log.i("sqareMemverListLoadDB", t.getMessage()); }
         });
     }
 
@@ -317,7 +316,10 @@ public class WorkShopSquareFragment extends Fragment {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 String jsonStr = response.body();
-                Log.i("squareMemberLoadDB", response.body());
+                Log.i("qwghrtjyuuilofgd", response.body());
+                llStateBlur.setVisibility(View.VISIBLE);
+                pgMember.setVisibility(View.INVISIBLE);
+                recyclerViewMember.setVisibility(View.VISIBLE);
                 try {
                     JSONArray  jsonArray = new JSONArray(jsonStr);
                     for (int i=0; i<jsonArray.length(); i++){
@@ -329,6 +331,14 @@ public class WorkShopSquareFragment extends Fragment {
                         String id = jsonObject.getString("id");
                         String prefId = pref.getString("id", "");
 
+                        String ss = jsonObject.getString("isLogin");
+                        boolean isLogin =false;
+                        if (ss.equals("1")){
+                            isLogin = true;
+                        }else {
+                            isLogin = false;
+                        }
+
                         String s = jsonObject.getString("isUserPublic");
                         boolean isUserPublic =false;
                         if (s.equals("1")){
@@ -336,6 +346,7 @@ public class WorkShopSquareFragment extends Fragment {
                         }else {
                             isUserPublic = false;
                         }
+
                         String userMsg = jsonObject.getString("stateMsg");
                         if(userMsg.equals("null")){
                             userMsg = "아직 상태메세지가 없어요!";
@@ -361,11 +372,16 @@ public class WorkShopSquareFragment extends Fragment {
                             myFavoriteCheckedUserList = favoriteCheckedUserList;
                             Log.i("myMemberId", myId);
                         }else {
-                            if (isUserPublic){
-                                squareMemberItems.add(0, new SquareMemberItem(id, imgUrl, nickName, userMsg, favoriteNum, favoriteCheckedUserList));
-                                squareMemberAdapter2.notifyItemChanged(0);
-                                Log.i("atherMerberId", id);
+                            if(isLogin){
+
+                                if (isUserPublic){
+                                    squareMemberItems.add(0, new SquareMemberItem(id, imgUrl, nickName, userMsg, favoriteNum, favoriteCheckedUserList));
+                                    squareMemberAdapter2.notifyItemChanged(0);
+                                    Log.i("atherMerberId", id);
+                                }
+
                             }
+
                         }
 
 
@@ -374,11 +390,6 @@ public class WorkShopSquareFragment extends Fragment {
 
                     squareMemberItems.add(0, new SquareMemberItem(myId, myImgUrl, myNickName, myUserStateMsg, myFavoriteNum, myFavoriteCheckedUserList));
                     squareMemberAdapter2.notifyItemChanged(0);
-
-                    llStateBlur.setVisibility(View.VISIBLE);
-                    pgMember.setVisibility(View.INVISIBLE);
-                    recyclerViewMember.setVisibility(View.VISIBLE);
-
 
                     if (isFirst){
                         //todo: statemsg 작업이 끝나면 여기서 부터 작업을 해야함
@@ -454,11 +465,21 @@ public class WorkShopSquareFragment extends Fragment {
         public void onBindViewHolder(@NonNull VH holder, int position) {
             final int finalPosition = position;
             SquareMemberItem squareMemberItem = squareMemberItems.get(finalPosition);
-
             Glide.with(getActivity()).load(squareMemberItem.getImgUrl()).into(holder.civFrofile);
-
-
             holder.tvMemberName.setText(squareMemberItem.getMemberName());
+
+
+            //todo:이거 교수님한테 질문해야함 !!!!
+            for (int i=0; i<myFavoriteCheckedUserList.size(); i++){
+                String myFav = myFavoriteCheckedUserList.get(i);
+                if (myFav.equals(squareMemberItem.getId())){
+                    holder.ivMemberFavoriteState.setVisibility(View.VISIBLE);
+
+                }else {
+                    holder.ivMemberFavoriteState.setVisibility(View.INVISIBLE);
+
+                }
+            }
 
             if (selectedPosition==finalPosition){
                 holder.cdMemberBg.setVisibility(View.VISIBLE);
@@ -579,12 +600,14 @@ public class WorkShopSquareFragment extends Fragment {
             private CardView cdMemberBg;
             private CircleImageView civFrofile;
             private TextView tvMemberName;
+            private ImageView ivMemberFavoriteState;
             public VH(@NonNull View itemView) {
                 super(itemView);
                 cdMemberBg = itemView.findViewById(R.id.cd_member_bg);
                 ivMemberBg= itemView.findViewById(R.id.iv_member_bg);
                 civFrofile = itemView.findViewById(R.id.civ_frofile);
                 tvMemberName = itemView.findViewById(R.id.tv_member_name);
+                ivMemberFavoriteState = itemView.findViewById(R.id.iv_member_favorite_state);
             }
 
             public void squareFavoiteNumLoadDB(String id){

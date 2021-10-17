@@ -33,14 +33,17 @@
 
     if($isPhotoChecked=='true'){
         $sql = "UPDATE MemberYogaDesign SET name = '$name', frofile='$dstName', stateMsg='$userStateMsg', date='$now' WHERE id='$id'";
+        $sql2 = "UPDATE ChattingYogaDesign SET myNickName = '$name', dstName='$dstName' WHERE id='$id'";
 
     }else{
         $sql = "UPDATE MemberYogaDesign SET name = '$name', stateMsg='$userStateMsg', date='$now' WHERE id='$id'";
+        $sql2 = "UPDATE ChattingYogaDesign SET myNickName = '$name' WHERE id='$id'";
     }
 
     $result = mysqli_query($conn, $sql);
+    $result2 = mysqli_query($conn, $sql2);
 
-    if($result) echo $isPhotoChecked;
+    if($result) echo "게시글이 업로드됬습니다";
     else echo "다시 시도";
 
     mysqli_close($conn);

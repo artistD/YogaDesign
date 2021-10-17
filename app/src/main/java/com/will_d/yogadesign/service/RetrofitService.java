@@ -70,8 +70,8 @@ public interface RetrofitService {
     @POST("/YogaDesign2/workitem/workTodayModifyUpdateToServer.php")
     Call<String> workTodayModifyUpdateToServer(@PartMap Map<String, String> dataPart, @Part MultipartBody.Part filePart);
 
-    @GET("/YogaDesign2/workitem/workItemPublicUpdate.php")
-    Call<String> workItemPublicUpdate(@Query("no") String no, @Query("isItemPublic") boolean isItemPublic);
+    @GET("/YogaDesign2/workitem/workItemPrivateUpdateDB.php")
+    Call<String> workItemPrivateUpdateDB(@Query("no") String no, @Query("isItemPrivate") boolean isItemPrivate);
 
 
     @FormUrlEncoded
@@ -139,6 +139,15 @@ public interface RetrofitService {
     @FormUrlEncoded
     @POST("/YogaDesign2/member/memberChattingMessageLoadToDB.php")
     Call<String> memberChattingMessageLoadToDB(@Field("checkedId") String checkedId);
+
+
+
+    @GET("/YogaDesign2/member/memberMyMessageDeleteDB.php")
+    Call<String> memberMyMessageDeleteDB(@Query("no") String no);
+
+    @FormUrlEncoded
+    @POST("/YogaDesign2/member/memberLoginStateUpdateDB.php")
+    Call<String> memberLoginStateUpdateDB(@Field("myId") String myId);
 
 
 

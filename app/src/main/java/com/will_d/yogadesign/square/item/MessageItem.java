@@ -2,6 +2,7 @@ package com.will_d.yogadesign.square.item;
 
 public class MessageItem {
 
+    private String no;
     private String id;
     private String name;
     private String message;
@@ -9,12 +10,18 @@ public class MessageItem {
     private String profileUrl;
 
 
-    public MessageItem(String id,String name, String message, String time, String profileUrl) {
+    public MessageItem(String no, String id,String name, String message, String time, String profileUrl) {
+        this.no =no;
         this.id= id;
         this.name = name;
         this.message = message;
         this.time = time;
         this.profileUrl = profileUrl;
+    }
+
+
+    public String getNo() {
+        return no;
     }
 
 

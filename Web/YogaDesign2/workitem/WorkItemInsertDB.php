@@ -15,7 +15,7 @@
     $latitude = $_POST['latitude'];
     $longitude = $_POST['longitude'];
     $isItemOnOff = $_POST['isItemOnOff'];
-    $isItemPublic = $_POST['isItemPublic'];
+    $isItemPrivate = $_POST['isItemPrivate'];
     $completeNum = $_POST['completeNum'];
     $todoistBooleanState = $_POST['todoistBooleanState'];
     $isDayOrTodaySelected = $_POST['isDayOrTodaySelected'];
@@ -59,7 +59,7 @@
     $conn = mysqli_connect("localhost", "willd88", "messid88!!", "willd88");
     mysqli_query($conn, "set names utf8");
 
-    $sql = "INSERT INTO WorkItemYogaDesign(id, indexNo, name, dstName, nickName, weeksData, isGoalChecked, goalSet, isPreNotificationChecked, preNotificationTime, isLocalNotificationChecked, placeName, latitude, longitude, isItemOnOff, isItemPublic, todoistBooleanState, Completenum, isDayOrTodaySelected, isLogModify, isTimeFirst, timeSum, now) VALUES('$id', 0, '$name', '$dstName', '$nickName', '$weeksDataJsonStr', $isGoalChecked, '$goalSet', $isPreNotificationChecked, '$preNotificationTime', $isLocalNotificationChecked, '$placeName', '$latitude', '$longitude', $isItemOnOff, $isItemPublic, '$todoistBooleanState', '$completeNum', '$isDayOrTodaySelected', $isLogModify, $isTimeFirst, '$timeSum' , '$now')";
+    $sql = "INSERT INTO WorkItemYogaDesign(id, indexNo, name, dstName, nickName, weeksData, isGoalChecked, goalSet, isPreNotificationChecked, preNotificationTime, isLocalNotificationChecked, placeName, latitude, longitude, isItemOnOff, isItemPrivate, todoistBooleanState, Completenum, isDayOrTodaySelected, isLogModify, isTimeFirst, timeSum, now) VALUES('$id', 0, '$name', '$dstName', '$nickName', '$weeksDataJsonStr', $isGoalChecked, '$goalSet', $isPreNotificationChecked, '$preNotificationTime', $isLocalNotificationChecked, '$placeName', '$latitude', '$longitude', $isItemOnOff, $isItemPrivate, '$todoistBooleanState', '$completeNum', '$isDayOrTodaySelected', $isLogModify, $isTimeFirst, '$timeSum' , '$now')";
     $result = mysqli_query($conn, $sql);
 
     if($result) echo "ㄱㅔ시글ㅣ 업로드 됬습니다";

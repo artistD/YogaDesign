@@ -13,7 +13,8 @@
         <RelativeLayout
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?android:attr/actionBarSize">
+            android:layout_height="?android:attr/actionBarSize"
+            android:layout_marginTop="4dp">
 
 
             <LinearLayout
@@ -39,24 +40,6 @@
                     android:visibility="visible" />
 
             </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/ll_friend_search"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="12dp">
-
-                <ImageView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/ic_search"
-                    android:layout_marginLeft="4dp"/>
-
-            </LinearLayout>
-
 
 
         </RelativeLayout>

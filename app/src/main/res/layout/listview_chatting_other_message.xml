@@ -7,8 +7,8 @@
     android:paddingRight="12dp"
     android:paddingLeft="12dp"
     android:layout_marginTop="4dp"
-    android:layout_marginBottom="4dp"
-    android:background="#C7DDFF">
+    android:layout_marginBottom="4dp">
+
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/civ_profile"
@@ -51,11 +51,6 @@
         android:layout_toRightOf="@id/civ_profile"
         android:layout_marginTop="12dp">
 
-        <ImageView
-            android:id="@+id/iv_message_bg"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY"/>
 
 
         <RelativeLayout

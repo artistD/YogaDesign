@@ -61,9 +61,11 @@ public class WorkShopUserSetFragment extends Fragment {
             public void onClick(View v) {
 
                 SharedPreferences pref = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
+                String myId = pref.getString("id","");
                 SharedPreferences.Editor editor = pref.edit();
                 editor.putBoolean("isLogin", false);
                 editor.commit();
+                memberLoginStateUpdateDB(myId);
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
                 startActivity(intent);
                 getActivity().finish();
@@ -106,6 +108,24 @@ public class WorkShopUserSetFragment extends Fragment {
         tvUserSettingNickName.setText(Global.myNickName);
         tvUserSettingStateMsg.setText(Global.myStateMsg);
     }
+
+    public  void memberLoginStateUpdateDB(String myId) {
+        Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
+        RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+        Call<String> call = retrofitService.memberLoginStateUpdateDB(myId);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+               Log.i("memberLoginStateUpdateDB", response.body());
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.i("memberLoginStateUpdateDB", t.getMessage());
+            }
+        });
+    }
+
 
     public void userSetPrivateModeUpdateDB(boolean isPublic){
         SharedPreferences pref = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);

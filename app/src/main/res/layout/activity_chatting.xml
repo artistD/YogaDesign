@@ -1,180 +1,283 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#C7DDFF"
-    android:orientation="vertical"
     tools:context=".square.activity.ChattingActivity">
 
-    <RelativeLayout
-        android:id="@+id/toolbar"
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?android:attr/actionBarSize">
 
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_centerInParent="true">
-
-            <TextView
-                android:id="@+id/tv_username"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:text="UserName"
-                android:textColor="#FF333333"
-                android:textSize="16sp" />
+                android:orientation="vertical"
+                android:layout_centerInParent="true">
+
+                <TextView
+                    android:id="@+id/tv_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:text="UserName"
+                    android:textColor="#FF333333"
+                    android:textSize="16sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@drawable/mainbg_02"
+                    android:visibility="visible" />
+
+            </LinearLayout>
+
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_newback"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:onClick="clickBack"/>
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <ListView
+                android:id="@+id/listview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:transcriptMode="alwaysScroll"
+                android:visibility="visible"
+                android:divider="#C7DDFF"
+                android:dividerHeight="0dp"
+                android:overScrollMode="never"
+                android:listSelector="@android:color/transparent"/>
+
+
+            <ProgressBar
+                android:id="@+id/progress_chatting"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_centerInParent="true"
+                android:indeterminateTint="#FF9999FF"
+                android:visibility="invisible" />
+
+        </RelativeLayout>
+
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@drawable/mainbg_03">
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="@drawable/mainbg_02"
-                android:visibility="visible" />
+                android:layout_height="1dp"
+                android:background="@drawable/mainbg_02"/>
 
-        </LinearLayout>
-
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_newback"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
-            android:onClick="clickBack"/>
-
-    </RelativeLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_centerInParent="true">
 
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <ListView
-            android:id="@+id/listview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:transcriptMode="alwaysScroll"
-            android:visibility="visible"
-            android:divider="#C7DDFF"
-            android:dividerHeight="0dp"
-            android:overScrollMode="never"/>
-
-
-        <ProgressBar
-            android:id="@+id/progress_chatting"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_centerInParent="true"
-            android:indeterminateTint="#FF9999FF"
-            android:visibility="invisible" />
-
-    </RelativeLayout>
-
-
-
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="@drawable/mainbg_03">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@drawable/mainbg_02"/>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_centerInParent="true">
-
-
-            <RelativeLayout
-                android:id="@+id/rl_member_chatting"
-                android:layout_width="match_parent"
-                android:layout_marginLeft="16dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="16dp"
-                android:layout_weight="1"
-                android:layout_gravity="center"
-                android:gravity="center">
-
-
-
-                <androidx.cardview.widget.CardView
+                <RelativeLayout
+                    android:id="@+id/rl_member_chatting"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="0dp"
-                    android:layout_centerVertical="true">
+                    android:layout_marginLeft="16dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="16dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:gravity="center">
+
+
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp"
+                        android:layout_centerVertical="true">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="#C7DDFF"
+                            android:layout_gravity="center">
+
+                            <EditText
+                                android:id="@+id/et_chatting"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginRight="4dp"
+                                android:background="@drawable/bg_edit"
+                                android:inputType="textMultiLine"
+                                android:maxLines="5"
+                                android:paddingLeft="8dp"
+                                android:paddingRight="8dp"
+                                android:textColorHint="#FF666666"
+                                android:textSize="20sp" />
+
+
+                        </RelativeLayout>
+
+
+                    </androidx.cardview.widget.CardView>
+
+
+
+                </RelativeLayout>
+
+                <soup.neumorphism.NeumorphCardView
+                    android:id="@+id/ncd_send_message"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    app:neumorph_shapeAppearance="@style/ShapeAppearance3"
+                    app:neumorph_shadowColorLight="#77FFFFFF"
+                    android:layout_marginRight="4dp"
+                    app:neumorph_shadowColorDark="#77999999"
+                    android:clickable="true"
+                    android:layout_gravity="center">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="#C7DDFF"
-                        android:layout_gravity="center">
+                        android:padding="8dp"
+                        android:background="@drawable/mainbg_03">
 
-                        <EditText
-                            android:id="@+id/et_chatting"
+                        <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginRight="4dp"
-                            android:background="@drawable/bg_edit"
-                            android:inputType="textMultiLine"
-                            android:maxLines="5"
-                            android:paddingLeft="8dp"
-                            android:paddingRight="8dp"
-                            android:textColorHint="#FF666666"
-                            android:textSize="20sp" />
-
+                            android:src="@drawable/ic_send" />
 
                     </RelativeLayout>
 
 
-                </androidx.cardview.widget.CardView>
+                </soup.neumorphism.NeumorphCardView>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
 
 
+    <RelativeLayout
+        android:id="@+id/rl_chatting_delete_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        android:background="#bbC7DDFF">
 
-            </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"/>
 
-            <soup.neumorphism.NeumorphCardView
-                android:id="@+id/ncd_send_message"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                app:neumorph_shapeAppearance="@style/ShapeAppearance3"
-                app:neumorph_shadowColorLight="#77FFFFFF"
-                android:layout_marginRight="4dp"
-                app:neumorph_shadowColorDark="#77999999"
-                android:clickable="true"
-                android:layout_gravity="center">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+        <soup.neumorphism.NeumorphCardView
+            style="@style/Widget.Neumorph.CardView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:neumorph_shadowColorDark="#77999999"
+            app:neumorph_shadowColorLight="#77FFFFFF">
+
+            <LinearLayout
+                android:layout_width="256dp"
+                android:layout_height="160dp"
+                android:background="@drawable/mainbg_03"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="삭제"
+                    android:textSize="20sp"
                     android:padding="8dp"
-                    android:background="@drawable/mainbg_03">
+                    android:layout_gravity="center"/>
 
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/ic_send" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@drawable/mainbg_02"/>
 
-                </RelativeLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="댓글을 삭제하시겠습니까?"
+                    android:textSize="16sp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:padding="12dp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@drawable/mainbg_02"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
 
 
-            </soup.neumorphism.NeumorphCardView>
+                    <TextView
+                        android:id="@+id/tv_chatting_delete_cancel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="취소"
+                        android:textSize="16sp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_weight="1"/>
 
-        </LinearLayout>
+                    <TextView
+                        android:id="@+id/tv_chatting_delete_ok"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="확인"
+                        android:textSize="16sp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_weight="1"/>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+        </soup.neumorphism.NeumorphCardView>
+
 
     </RelativeLayout>
 
 
-</LinearLayout>
+
+</RelativeLayout>

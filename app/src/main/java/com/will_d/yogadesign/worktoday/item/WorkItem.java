@@ -54,13 +54,15 @@ public class WorkItem {
     public boolean isLogModify =false;
     public boolean isTimeFirst =false;
 
+    private boolean isPrivate  =false;
+
 
 
     public WorkItem() {
 
     }
 
-    public WorkItem(String no, String imgUrl, String nickName, String name, boolean isgoal, String tvgoal, boolean ispreNotification, String tvpreNotification, boolean islocationNotification, String tvlocalNotification, boolean[] isweeks, boolean isItemInOff, int completeNum, boolean[] isDayOrTodaySelected, RelativeLayout rlWorkitemDeleteDialog, TextView tvWorkitemDeleteOK, TextView tvWorkitemDeleteCancel, boolean isLogModify, boolean isTimeFirst) {
+    public WorkItem(String no, String imgUrl, String nickName, String name, boolean isgoal, String tvgoal, boolean ispreNotification, String tvpreNotification, boolean islocationNotification, String tvlocalNotification, boolean[] isweeks, boolean isItemInOff, int completeNum, boolean[] isDayOrTodaySelected, RelativeLayout rlWorkitemDeleteDialog, TextView tvWorkitemDeleteOK, TextView tvWorkitemDeleteCancel, boolean isLogModify, boolean isTimeFirst, boolean isPrivate) {
         this.no = no;
         this.imgUrl = imgUrl;
         this.nickName = nickName;
@@ -80,6 +82,7 @@ public class WorkItem {
         this.tvWorkitemDeleteCancel = tvWorkitemDeleteCancel;
         this.isLogModify = isLogModify;
         this.isTimeFirst = isTimeFirst;
+        this.isPrivate = isPrivate;
     }
 
     public String getNo() {
@@ -144,6 +147,10 @@ public class WorkItem {
 
     public boolean getIsTimeFirst() {
         return isTimeFirst;
+    }
+
+    public boolean getIsPrivate() {
+        return isPrivate;
     }
 }
 

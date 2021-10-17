@@ -6,7 +6,7 @@
 
     mysqli_query($conn, "set names utf8");
 
-    $sql = "SELECT * FROM MemberYogaDesign ORDER BY isUserPublic DESC";
+    $sql = "SELECT * FROM MemberYogaDesign ORDER BY favoriteNum ASC";
     $result = mysqli_query($conn, $sql);
 
     $row_num = mysqli_num_rows($result);

@@ -7,8 +7,7 @@
     android:paddingRight="4dp"
     android:paddingLeft="4dp"
     android:layout_marginTop="4dp"
-    android:layout_marginBottom="4dp"
-    android:background="#C7DDFF">
+    android:layout_marginBottom="4dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/civ_profile"
@@ -55,11 +54,8 @@
             android:layout_toLeftOf="@id/civ_profile"
             android:layout_marginTop="12dp">
 
-            <ImageView
-                android:id="@+id/iv_message_bg"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitXY"/>
+
+
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -69,7 +65,7 @@
                     android:id="@+id/tv_message"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="qwdqwdqwdqwdqwdddqwdqwqwddqwqwdqwdqwdqwd"
+                    android:text="qwdqqdwqwdqwdqwdqw"
                     android:maxWidth="256dp"
                     android:textSize="16sp"
                     android:padding="12dp"/>
