@@ -13,13 +13,30 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.will_d.yogadesign.R;
 import com.will_d.yogadesign.service.Global;
+import com.will_d.yogadesign.service.RetrofitHelper;
+import com.will_d.yogadesign.service.RetrofitService;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 
 public class ProfileSetActivity extends AppCompatActivity {
@@ -27,10 +44,9 @@ public class ProfileSetActivity extends AppCompatActivity {
     private ImageView ivProfile;
     private EditText etUserNickName;
     private EditText etUserStateMsg;
+    private RelativeLayout rlProfileSetBlur;
 
-    //넣어줘야함
-    private String uriToString;
-    private String imgPath;
+    private boolean isPhotoChecked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,15 +56,11 @@ public class ProfileSetActivity extends AppCompatActivity {
         ivProfile = findViewById(R.id.iv_profile);
         etUserNickName = findViewById(R.id.et_user_nickname);
         etUserStateMsg = findViewById(R.id.et_state_msg);
+        rlProfileSetBlur = findViewById(R.id.rl_profileset_blur);
 
-//        SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
-//        String uriToString = pref.getString("ProfileUritoString", "");
-//        String userNickName = pref.getString("ProfileName", "");
-//
-//        Glide.with(this).load(Uri.parse(uriToString)).into(ivProfile);
-//        etUserNickName.setText(userNickName);
-
-
+        Glide.with(this).load(Global.myRealImgUrl).into(ivProfile);
+        etUserNickName.setText(Global.myNickName);
+        etUserStateMsg.setText("");
     }
 
     public void clickClose(View view) {
@@ -66,10 +78,62 @@ public class ProfileSetActivity extends AppCompatActivity {
         editor.putString("myStateMsg", Global.myStateMsg);
         editor.putString("myImgRealPathUrl", Global.myRealImgUrl);
         editor.commit();
-        startActivity(new Intent(this, WorkShopActivity.class));
-        finish();
+
+        rlProfileSetBlur.setVisibility(View.VISIBLE);
+        meberInsertDB();
     }
 
+    public void meberInsertDB(){
+        SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
+        String id = pref.getString("id","");
+        boolean isLogin = pref.getBoolean("isLogin", false);
+        String nickName = etUserNickName.getText().toString();
+        String stateMsg = etUserStateMsg.getText().toString();
+
+        Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
+        RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+
+        Map<String, String> dataPart = new HashMap<>();
+
+        MultipartBody.Part filePart = null;
+        if (isPhotoChecked){
+            File file = new File(Global.myRealImgUrl);
+            RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
+            filePart = MultipartBody.Part.createFormData("img", file.getName(), requestBody);
+        }else {
+            dataPart.put("myKaKaoHttpStr", Global.myRealImgUrl);
+        }
+        dataPart.put("isPhotoChecked", String.valueOf(isPhotoChecked)); //************** 이게 제일 중요한 판단일걱 같은데??
+        dataPart.put("id", id);
+        dataPart.put("nickName", nickName);
+        dataPart.put("stateMsg", stateMsg);
+        dataPart.put("isLogin", String.valueOf(isLogin));
+        dataPart.put("isUserPublic", String.valueOf(true));
+        dataPart.put("favoriteNum", String.valueOf(0));
+        dataPart.put("favoriteCheckedUserList", "[]");
+
+        Call<String> call = retrofitService.meberInsertDB(dataPart, filePart);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                rlProfileSetBlur.setVisibility(View.INVISIBLE);
+                Log.i("memberPostDataToServer", response.body());
+                startActivity(new Intent(ProfileSetActivity.this, WorkShopActivity.class));
+                finish();
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.i("memberPostDataToServer", t.getMessage());
+            }
+        });
+
+
+
+
+
+
+    }
 
     public void clickChangeProfile(View view) {
         Intent intent = new Intent(Intent.ACTION_PICK);
@@ -85,8 +149,9 @@ public class ProfileSetActivity extends AppCompatActivity {
                 Intent intent = result.getData();
                 Uri uri = intent.getData();
                 Global.myRealImgUrl = getRealPathFromUri(uri);
-
-                Glide.with(ProfileSetActivity.this).load(uri).into(ivProfile);
+                isPhotoChecked = true;
+            }else {
+                isPhotoChecked = false;
             }
         }
     });

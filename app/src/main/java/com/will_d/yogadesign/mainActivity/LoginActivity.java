@@ -25,8 +25,13 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
+import com.kakao.sdk.auth.model.OAuthToken;
+import com.kakao.sdk.user.UserApiClient;
+import com.kakao.sdk.user.model.User;
+import com.squareup.picasso.Picasso;
 import com.will_d.yogadesign.R;
 import com.will_d.yogadesign.service.ForcedTerminationService;
+import com.will_d.yogadesign.service.Global;
 import com.will_d.yogadesign.service.RetrofitHelper;
 import com.will_d.yogadesign.service.RetrofitService;
 
@@ -39,6 +44,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import kotlin.Unit;
+import kotlin.jvm.functions.Function2;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -46,6 +53,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import soup.neumorphism.NeumorphCardView;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -66,6 +74,8 @@ public class LoginActivity extends AppCompatActivity {
     private ArrayList<String> favoriteCheckedUserList = new ArrayList<>();
     //*************************************************
 
+    private ImageView ivBrand;
+
 
 
     @Override
@@ -77,10 +87,8 @@ public class LoginActivity extends AppCompatActivity {
         etName = findViewById(R.id.et_name);
         ivProfile = findViewById(R.id.iv_profile);
 
-        SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
-        isLogin = pref.getBoolean("isLogin", false);
-        isFirstProfileChecked = pref.getBoolean("isFirstProfileChecked", true);
-
+        ivBrand = findViewById(R.id.iv_brand);
+        Glide.with(this).load(R.drawable.ic_yodadesign_brand_foreground).into(ivBrand);
 
         //퍼미션 작업 수행
         String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -88,9 +96,11 @@ public class LoginActivity extends AppCompatActivity {
             requestPermissions(permissions, PERMISSION_EX_PHOTO);
         }
 
-        memberLoadDb();
+        SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
+        isLogin = pref.getBoolean("isLogin", false);
+        isFirstProfileChecked = pref.getBoolean("isFirstProfileChecked", true);
 
-        Log.i("Login", isLogin+"");
+
         if (!isFirstProfileChecked){
             Intent intent = new Intent(this, ProfileSetActivity.class);
             startActivity(intent);
@@ -101,7 +111,68 @@ public class LoginActivity extends AppCompatActivity {
         }
 
 
+
+
     }
+
+    public void clickKaKaoLogin(View view) {
+        UserApiClient.getInstance().loginWithKakaoAccount(this, new Function2<OAuthToken, Throwable, Unit>() {
+            @Override
+            public Unit invoke(OAuthToken oAuthToken, Throwable throwable) {
+                if (oAuthToken!=null){
+                    Toast.makeText(LoginActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
+                    UserApiClient.getInstance().me(new Function2<User, Throwable, Unit>() {
+                        @Override
+                        public Unit invoke(User user, Throwable throwable) {
+                            if (user!=null){
+                                Global.myRealImgUrl = user.getKakaoAccount().getProfile().getProfileImageUrl();
+                                Global.myNickName = user.getKakaoAccount().getProfile().getNickname();
+                                String id = String.valueOf(user.getId());
+                                SharedPreferences pref= getSharedPreferences("Data", MODE_PRIVATE);
+
+
+                                isLogin =true;
+                                SharedPreferences.Editor editor = pref.edit();
+                                editor.putString("id", id);
+                                editor.putBoolean("isLogin", isLogin);
+                                editor.putBoolean("isFirstCompair", true);
+                                editor.commit();
+
+                                isFirstProfileChecked = pref.getBoolean("isFirstProfileChecked", false);
+                                Log.i("Global", id);
+                                if (isFirstProfileChecked){
+                                    Intent intent = new Intent(LoginActivity.this, WorkShopActivity.class);
+                                    startActivity(intent);
+                                    LoginActivity.this.finish();
+                                }else {
+                                    Intent intent = new Intent(LoginActivity.this, ProfileSetActivity.class);
+                                    startActivity(intent);
+                                    LoginActivity.this.finish();
+                                }
+
+                            }
+                            return null;
+                        }
+                    });
+                }else {
+                    Toast.makeText(LoginActivity.this, "사용자 정보 요청 실패", Toast.LENGTH_SHORT).show();
+                }
+                return null;
+            }
+        });
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode==PERMISSION_EX_PHOTO && grantResults[0]==PackageManager.PERMISSION_GRANTED){
+            Toast.makeText(this, "외부버장소 접근 허용", Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(this, "이미지 업로드 불가", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     public void clickLogin(View view) {
 
@@ -113,8 +184,8 @@ public class LoginActivity extends AppCompatActivity {
                 SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
                 SharedPreferences.Editor editor = pref.edit();
                 editor.putBoolean("isLogin", isLogin);
-                editor.putString("id", datas.get(i));
                 editor.putBoolean("isFirstCompair", true);
+                editor.putString("id", datas.get(i));
                 editor.commit();
 
                 isFirstProfileChecked = pref.getBoolean("isFirstProfileChecked", false);
@@ -142,7 +213,6 @@ public class LoginActivity extends AppCompatActivity {
         launcher.launch(intent);
     }
 
-
     public void clickDBLoad(View view) { //**암시로 사용할 버튼
         String id = etId.getText().toString();
         String name = etName.getText().toString();
@@ -169,7 +239,7 @@ public class LoginActivity extends AppCompatActivity {
         String jsonStr = gson.toJson(favoriteCheckedUserList);
         dataPart.put("favoriteCheckedUserList", jsonStr);
 
-        Call<String> call = retrofitService.memberPostDataToServer(dataPart, filePart);
+        Call<String> call = retrofitService.meberInsertDB(dataPart, filePart);
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
@@ -183,7 +253,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-
 
     void memberLoadDb(){
         Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
@@ -240,18 +309,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
     }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode==PERMISSION_EX_PHOTO && grantResults[0]==PackageManager.PERMISSION_GRANTED){
-            Toast.makeText(this, "외부버장소 접근 허용", Toast.LENGTH_SHORT).show();
-        }else {
-            Toast.makeText(this, "이미지 업로드 불가", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-
 
     ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override

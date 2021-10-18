@@ -3,6 +3,7 @@ package com.will_d.yogadesign.mainActivity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -58,6 +59,7 @@ public class TestActivity extends AppCompatActivity {
                                 tvNickName.setText(nickName);
                                 tvId.setText(id+"");
                                 Glide.with(TestActivity.this).load(imgUrl).into(ivProfile);
+                                Log.i("qwdwefggerqj", imgUrl);
                             }
                             return null;
                         }

@@ -32,10 +32,7 @@ public class IntroActivity extends AppCompatActivity {
 
         iv = findViewById(R.id.iv);
 
-        Glide.with(this).load(R.drawable.bg_intro01).into(iv);
-
-//        String keyHash = Utility.INSTANCE.getKeyHash(this);
-//        Log.i("KeyHash", keyHash);
+        Glide.with(this).load(R.drawable.ic_yodadesign_brand_foreground).into(iv);
 
         Animation ani = AnimationUtils.loadAnimation(this, R.anim.activity_intro);
         iv.startAnimation(ani);

@@ -194,10 +194,25 @@
 
 
 
+    </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/rl_profileset_blur"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#bbC7DDFF"
+        android:visibility="invisible">
 
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_centerInParent="true"
+            android:visibility="visible"
+            android:indeterminateTint="#FF9999FF"/>
 
     </RelativeLayout>
+
 
 
 </RelativeLayout>
