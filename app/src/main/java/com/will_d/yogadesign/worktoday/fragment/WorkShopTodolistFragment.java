@@ -306,6 +306,8 @@ public class WorkShopTodolistFragment extends Fragment {
                 Log.i("loadTodolistData", response.body());
 //                todolistItems.clear();
 //                adapter.notifyDataSetChanged();
+                progressBar.setVisibility(View.INVISIBLE);
+                recyclerView.setVisibility(View.VISIBLE);
                 try {
                     JSONArray jsonArray = new JSONArray(jsonStr);
                     for (int i=0; i<jsonArray.length(); i++){
@@ -362,7 +364,7 @@ public class WorkShopTodolistFragment extends Fragment {
                         }
 
 
-                        progressBar.setVisibility(View.INVISIBLE);
+
 
                         Calendar cal = Calendar.getInstance();
                         int day_of_week = cal.get(Calendar.DAY_OF_WEEK);
@@ -416,7 +418,7 @@ public class WorkShopTodolistFragment extends Fragment {
                                 }
                                 break;
                         }
-                        recyclerView.setVisibility(View.VISIBLE);
+
 
 
                     }

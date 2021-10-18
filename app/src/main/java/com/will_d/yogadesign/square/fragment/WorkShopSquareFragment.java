@@ -470,11 +470,13 @@ public class WorkShopSquareFragment extends Fragment {
 
 
             //todo:이거 교수님한테 질문해야함 !!!!
+            Log.i("afwqfgqg57483", squareMemberItem.getId());
             for (int i=0; i<myFavoriteCheckedUserList.size(); i++){
                 String myFav = myFavoriteCheckedUserList.get(i);
+                Log.i("afwqfgqg", myFav);
                 if (myFav.equals(squareMemberItem.getId())){
                     holder.ivMemberFavoriteState.setVisibility(View.VISIBLE);
-
+                    break;
                 }else {
                     holder.ivMemberFavoriteState.setVisibility(View.INVISIBLE);
 
