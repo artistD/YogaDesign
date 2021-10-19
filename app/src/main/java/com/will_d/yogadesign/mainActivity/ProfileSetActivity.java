@@ -68,7 +68,7 @@ public class ProfileSetActivity extends AppCompatActivity {
         etUserNickName.setText(Global.myNickName);
         etUserStateMsg.setText("");
 
-        //퍼미션 작업 수행
+
         String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (checkSelfPermission(permissions[0]) == PackageManager.PERMISSION_DENIED){
             requestPermissions(permissions, PERMISSION_EX_PHOTO);
