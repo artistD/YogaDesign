@@ -326,7 +326,14 @@ public class WorkShopSquareFragment extends Fragment {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
 
                         String nickName = jsonObject.getString("name");
-                        String imgUrl = "http://willd88.dothome.co.kr/YogaDesign2/member/" +jsonObject.getString("frofile");
+                        String frofile = jsonObject.getString("frofile");
+                        String imgUrl;
+                        if (frofile.contains("k.kakao")){
+                            imgUrl = frofile;
+                        }else {
+                            imgUrl = "http://willd88.dothome.co.kr/YogaDesign2/member/" +jsonObject.getString("frofile");
+                        }
+
 
                         String id = jsonObject.getString("id");
                         String prefId = pref.getString("id", "");
@@ -348,7 +355,7 @@ public class WorkShopSquareFragment extends Fragment {
                         }
 
                         String userMsg = jsonObject.getString("stateMsg");
-                        if(userMsg.equals("null")){
+                        if(userMsg.equals("null") || userMsg.equals("")){
                             userMsg = "아직 상태메세지가 없어요!";
                         }
 

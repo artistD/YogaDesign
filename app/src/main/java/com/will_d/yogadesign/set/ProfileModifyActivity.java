@@ -66,12 +66,7 @@ public class ProfileModifyActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-
-            Glide.with(this).load(Global.myRealImgUrl).into(ivProfile);
-
-
-
+        Glide.with(this).load(Global.myRealImgUrl).into(ivProfile);
         etUserNickName.setText(Global.myNickName);
         etUserStateMsg.setText(Global.myStateMsg);
 

@@ -4,11 +4,14 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.loader.content.CursorLoader;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,6 +21,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
@@ -27,6 +31,7 @@ import com.will_d.yogadesign.service.RetrofitHelper;
 import com.will_d.yogadesign.service.RetrofitService;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,6 +45,7 @@ import retrofit2.Retrofit;
 
 
 public class ProfileSetActivity extends AppCompatActivity {
+    private final int PERMISSION_EX_PHOTO = 1018;
 
     private ImageView ivProfile;
     private EditText etUserNickName;
@@ -61,9 +67,24 @@ public class ProfileSetActivity extends AppCompatActivity {
         Glide.with(this).load(Global.myRealImgUrl).into(ivProfile);
         etUserNickName.setText(Global.myNickName);
         etUserStateMsg.setText("");
+
+        //퍼미션 작업 수행
+        String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (checkSelfPermission(permissions[0]) == PackageManager.PERMISSION_DENIED){
+            requestPermissions(permissions, PERMISSION_EX_PHOTO);
+        }
     }
 
     public void clickClose(View view) {
+        SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("id","");
+        editor.putBoolean("isFirstCompair", false);
+        editor.putBoolean("isLogin", false);
+        editor.putBoolean("isFirstProfileChecked", false);
+        editor.putString("myNickName", "");
+        editor.putString("myImgRealPathUrl", "");
+        editor.commit();
         startActivity(new Intent(this, LoginActivity.class));
     }
 
@@ -110,7 +131,10 @@ public class ProfileSetActivity extends AppCompatActivity {
         dataPart.put("isLogin", String.valueOf(isLogin));
         dataPart.put("isUserPublic", String.valueOf(true));
         dataPart.put("favoriteNum", String.valueOf(0));
-        dataPart.put("favoriteCheckedUserList", "[]");
+        ArrayList<String> arr = new ArrayList<>();
+        Gson gson = new Gson();
+        String favoriteCheckedUserList = gson.toJson(arr);
+        dataPart.put("favoriteCheckedUserList", favoriteCheckedUserList);
 
         Call<String> call = retrofitService.meberInsertDB(dataPart, filePart);
         call.enqueue(new Callback<String>() {
@@ -130,9 +154,6 @@ public class ProfileSetActivity extends AppCompatActivity {
 
 
 
-
-
-
     }
 
     public void clickChangeProfile(View view) {
@@ -149,12 +170,23 @@ public class ProfileSetActivity extends AppCompatActivity {
                 Intent intent = result.getData();
                 Uri uri = intent.getData();
                 Global.myRealImgUrl = getRealPathFromUri(uri);
+                Glide.with(ProfileSetActivity.this).load(uri).into(ivProfile);
                 isPhotoChecked = true;
             }else {
                 isPhotoChecked = false;
             }
         }
     });
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode==PERMISSION_EX_PHOTO && grantResults[0]==PackageManager.PERMISSION_GRANTED){
+            Toast.makeText(this, "외부버장소 접근 허용", Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(this, "이미지 업로드 불가", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
 
     //Uri -- > 절대경로로 바꿔서 리턴시켜주는 메소드

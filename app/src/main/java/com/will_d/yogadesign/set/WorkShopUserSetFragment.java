@@ -56,6 +56,7 @@ public class WorkShopUserSetFragment extends Fragment {
 
 
 
+        //로그아웃
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,7 +107,13 @@ public class WorkShopUserSetFragment extends Fragment {
 
         Glide.with(getActivity()).load(Global.myRealImgUrl).into(civUserSettingProfile);
         tvUserSettingNickName.setText(Global.myNickName);
-        tvUserSettingStateMsg.setText(Global.myStateMsg);
+
+        if (Global.myStateMsg.equals("") || Global.myStateMsg.equals("null")){
+            tvUserSettingStateMsg.setText("상태메세지를 입력" + "\n" + "해주세요!");
+        }else {
+            tvUserSettingStateMsg.setText(Global.myStateMsg);
+        }
+
     }
 
     public  void memberLoginStateUpdateDB(String myId) {

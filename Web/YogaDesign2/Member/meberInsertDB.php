@@ -12,6 +12,7 @@
     $favoriteNum = $_POST['favoriteNum'];
     $favoriteCheckedUserList = $_POST['favoriteCheckedUserList'];
 
+
     if($isPhotoChecked == 'true'){
 
         $file = $_FILES['img'];
@@ -30,23 +31,25 @@
     $nickName = addslashes($nickName);
     $stateMsg = addslashes($stateMsg);
 
-    $now = date('Y-m-d');
+
+    $now = date('Y-m-d H:i:s');
+
 
     $conn = mysqli_connect("localhost","willd88","messid88!!","willd88");
     mysqli_query($conn, "set names utf8");
 
     if($isPhotoChecked == 'true'){
-        $sql ="INSERT INTO MemberYogaDesign(id, name, frofile, stateMsg, isLogin, isUserPublic, favoriteNum, favoriteCheckedUserList, date) VALUES('$id', '$nickName', '$dstName', '$stateMsg', $isLogin, $isUerPublic, $favoriteNum, '$favoriteCheckedUserList', '$now')";
+        $sql ="INSERT INTO MemberYogaDesign(id, name, frofile, stateMsg, isLogin, isUserPublic, favoriteNum, favoriteCheckedUserList, date) VALUES('$id', '$nickName', '$dstName', '$stateMsg', $isLogin, $isUserPublic, '$favoriteNum', '$favoriteCheckedUserList', '$now')";
         $result = mysqli_query($conn, $sql);
 
     }else{
-        $sql ="INSERT INTO MemberYogaDesign(id, name, frofile, stateMsg, isLogin, isUserPublic, favoriteNum, favoriteCheckedUserList, date) VALUES('$id', '$nickName', '$myKaKaoHttpStr', '$stateMsg', $isLogin, $isUerPublic, $favoriteNum, '$favoriteCheckedUserList', '$now')";
+        $sql ="INSERT INTO MemberYogaDesign(id, name, frofile, stateMsg, isLogin, isUserPublic, favoriteNum, favoriteCheckedUserList, date) VALUES('$id', '$nickName', '$myKaKaoHttpStr', '$stateMsg', $isLogin, $isUserPublic, '$favoriteNum', '$favoriteCheckedUserList', '$now')";
         $result = mysqli_query($conn, $sql);
     }
 
 
     if($result) echo "게시글 업로드 되었습니다.";
-    else echo "게시글 업로드에 실패하였습니다. \n 다시시도해주세요.";
+    else echo 'ㄷㅏ시시도';
 
     mysqli_close($conn);
 
