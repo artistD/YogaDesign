@@ -127,9 +127,16 @@ public class ProfileModifyActivity extends AppCompatActivity {
     }
 
     public void clickChangeProfile(View view) {
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");
-        launcher.launch(intent);
+        SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
+        boolean isPermisssion = pref.getBoolean("isPermisssion", false);
+        if (isPermisssion){
+            Intent intent = new Intent(Intent.ACTION_PICK);
+            intent.setType("image/*");
+            launcher.launch(intent);
+        }else {
+            Toast.makeText(this, "이미지 업로드 불가", Toast.LENGTH_SHORT).show();
+            return;
+        }
     }
 
     ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {

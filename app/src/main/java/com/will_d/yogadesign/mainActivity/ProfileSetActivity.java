@@ -53,6 +53,7 @@ public class ProfileSetActivity extends AppCompatActivity {
     private RelativeLayout rlProfileSetBlur;
 
     private boolean isPhotoChecked = false;
+    private boolean isPermisssion  =false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,9 +158,17 @@ public class ProfileSetActivity extends AppCompatActivity {
     }
 
     public void clickChangeProfile(View view) {
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");
-        launcher.launch(intent);
+        SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
+        boolean isPermisssion = pref.getBoolean("isPermisssion", false);
+        if (isPermisssion){
+            Intent intent = new Intent(Intent.ACTION_PICK);
+            intent.setType("image/*");
+            launcher.launch(intent);
+        }else {
+            Toast.makeText(this, "이미지 업로드 불가", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
     }
 
 
@@ -182,8 +191,18 @@ public class ProfileSetActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(requestCode==PERMISSION_EX_PHOTO && grantResults[0]==PackageManager.PERMISSION_GRANTED){
             Toast.makeText(this, "외부버장소 접근 허용", Toast.LENGTH_SHORT).show();
+            isPermisssion = true;
+            SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putBoolean("isPermisssion", isPermisssion);
+            editor.commit();
         }else {
             Toast.makeText(this, "이미지 업로드 불가", Toast.LENGTH_SHORT).show();
+            isPermisssion  =false;
+            SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putBoolean("isPermisssion", isPermisssion);
+            editor.commit();
         }
     }
 
