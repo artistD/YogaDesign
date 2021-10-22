@@ -4,11 +4,14 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.loader.content.CursorLoader;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,6 +25,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 import com.will_d.yogadesign.R;
+import com.will_d.yogadesign.mainActivity.ProfileSetActivity;
 import com.will_d.yogadesign.service.Global;
 import com.will_d.yogadesign.service.RetrofitHelper;
 import com.will_d.yogadesign.service.RetrofitService;
@@ -39,13 +43,16 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class ProfileModifyActivity extends AppCompatActivity {
-
+    private final int PERMISSION_EX_PHOTO = 1018;
 
     private ImageView ivProfile;
     private EditText etUserNickName;
     private EditText etUserStateMsg;
 
     private boolean isPhotoChecked =false;
+
+    private boolean isPermisstion = false;
+
 
 
 
@@ -59,9 +66,25 @@ public class ProfileModifyActivity extends AppCompatActivity {
         etUserNickName = findViewById(R.id.et_user_nickname);
         etUserStateMsg = findViewById(R.id.et_state_msg);
 
-
+        String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (checkSelfPermission(permissions[0]) == PackageManager.PERMISSION_DENIED){
+            requestPermissions(permissions, PERMISSION_EX_PHOTO);
+        }
 
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode==PERMISSION_EX_PHOTO && grantResults[0]==PackageManager.PERMISSION_GRANTED){
+            Toast.makeText(this, "외부버장소 접근 허용", Toast.LENGTH_SHORT).show();
+            isPermisstion = true;
+        }else {
+            Toast.makeText(this, "이미지 업로드 불가", Toast.LENGTH_SHORT).show();
+            isPermisstion  =false;
+        }
+    }
+
 
     @Override
     protected void onResume() {
@@ -71,6 +94,7 @@ public class ProfileModifyActivity extends AppCompatActivity {
         etUserStateMsg.setText(Global.myStateMsg);
 
     }
+
 
     public void clickClose(View view) {
         finish();
@@ -129,7 +153,7 @@ public class ProfileModifyActivity extends AppCompatActivity {
     public void clickChangeProfile(View view) {
         SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
         boolean isPermisssion = pref.getBoolean("isPermisssion", false);
-        if (isPermisssion){
+        if (isPermisssion || ProfileModifyActivity.this.isPermisstion){
             Intent intent = new Intent(Intent.ACTION_PICK);
             intent.setType("image/*");
             launcher.launch(intent);

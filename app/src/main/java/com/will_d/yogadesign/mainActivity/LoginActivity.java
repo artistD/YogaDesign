@@ -10,13 +10,27 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
+import com.google.gson.JsonObject;
 import com.kakao.sdk.auth.model.OAuthToken;
 import com.kakao.sdk.user.UserApiClient;
 import com.kakao.sdk.user.model.User;
 import com.will_d.yogadesign.R;
 import com.will_d.yogadesign.service.Global;
+import com.will_d.yogadesign.service.RetrofitHelper;
+import com.will_d.yogadesign.service.RetrofitService;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -24,30 +38,45 @@ public class LoginActivity extends AppCompatActivity {
     private boolean isLogin = false;
     private boolean isFirstProfileChecked = false;
 
+
+    private ArrayList<String> idEqual = new ArrayList<>();
+    private boolean isIdEqual = false;
+
+    private SharedPreferences pref;
+
+    private String myNickName;
+    private String myProfileUrl;
+    private String mySteteMsg;
+    private boolean myIsUserPublic;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
 
         ivBrand = findViewById(R.id.iv_brand);
         Glide.with(this).load(R.drawable.ic_yodadesign_brand_foreground).into(ivBrand);
 
-        SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
+        pref = getSharedPreferences("Data", MODE_PRIVATE);
         isLogin = pref.getBoolean("isLogin", false);
         Log.i("isLogin", isLogin +"");
         isFirstProfileChecked = pref.getBoolean("isFirstProfileChecked", false);
         Log.i("isFirstProfileChecked", isFirstProfileChecked + "");
 
         if(isLogin && !isFirstProfileChecked){
-            Intent intent = new Intent(this, ProfileSetActivity.class);
+            Intent intent = new Intent(LoginActivity.this, ProfileSetActivity.class);
             startActivity(intent);
             finish();
         }else if(isLogin && isFirstProfileChecked) {
-            startActivity(new Intent(this, WorkShopActivity.class));
+            startActivity(new Intent(LoginActivity.this, WorkShopActivity.class));
             finish();
         }
-
-
     }
 
     public void clickKaKaoLogin(View view) {
@@ -86,16 +115,9 @@ public class LoginActivity extends AppCompatActivity {
 
 
 //                                isFirstProfileChecked = pref.getBoolean("isFirstProfileChecked", false);
+                                memberLoadDB();
                                 Log.i("Global", id);
-                                if (isFirstProfileChecked){
-                                    Intent intent = new Intent(LoginActivity.this, WorkShopActivity.class);
-                                    startActivity(intent);
-                                    LoginActivity.this.finish();
-                                }else {
-                                    Intent intent = new Intent(LoginActivity.this, ProfileSetActivity.class);
-                                    startActivity(intent);
-                                    LoginActivity.this.finish();
-                                }
+
 
                             }
                             return null;
@@ -108,6 +130,95 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void memberLoadDB(){
+        Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
+        RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+        Call<String> call = retrofitService.memberLoadDataFromServer();
+
+        idEqual.clear();
+        String prefId = pref.getString("id", "");
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+               String jsonStr = response.body();
+                try {
+                    JSONArray jsonArray = new JSONArray(jsonStr);
+                    for (int i=0; i<jsonArray.length();i++){
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        String id = jsonObject.getString("id");
+                        idEqual.add(id);
+
+                        if (id.equals(prefId)){
+
+                            String nickName = jsonObject.getString("name");
+                            String profileDstName = jsonObject.getString("frofile");
+                            String imgUrl ="";
+                            if (profileDstName.contains("k.kakao")){
+                                imgUrl = profileDstName;
+                            }else {
+                                imgUrl = "http://willd88.dothome.co.kr/YogaDesign2/member/" + profileDstName;
+                            }
+                            String stateMsg = jsonObject.getString("stateMsg");
+                            String userPublicStr = jsonObject.getString("isUserPublic");
+                            boolean isUserPublic = false;
+                            if (userPublicStr.equals("1")){
+                                isUserPublic = true;
+                            }else {
+                                isUserPublic = false;
+                            }
+                            myNickName = nickName;
+                            myProfileUrl = imgUrl;
+                            mySteteMsg = stateMsg;
+                            myIsUserPublic = isUserPublic;
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                for (int i=0;i<idEqual.size(); i++){
+                    if(idEqual.get(i).equals(prefId)){
+                        isIdEqual = true;
+                        break;
+                    }else {
+                        isIdEqual =false;
+                    }
+                }
+
+                if (isIdEqual){
+                    Global.myNickName = myNickName;
+                    Global.myStateMsg = mySteteMsg;
+                    Global.myRealImgUrl = myProfileUrl;
+                    Global.myIsUserPrivate = !myIsUserPublic;
+                    Global.isReLogin = true;
+                    startActivity(new Intent(LoginActivity.this, WorkShopActivity.class));
+                    finish();
+                    return;
+                }else {
+                    Intent intent = new Intent(LoginActivity.this, ProfileSetActivity.class);
+                    startActivity(intent);
+                    LoginActivity.this.finish();
+                }
+
+//                if (isFirstProfileChecked){
+//                    Intent intent = new Intent(LoginActivity.this, WorkShopActivity.class);
+//                    startActivity(intent);
+//                    LoginActivity.this.finish();
+//                }else {
+//                    Intent intent = new Intent(LoginActivity.this, ProfileSetActivity.class);
+//                    startActivity(intent);
+//                    LoginActivity.this.finish();
+//                }
+
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+
+            }
+        });
     }
 
 }

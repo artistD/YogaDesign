@@ -12,9 +12,12 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.applandeo.materialcalendarview.CalendarView;
+import com.applandeo.materialcalendarview.EventDay;
+import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
 import com.will_d.yogadesign.R;
 import com.will_d.yogadesign.service.RetrofitHelper;
 import com.will_d.yogadesign.service.RetrofitService;
@@ -112,6 +115,13 @@ public class WorkItemClickedActivity extends AppCompatActivity {
 
         logLoadDataFromServer(workItemNo);
         calendarDataLoadFromServer(workItemNo);
+
+        calendarView.setOnDayClickListener(new OnDayClickListener() {
+            @Override
+            public void onDayClick(EventDay eventDay) {
+
+            }
+        });
 
     }
 

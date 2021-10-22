@@ -155,7 +155,6 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
             @Override
             public void onClick(View v) {
                 PopupWindow popupWindow =  holder.showPopup(filnalPosition);
-                Toast.makeText(context, "qwfqwfqwf", Toast.LENGTH_SHORT).show();
                 no = item.getNo();
 
             }
@@ -261,7 +260,6 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
                 @Override
                 public void onClick(View v) {
                     WorkItem item = items.get(getAdapterPosition());
-                    Toast.makeText(context, "asdf", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(context, WorkItemClickedActivity.class);
                     intent.putExtra("workItemNo", item.getNo());
                     intent.putExtra("name", item.getName());
@@ -365,7 +363,6 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
                 @Override
                 public void onClick(View v) {
                     popupIsItemPrivate = !popupIsItemPrivate;
-                    Toast.makeText(context, "qwfqwffqw", Toast.LENGTH_SHORT).show();
                     if (popupIsItemPrivate) tvItemPrivate.setText("on");
                     else tvItemPrivate.setText("off");
                     WorkItem workItem = items.get(finalPosition);

@@ -173,7 +173,6 @@ public class WorkShopActivity extends AppCompatActivity {
             timeTimerFragment.editor.putInt("sec", timeTimerFragment.timeThread.sec);
             timeTimerFragment.editor.commit();
         }
-        Toast.makeText(this, "qwdqwdqw", Toast.LENGTH_SHORT).show();
     }
         super.onDestroy();
 

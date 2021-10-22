@@ -201,7 +201,7 @@ public class ProfileSetActivity extends AppCompatActivity {
             isPermisssion  =false;
             SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
             SharedPreferences.Editor editor = pref.edit();
-            editor.putBoolean("isPermisssion", isPermisssion);
+            editor.putBoolean("1", isPermisssion);
             editor.commit();
         }
     }

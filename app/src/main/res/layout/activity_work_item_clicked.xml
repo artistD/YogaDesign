@@ -73,25 +73,38 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginLeft="16dp">
 
-
-
-                <com.applandeo.materialcalendarview.CalendarView
-                    android:id="@+id/calendar"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:overScrollMode="never"
-                    app:highlightedDaysLabelsColor="#FF9999FF"
-                    app:type="many_days_picker"
-                    app:headerColor="#FF9999FF"
-                    app:swipeEnabled="false"
-                    app:selectionColor="#FF9999FF"
-                    app:pagesColor="#55C7DDFF"
-                    app:abbreviationsBarColor="#55C7DDFF" />
-
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clickable="true"/>
+                    android:layout_height="match_parent">
+
+                    <com.applandeo.materialcalendarview.CalendarView
+                        android:id="@+id/calendar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:overScrollMode="never"
+                        app:highlightedDaysLabelsColor="#FF9999FF"
+                        app:type="many_days_picker"
+                        app:headerColor="#FF9999FF"
+                        app:swipeEnabled="false"
+                        android:clickable="false"
+                        app:selectionColor="#FF9999FF"
+                        app:pagesColor="#55C7DDFF"
+                        app:abbreviationsBarColor="#55C7DDFF" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="316dp"
+                        android:clickable="true"
+                        android:layout_alignParentBottom="true"/>
+
+
+                </RelativeLayout>
+
+
+
+
+
+
 
 
 

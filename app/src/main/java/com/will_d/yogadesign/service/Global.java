@@ -35,9 +35,11 @@ public class Global {
     public static boolean isPrifileChanged = false;
 
     //자신의 데이터에 관한거임
+    public static boolean isReLogin = false;
     public static String myRealImgUrl;
     public static String myNickName;
     public static String myStateMsg;
+    public static boolean myIsUserPrivate;
 
 
     //시간이 변경되거나 아이템 이 변경될떄도 제어해야될게필요함 : 근데 이건 지금 할게 아님

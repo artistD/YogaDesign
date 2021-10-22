@@ -51,10 +51,9 @@ public class TimeTimerFragment extends Fragment {
     public boolean isPlayAndPuase = false;
 
 
-   public SharedPreferences pref;
-   public SharedPreferences.Editor editor;
+    public SharedPreferences pref;
+    public SharedPreferences.Editor editor;
 
-    //
     public ProgressBar progressBar;
     public RelativeLayout rl;
 

@@ -110,11 +110,21 @@
 
 
             <TextView
+                android:id="@+id/tv_mc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Mission Complete!!"
+                android:text="Mission Complete"
                 android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_mission_clear_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="16:32"
+                android:layout_below="@id/tv_mc"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="4dp"/>
 
         </RelativeLayout>
 

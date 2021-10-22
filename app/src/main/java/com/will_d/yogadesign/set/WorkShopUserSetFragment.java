@@ -102,8 +102,12 @@ public class WorkShopUserSetFragment extends Fragment {
         super.onResume();
 
         SharedPreferences pref = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
-        boolean isUserPrivateMode = pref.getBoolean("isUserPrivateMode", false);
-        swPrivateMode.setChecked(isUserPrivateMode);
+        if (Global.isReLogin){
+            swPrivateMode.setChecked(Global.myIsUserPrivate);
+        }else {
+            boolean isUserPrivateMode = pref.getBoolean("isUserPrivateMode", false);
+            swPrivateMode.setChecked(isUserPrivateMode);
+        }
 
         Glide.with(getActivity()).load(Global.myRealImgUrl).into(civUserSettingProfile);
         tvUserSettingNickName.setText(Global.myNickName);

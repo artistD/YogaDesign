@@ -804,8 +804,14 @@ public class WokrDataSetActivity extends AppCompatActivity {
     }
 
     public void clickWeeksChecked(View view) {
-        isWeeksChecked=!isWeeksChecked;
         ImageView imageView = (ImageView) view;
+        String num = imageView.getTag().toString();
+        if(weeksData[Integer.parseInt(num)]){
+            isWeeksChecked = true;
+        }else {
+            isWeeksChecked = false;
+        }
+        isWeeksChecked=!isWeeksChecked;
         if (isWeeksChecked){
             imageView.setImageResource(R.drawable.ic_checked);
             if (imageView.getTag().toString().equals("0")) weeksData[0] = true;
@@ -815,7 +821,6 @@ public class WokrDataSetActivity extends AppCompatActivity {
             else if (imageView.getTag().toString().equals("4")) weeksData[4] = true;
             else if (imageView.getTag().toString().equals("5")) weeksData[5] = true;
             else if (imageView.getTag().toString().equals("6")) weeksData[6] = true;
-
         }else {
             imageView.setImageResource(R.drawable.ic_unchecked);
             if (imageView.getTag().toString().equals("0")) weeksData[0] = false;
