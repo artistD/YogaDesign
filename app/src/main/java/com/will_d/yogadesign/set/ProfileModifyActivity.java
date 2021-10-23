@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -48,6 +49,7 @@ public class ProfileModifyActivity extends AppCompatActivity {
     private ImageView ivProfile;
     private EditText etUserNickName;
     private EditText etUserStateMsg;
+    private RelativeLayout rlProfileSetBlur;
 
     private boolean isPhotoChecked =false;
 
@@ -67,6 +69,7 @@ public class ProfileModifyActivity extends AppCompatActivity {
         ivProfile = findViewById(R.id.iv_profile);
         etUserNickName = findViewById(R.id.et_user_nickname);
         etUserStateMsg = findViewById(R.id.et_state_msg);
+        rlProfileSetBlur = findViewById(R.id.rl_profileset_blur);
 
         String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (checkSelfPermission(permissions[0]) == PackageManager.PERMISSION_DENIED){
@@ -85,6 +88,10 @@ public class ProfileModifyActivity extends AppCompatActivity {
             Toast.makeText(this, "이미지 업로드 불가", Toast.LENGTH_SHORT).show();
             isPermisstion  =false;
         }
+        SharedPreferences pref = getSharedPreferences("Data",MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putBoolean("isPermisssion", isPermisstion);
+        editor.commit();
     }
 
 
@@ -105,7 +112,10 @@ public class ProfileModifyActivity extends AppCompatActivity {
     }
 
     public void clickSave(View view) {
-        Global.myRealImgUrl = getRealPathFromUri(uri);
+        rlProfileSetBlur.setVisibility(View.VISIBLE);
+        if (uri!=null){
+            Global.myRealImgUrl = getRealPathFromUri(uri);
+        }
         Global.myNickName = etUserNickName.getText().toString();
         Global.myStateMsg = etUserStateMsg.getText().toString();
 
@@ -121,7 +131,6 @@ public class ProfileModifyActivity extends AppCompatActivity {
 
         Log.i("isPhotoChecked", isPhotoChecked+"");
         memberProfileUpdateDB(id, Global.myNickName, Global.myStateMsg, isPhotoChecked);
-        finish();
     }
 
     public void memberProfileUpdateDB(String id, String name, String userStateMsg, boolean isPhotoChecked){
@@ -145,7 +154,9 @@ public class ProfileModifyActivity extends AppCompatActivity {
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
+                rlProfileSetBlur.setVisibility(View.INVISIBLE);
                 Log.i("ehrherherehrerh", response.body());
+                finish();
             }
 
             @Override
@@ -158,7 +169,7 @@ public class ProfileModifyActivity extends AppCompatActivity {
     public void clickChangeProfile(View view) {
         SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
         boolean isPermisssion = pref.getBoolean("isPermisssion", false);
-        if (isPermisssion || ProfileModifyActivity.this.isPermisstion){
+        if (isPermisssion){
             Intent intent = new Intent(Intent.ACTION_PICK);
             intent.setType("image/*");
             launcher.launch(intent);

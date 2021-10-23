@@ -134,7 +134,7 @@
                 android:textSize="20sp"
                 android:textColorHint="#FF666666"
                 android:inputType="text"
-                android:maxLength="20"
+                android:maxLength="40"
                 android:background="@drawable/bg_edit"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
@@ -169,7 +169,7 @@
                 android:textSize="20sp"
                 android:textColorHint="#FF666666"
                 android:inputType="text"
-                android:maxLength="20"
+                android:maxLength="40"
                 android:background="@drawable/bg_edit"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
@@ -179,9 +179,23 @@
         </soup.neumorphism.NeumorphCardView>
 
 
+    </RelativeLayout>
 
 
+    <RelativeLayout
+        android:id="@+id/rl_profileset_blur"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#bbC7DDFF"
+        android:visibility="invisible">
 
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_centerInParent="true"
+            android:indeterminateTint="#FF9999FF"
+            android:visibility="visible" />
 
     </RelativeLayout>
 

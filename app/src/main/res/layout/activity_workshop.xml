@@ -223,14 +223,36 @@
 
         <ImageView
             android:id="@+id/iv_todolist_back"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:clickable="true"
+            android:onClick="clickTodolistBack"
+            android:src="@drawable/ic_newback"
+            android:visibility="invisible" />
+
+
+
+        <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_newback"
-            android:clickable="true"
-            android:layout_marginLeft="16dp"
             android:layout_centerVertical="true"
-            android:onClick="clickTodolistBack"
-            android:visibility="invisible"/>
+            android:layout_marginRight="16dp"
+            app:cardCornerRadius="4dp"
+            android:clickable="true"
+            android:layout_alignParentRight="true"
+            android:onClick="clickNotification">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_newnoti"
+                android:background="@drawable/mainbg_02"/>
+
+        </androidx.cardview.widget.CardView>
+
+
 
     </RelativeLayout>
 

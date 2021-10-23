@@ -266,6 +266,7 @@
                 android:layout_marginLeft="8dp"/>
 
             <soup.neumorphism.NeumorphImageView
+                android:id="@+id/niv_license"
                 style="@style/Widget.Neumorph.ImageView"
                 android:layout_width="60dp"
                 android:layout_height="60dp"

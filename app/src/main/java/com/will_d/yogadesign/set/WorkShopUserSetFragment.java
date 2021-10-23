@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,6 +29,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import soup.neumorphism.NeumorphCardView;
 import soup.neumorphism.NeumorphImageView;
 
 public class WorkShopUserSetFragment extends Fragment {
@@ -37,6 +39,8 @@ public class WorkShopUserSetFragment extends Fragment {
     private TextView tvUserSettingStateMsg;
     private NeumorphImageView nivUserSettingModify;
     private Switch swPrivateMode;
+
+    private NeumorphImageView nivLicence;
 
     @Nullable
     @Override
@@ -53,6 +57,8 @@ public class WorkShopUserSetFragment extends Fragment {
         nivUserSettingModify = view.findViewById(R.id.niv_usersetting_modify);
         btn = view.findViewById(R.id.btn);
         swPrivateMode = view.findViewById(R.id.sw_private_mode);
+
+        nivLicence = view.findViewById(R.id.niv_license);
 
 
 
@@ -88,6 +94,13 @@ public class WorkShopUserSetFragment extends Fragment {
                 editor.putBoolean("isUserPrivateMode", isChecked);
                 editor.commit();
                 userSetPrivateModeUpdateDB(!isChecked);
+            }
+        });
+
+        nivLicence.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "Comming Soon!", Toast.LENGTH_SHORT).show();
             }
         });
 

@@ -319,4 +319,7 @@ public class WorkShopActivity extends AppCompatActivity {
         ivNab.setImageResource(nabRes);
     }
 
+    public void clickNotification(View view) {
+        Toast.makeText(WorkShopActivity.this, "Comming Soon!", Toast.LENGTH_SHORT).show();
+    }
 }

@@ -148,7 +148,7 @@
                 android:textSize="20sp"
                 android:textColorHint="#FF666666"
                 android:inputType="text"
-                android:maxLength="20"
+                android:maxLength="16"
                 android:background="@drawable/bg_edit"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
@@ -183,7 +183,7 @@
                 android:textSize="20sp"
                 android:textColorHint="#FF666666"
                 android:inputType="text"
-                android:maxLength="20"
+                android:maxLength="40"
                 android:background="@drawable/bg_edit"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
@@ -212,6 +212,8 @@
             android:visibility="visible" />
 
     </RelativeLayout>
+
+
 
 
 

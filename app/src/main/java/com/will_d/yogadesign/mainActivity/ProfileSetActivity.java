@@ -100,7 +100,10 @@ public class ProfileSetActivity extends AppCompatActivity {
     public void clickStart(View view) {
         Global.myNickName = etUserNickName.getText().toString();
         Global.myStateMsg = etUserStateMsg.getText().toString();
-        Global.myRealImgUrl = getRealPathFromUri(uri);
+        if (uri!=null){
+            Global.myRealImgUrl = getRealPathFromUri(uri);
+        }
+
 
         SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
