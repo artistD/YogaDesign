@@ -3,10 +3,8 @@ package com.will_d.yogadesign.worktoday.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -25,11 +23,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.will_d.yogadesign.R;
-import com.will_d.yogadesign.WorkShopActivity;
-import com.will_d.yogadesign.worktoday.GworkToday;
+import com.will_d.yogadesign.mainActivity.WorkShopActivity;
+import com.will_d.yogadesign.service.Global;
 import com.will_d.yogadesign.worktoday.ItemTouchHelperListener;
-import com.will_d.yogadesign.worktoday.RetrofitHelper;
-import com.will_d.yogadesign.worktoday.RetrofitService;
+import com.will_d.yogadesign.service.RetrofitHelper;
+import com.will_d.yogadesign.service.RetrofitService;
 import com.will_d.yogadesign.worktoday.activity.WokrDataSetActivity;
 import com.will_d.yogadesign.worktoday.activity.WorkItemClickedActivity;
 import com.will_d.yogadesign.worktoday.item.WorkItem;
@@ -50,7 +48,7 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
     private String no;
 
     //아이템 퍼블릭의 불린값임
-    boolean popupIsItemPublick = true;
+    boolean popupIsItemPrivate = false;
 
     public WorkRecyclerAdapter(Context context, ArrayList<WorkItem> items) {
         this.context = context;
@@ -84,6 +82,7 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
         }
         else {
             holder.ivGaol.setBackgroundColor(0xFFeeeeee);
+            holder.tvGoal.setVisibility(View.INVISIBLE);
         }
 
         if (item.getIspreNotification()) {
@@ -93,6 +92,7 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
         }
         else {
             holder.ivPreNotification.setBackgroundColor(0xFFeeeeee);
+            holder.tvPreNotification.setVisibility(View.INVISIBLE);
         }
 
         if (item.getIslocationNotification()) {
@@ -102,6 +102,7 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
         }
         else {
             holder.ivLocationNotification.setBackgroundColor(0xFFeeeeee);
+            holder.tvLocalNotification.setVisibility(View.INVISIBLE);
         }
 
 
@@ -128,8 +129,9 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
         if (!isDayOrTodaySelected[0] && isDayOrTodaySelected[1]){
             holder.cdTodayWork.setVisibility(View.VISIBLE);
+        }else {
+            holder.cdTodayWork.setVisibility(View.INVISIBLE);
         }
-
 
         holder.sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -153,7 +155,6 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
             @Override
             public void onClick(View v) {
                 PopupWindow popupWindow =  holder.showPopup(filnalPosition);
-                Toast.makeText(context, "qwfqwfqwf", Toast.LENGTH_SHORT).show();
                 no = item.getNo();
 
             }
@@ -170,13 +171,11 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
     @Override
     public boolean onItemMove(int from_position, int to_position) {
-        WorkItem workItem_from= items.get(from_position);
-        WorkItem workItem_to= items.get(to_position);
+        WorkItem workItem= items.get(from_position);
         Log.i("Tagposition", from_position +  " : " + to_position + "");
         items.remove(from_position);
-        items.add(to_position, workItem_from);
+        items.add(to_position, workItem);
         notifyItemMoved(from_position,to_position);
-        workItemChangePositionInsertToDB(workItem_from.getNo(), workItem_from.getSortationNo(), workItem_to.getNo(), workItem_to.getSortationNo());
         return false;
     }
 
@@ -217,6 +216,7 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
         private TextView tvWorkItemCounter;
 
         private CardView cdTodayWork;
+
 
 
         public Switch getSw() {//####################getter
@@ -260,7 +260,6 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
                 @Override
                 public void onClick(View v) {
                     WorkItem item = items.get(getAdapterPosition());
-                    Toast.makeText(context, "asdf", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(context, WorkItemClickedActivity.class);
                     intent.putExtra("workItemNo", item.getNo());
                     intent.putExtra("name", item.getName());
@@ -285,8 +284,17 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
             RelativeLayout popupRlModify =  popupView.findViewById(R.id.rl_modify);
             RelativeLayout popupRlDelete = popupView.findViewById(R.id.rl_delete);
-            RelativeLayout popupRlPublick = popupView.findViewById(R.id.rl_itempublic);
-            TextView tvItemPublic = popupView.findViewById(R.id.tv_itempublic);
+            RelativeLayout popupRlPrivate = popupView.findViewById(R.id.rl_itemprivate);
+            TextView tvItemPrivate = popupView.findViewById(R.id.tv_itemprivate);
+
+            WorkItem item = items.get(getAdapterPosition());
+            if (item.getIsPrivate()){
+                popupIsItemPrivate = true;
+                tvItemPrivate.setText("On");
+            }else {
+                popupIsItemPrivate = false;
+                tvItemPrivate.setText("Off");
+            }
 
 
             int width = RelativeLayout.LayoutParams.WRAP_CONTENT;
@@ -308,9 +316,9 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
                     Log.i("qaz", no);
                     WorkItem item= items.get(finalPosition);
-                    GworkToday.no = item.getNo();
-                    GworkToday.isworkitemModifyChcecked = true;
-                    GworkToday.isModifySave = true;
+                    Global.no = item.getNo();
+                    Global.isworkitemModifyChcecked = true;
+                    Global.isModifySave = true;
 
 
                     context.startActivity(intent);
@@ -351,15 +359,14 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
             });
 
 
-            popupRlPublick.setOnClickListener(new View.OnClickListener() {
+            popupRlPrivate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    popupIsItemPublick = !popupIsItemPublick;
-                    Toast.makeText(context, "qwfqwffqw", Toast.LENGTH_SHORT).show();
-                    if (popupIsItemPublick) tvItemPublic.setText("on");
-                    else tvItemPublic.setText("off");
+                    popupIsItemPrivate = !popupIsItemPrivate;
+                    if (popupIsItemPrivate) tvItemPrivate.setText("on");
+                    else tvItemPrivate.setText("off");
                     WorkItem workItem = items.get(finalPosition);
-                    workItemPublicUpdate(workItem.getNo(), popupIsItemPublick);
+                    workItemPrivateUpdateDB(workItem.getNo(), popupIsItemPrivate);
                     notifyDataSetChanged();
                 }
             });
@@ -413,11 +420,11 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
         }
 
-        public void workItemPublicUpdate(String no, boolean isItemPublic){
+        public void workItemPrivateUpdateDB(String no, boolean isItemPublic){
             Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
             RetrofitService retrofitServic= retrofit.create(RetrofitService.class);
 
-            Call<String> call = retrofitServic.workItemPublicUpdate(no, isItemPublic);
+            Call<String> call = retrofitServic.workItemPrivateUpdateDB(no, isItemPublic);
             call.enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
@@ -438,27 +445,5 @@ public class WorkRecyclerAdapter extends RecyclerView.Adapter<WorkRecyclerAdapte
 
     }
 
-    public void workItemChangePositionInsertToDB(String fromNo, String fromSortationNo, String toNo, String toSortationNo){
-        Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
-        RetrofitService retrofitService = retrofit.create(RetrofitService.class);
-
-        Call<String> call = retrofitService.workItemChangePositionInsertToDB(fromNo, fromSortationNo, toNo, toSortationNo);
-        call.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                Log.i("retrofitPosition", response.body());
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                Log.i("retrofitPosition", t.getMessage());
-            }
-        });
-
-
-
-
-
-    }
 
 }

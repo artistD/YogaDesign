@@ -6,9 +6,9 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cd_today_work"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="8dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:cardCornerRadius="20dp"
         android:backgroundTint="#FFFFFFFF"
         android:layout_marginLeft="4dp"
         android:visibility="invisible">
@@ -16,14 +16,15 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="오늘 하루만"
-            android:textSize="12sp"
+            android:text="T"
+            android:textSize="16sp"
             android:paddingRight="12dp"
             android:paddingLeft="12dp"
             android:paddingTop="4dp"
             android:paddingBottom="4dp"
             android:layout_gravity="center"
-            android:gravity="center" />
+            android:gravity="center"
+            android:background="@drawable/mainbg_03"/>
 
 
 
@@ -338,7 +339,8 @@
                         android:text="월"
                         android:paddingRight="8dp"
                         android:paddingLeft="8dp"
-                        android:textColor="#FF999999"/>
+                        android:textColor="#FF999999"
+                        android:textStyle="bold"/>
 
                     <TextView
                         android:id="@+id/tv_week_tues"
@@ -347,7 +349,8 @@
                         android:text="화"
                         android:paddingRight="8dp"
                         android:paddingLeft="8dp"
-                        android:textColor="#FF999999"/>
+                        android:textColor="#FF999999"
+                        android:textStyle="bold"/>
 
                     <TextView
                         android:id="@+id/tv_week_wendnes"
@@ -356,7 +359,8 @@
                         android:text="수"
                         android:paddingRight="8dp"
                         android:paddingLeft="8dp"
-                        android:textColor="#FF999999"/>
+                        android:textColor="#FF999999"
+                        android:textStyle="bold"/>
 
                     <TextView
                         android:id="@+id/tv_week_thurs"
@@ -365,7 +369,8 @@
                         android:text="목"
                         android:paddingRight="8dp"
                         android:paddingLeft="8dp"
-                        android:textColor="#FF999999"/>
+                        android:textColor="#FF999999"
+                        android:textStyle="bold"/>
 
                     <TextView
                         android:id="@+id/tv_week_fri"
@@ -374,7 +379,8 @@
                         android:text="금"
                         android:paddingRight="8dp"
                         android:paddingLeft="8dp"
-                        android:textColor="#FF999999"/>
+                        android:textColor="#FF999999"
+                        android:textStyle="bold"/>
 
                     <TextView
                         android:id="@+id/tv_week_satur"
@@ -383,7 +389,8 @@
                         android:text="토"
                         android:paddingRight="8dp"
                         android:paddingLeft="8dp"
-                        android:textColor="#FF999999"/>
+                        android:textColor="#FF999999"
+                        android:textStyle="bold"/>
 
                     <TextView
                         android:id="@+id/tv_week_sun"
@@ -392,7 +399,8 @@
                         android:text="일"
                         android:paddingRight="8dp"
                         android:paddingLeft="8dp"
-                        android:textColor="#FF999999"/>
+                        android:textColor="#FF999999"
+                        android:textStyle="bold"/>
 
 
                 </LinearLayout>

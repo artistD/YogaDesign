@@ -9,7 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:neumorph_shadowColorDark="#77999999"
-        app:neumorph_shadowColorLight="#77FFFFFF">
+        app:neumorph_shadowColorLight="#77FFFFFF"
+        app:neumorph_shapeAppearance="@style/ShapeAppearance2">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -21,15 +22,15 @@
                 style="@style/Widget.Neumorph.ImageView"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
-                app:neumorph_shapeAppearance="@style/ShapeAppearance"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="16dp"
-                android:src="@drawable/ic_weeks"
+                android:clickable="true"
                 android:padding="16dp"
+                android:src="@drawable/ic_weeks"
+                android:visibility="visible"
                 app:neumorph_shadowColorDark="#77999999"
                 app:neumorph_shadowColorLight="#77FFFFFF"
-                android:visibility="visible"
-                android:clickable="true"/>
+                app:neumorph_shapeAppearance="@style/ShapeAppearance" />
 
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -37,7 +38,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="8dp"
                 android:src="@drawable/bg_maincontents04" />
 
             <TextView
@@ -65,40 +66,41 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@id/tv_memberlist_name"
-                android:layout_toRightOf="@id/civ_memberlist_photo"
                 android:layout_marginLeft="12dp"
-                android:layout_marginRight="24dp"
+                android:layout_marginRight="12dp"
+                android:layout_toRightOf="@id/civ_memberlist_photo"
                 android:orientation="horizontal">
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:cardCornerRadius="8dp"
-                    android:layout_weight="1"
-                    android:layout_marginRight="8dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp">
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_weight="1"
+                    app:cardCornerRadius="8dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal"
+                        android:background="@drawable/mainbg_02"
                         android:gravity="center"
-                        android:background="@drawable/mainbg_02">
+                        android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center"
                             android:text="counter : "
-                            android:textSize="12sp"
-                            android:layout_gravity="center"/>
+                            android:textSize="12sp" />
+
                         <TextView
                             android:id="@+id/tv_memberlist_counter"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center"
                             android:text="32"
-                            android:textSize="16sp"
-                            android:layout_gravity="center"/>
+                            android:textSize="16sp" />
 
 
                     </LinearLayout>
@@ -108,36 +110,37 @@
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:cardCornerRadius="8dp"
-                    android:layout_weight="1"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp">
+                    android:layout_marginBottom="8dp"
+                    android:layout_weight="1"
+                    app:cardCornerRadius="8dp"
+                    android:visibility="visible">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal"
+                        android:background="@drawable/mainbg_02"
                         android:gravity="center"
-                        android:background="@drawable/mainbg_02">
+                        android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center"
                             android:text="timeSum : "
-                            android:textSize="12sp"
-                            android:layout_gravity="center"/>
+                            android:textSize="12sp" />
+
                         <TextView
                             android:id="@+id/tv_memberlist_timesum"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="216"
-                            android:textSize="16sp"
-                            android:layout_gravity="center"/>
+                            android:layout_gravity="center"
+                            android:text="216:00"
+                            android:textSize="16sp" />
 
 
                     </LinearLayout>
-
 
 
                 </androidx.cardview.widget.CardView>

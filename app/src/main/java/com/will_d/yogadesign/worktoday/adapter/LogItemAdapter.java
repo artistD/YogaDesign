@@ -1,3 +1,5 @@
+
+
 package com.will_d.yogadesign.worktoday.adapter;
 
 import android.content.Context;
@@ -43,7 +45,7 @@ public class LogItemAdapter extends RecyclerView.Adapter<LogItemAdapter.VH> {
 
 
         if (item.getLog().equals("null")){
-               holder.tvLog.setVisibility(View.GONE);
+            holder.tvLog.setVisibility(View.GONE);
         }else {
             holder.tvLog.setVisibility(View.VISIBLE);
             holder.tvLog.setText(item.getLog());

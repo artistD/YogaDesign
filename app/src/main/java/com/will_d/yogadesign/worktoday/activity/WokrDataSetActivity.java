@@ -42,9 +42,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.will_d.yogadesign.R;
-import com.will_d.yogadesign.worktoday.GworkToday;
-import com.will_d.yogadesign.worktoday.RetrofitHelper;
-import com.will_d.yogadesign.worktoday.RetrofitService;
+import com.will_d.yogadesign.service.Global;
+import com.will_d.yogadesign.service.RetrofitHelper;
+import com.will_d.yogadesign.service.RetrofitService;
 import com.will_d.yogadesign.worktoday.fragment.WorkShopTodolistFragment;
 import com.will_d.yogadesign.worktoday.fragment.WorkTodayFragment;
 import com.will_d.yogadesign.worktoday.item.WorkItem;
@@ -76,7 +76,6 @@ import soup.neumorphism.NeumorphImageView;
 public class WokrDataSetActivity extends AppCompatActivity {
 
     private final int PERMISSION_EX_PHOTO =100;
-    private boolean isSortationNoFirst;
 
     private EditText etName;
     private TextView tvNickname;
@@ -169,12 +168,13 @@ public class WokrDataSetActivity extends AppCompatActivity {
     private double latitude=37.560955;
     private double longitude=127.034721;
     private boolean isItemOnOff = true;
-    private boolean isItemPublic =true;
+    private boolean isItemPrivate = false;
     private int completeNum = 0;
     private boolean[] todolistBooleanState = new boolean[] {false,false,false};
     private boolean[] isDayOrTodaySelected = new boolean[2];
 
     private boolean isLogModify = false;
+    private boolean isTimeFirst = false;
     //##############################
 
     private double originalLatitude;
@@ -191,22 +191,8 @@ public class WokrDataSetActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wokr_data_set);
-
-
         SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-
-
-        isSortationNoFirst = pref.getBoolean("isSortationNoFirst", true);
-        if (isSortationNoFirst){
-            editor.putInt("sortationNo", 1);
-            editor.putBoolean("isSortationNoFirst", false);
-            editor.commit();
-        }
         id = pref.getString("id", "");
-
-
-
 
 
         etName = findViewById(R.id.et_name);
@@ -246,7 +232,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
 //        String jsonStr = intent.getStringExtra("Workitems");
 //        Gson gson = new Gson();
 //        WorkItem[] workItem = gson.fromJson(jsonStr, WorkItem[].class);
-        workItems = GworkToday.workItems;
+        workItems = Global.workItems;
 
         //weeks dialog
         weeks[0] = findViewById(R.id.iv_weeks_mon);
@@ -446,25 +432,37 @@ public class WokrDataSetActivity extends AppCompatActivity {
                                     String addr = etLocalNotificationSearch.getText().toString();
                                     Geocoder geocoder = new Geocoder(WokrDataSetActivity.this, Locale.KOREA);
                                     try {
-                                        googleMap.clear();
-                                        List<Address> address  = geocoder.getFromLocationName(addr, 3);
+                                        if (geocoder!=null){
+                                            List<Address> address  = geocoder.getFromLocationName(addr, 3);
+                                            if (address.size()!=0){
+                                                googleMap.clear();
 
-                                        double lat = address.get(0).getLatitude();
-                                        double lon = address.get(0).getLongitude();
+                                                double lat = address.get(0).getLatitude();
+                                                double lon = address.get(0).getLongitude();
 
-                                        LatLng userLocation = new LatLng(lat, lon);
-                                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 18));
+                                                LatLng userLocation = new LatLng(lat, lon);
+                                                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 18));
 
-                                        MarkerOptions marker = new MarkerOptions();
-                                        marker.position(userLocation);
-                                        marker.title("검색한 나의 위치");
-                                        marker.snippet("알림을 받고싶은 위치를 지정해주세요!");
-                                        marker.isVisible();
+                                                MarkerOptions marker = new MarkerOptions();
+                                                marker.position(userLocation);
+                                                marker.title("검색한 나의 위치");
+                                                marker.snippet("알림을 받고싶은 위치를 지정해주세요!");
+                                                marker.isVisible();
 
-                                        googleMap.addMarker(marker);
+                                                googleMap.addMarker(marker);
 
-                                        latitude = lat;
-                                        longitude = lon;
+                                                latitude = lat;
+                                                longitude = lon;
+
+                                            }else {
+                                                Toast.makeText(WokrDataSetActivity.this, "검색 실패", Toast.LENGTH_SHORT).show();
+                                            }
+
+
+                                        }else {
+                                            Toast.makeText(WokrDataSetActivity.this, "검색 실패", Toast.LENGTH_SHORT).show();
+                                       }
+
 
                                     } catch (IOException e) {
                                         Toast.makeText(WokrDataSetActivity.this, "검색 실패", Toast.LENGTH_SHORT).show();
@@ -522,8 +520,8 @@ public class WokrDataSetActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         //수정을 위해 startActivity가 오면 어떻게 동작할건지 설정
-        if (GworkToday.isworkitemModifyChcecked){
-            WorkItemModifyDataLoadDB(GworkToday.no);
+        if (Global.isworkitemModifyChcecked){
+            WorkItemModifyDataLoadDB(Global.no);
         }
 
     }
@@ -541,13 +539,13 @@ public class WokrDataSetActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        GworkToday.isModifySave = false;
+        Global.isModifySave = false;
         finish();
         overridePendingTransition(R.anim.fragment_none, R.anim.activity_data_set_end);
     }
 
     public void clickClose(View view) {
-        GworkToday.isModifySave = false;
+        Global.isModifySave = false;
         finish();
         overridePendingTransition(R.anim.fragment_none, R.anim.activity_data_set_end);
     }
@@ -561,12 +559,12 @@ public class WokrDataSetActivity extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-        if (GworkToday.isModifySave){
+        if (Global.isModifySave){
             name = etName.getText().toString();
             String no = intent.getStringExtra("no");
             Log.i("qazw", no);
             workTodayModifyUpdateToServer(isPhotoChecekd, no);
-            GworkToday.isModifySave=false;
+            Global.isModifySave=false;
 
         }else {
             name = etName.getText().toString();
@@ -655,7 +653,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (!isSelectedToday && !isSelectedDays){
+                if (!isSelectedDays && !isSelectedToday){
                     Toast.makeText(WokrDataSetActivity.this, "날짜를 선택해주세요!", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -817,11 +815,15 @@ public class WokrDataSetActivity extends AppCompatActivity {
 
     }
 
-
-
     public void clickWeeksChecked(View view) {
-        isWeeksChecked=!isWeeksChecked;
         ImageView imageView = (ImageView) view;
+        String num = imageView.getTag().toString();
+        if(weeksData[Integer.parseInt(num)]){
+            isWeeksChecked = true;
+        }else {
+            isWeeksChecked = false;
+        }
+        isWeeksChecked=!isWeeksChecked;
         if (isWeeksChecked){
             imageView.setImageResource(R.drawable.ic_checked);
             if (imageView.getTag().toString().equals("0")) weeksData[0] = true;
@@ -831,7 +833,6 @@ public class WokrDataSetActivity extends AppCompatActivity {
             else if (imageView.getTag().toString().equals("4")) weeksData[4] = true;
             else if (imageView.getTag().toString().equals("5")) weeksData[5] = true;
             else if (imageView.getTag().toString().equals("6")) weeksData[6] = true;
-
         }else {
             imageView.setImageResource(R.drawable.ic_unchecked);
             if (imageView.getTag().toString().equals("0")) weeksData[0] = false;
@@ -872,7 +873,6 @@ public class WokrDataSetActivity extends AppCompatActivity {
         Log.i("TAG", numberPickerGoalNumber.getValue() + "");
 
     }
-
 
     //dialog 부분임
     public void clickPreNotificationFixed(View view) {
@@ -1020,14 +1020,6 @@ public class WokrDataSetActivity extends AppCompatActivity {
             Map<String, String> dataPart = new HashMap<>();
             dataPart.put("id", id);
 
-            SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
-            SharedPreferences.Editor editor = pref.edit();
-            int sortationNo = pref.getInt("sortationNo", 1);
-            dataPart.put("sortationNo", String.valueOf(sortationNo));
-
-            editor.putInt("sortationNo", (sortationNo+1));
-            editor.commit();
-
             dataPart.put("name", name);
             dataPart.put("nickName", nickName);
 //          dataPart.put("imgPath", imgPath);  //이미지는 절대경로로 보내주는거니까 안줘도됨.
@@ -1045,7 +1037,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
             dataPart.put("latitude", String.valueOf(latitude));
             dataPart.put("longitude", String.valueOf(longitude));
             dataPart.put("isItemOnOff", String.valueOf(isItemOnOff));
-            dataPart.put("isItemPublic", String.valueOf(isItemPublic));
+            dataPart.put("isItemPrivate", String.valueOf(isItemPrivate));
 
             String todolistBooleanJsonStr = gson.toJson(todolistBooleanState);
             Log.i("TAGBoolean", todolistBooleanJsonStr);
@@ -1058,7 +1050,8 @@ public class WokrDataSetActivity extends AppCompatActivity {
             Log.i("TAGadadad", jsonStr);
 
             dataPart.put("isLogModify", String.valueOf(isLogModify));
-
+            dataPart.put("isTimeFirst", String.valueOf(isTimeFirst));
+            dataPart.put("timeSum", "00:00");
             Call<String> call = retrofitService.WorkItemPostDataToServer(dataPart, filePart);
             call.enqueue(new Callback<String>() {
                 @Override
@@ -1080,7 +1073,6 @@ public class WokrDataSetActivity extends AppCompatActivity {
 
 
     }
-
 
     public void workTodayModifyUpdateToServer(boolean isPhotoChecekd, String no){
         String baseUrl = "http://willd88.dothome.co.kr/";
@@ -1121,7 +1113,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
             dataPart.put("latitude", String.valueOf(latitude));
             dataPart.put("longitude", String.valueOf(longitude));
             dataPart.put("isItemOnOff", String.valueOf(isItemOnOff));
-            dataPart.put("isItemPublic", String.valueOf(isItemPublic));
+            dataPart.put("isItemPrivate", String.valueOf(isItemPrivate));
 
             String todolistBooleanJsonStr = gson.toJson(todolistBooleanState);
             Log.i("TAGBoolean", todolistBooleanJsonStr);
@@ -1160,9 +1152,6 @@ public class WokrDataSetActivity extends AppCompatActivity {
 
     }
 
-
-
-
     public void WorkItemModifyDataLoadDB(String no){
         Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
         RetrofitService retrofitService = retrofit.create(RetrofitService.class);
@@ -1171,7 +1160,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                GworkToday.isworkitemModifyChcecked = false;
+                Global.isworkitemModifyChcecked = false;
                 String jsonStr = response.body();
                 try {
                     JSONArray jsonArray = new JSONArray(jsonStr);
@@ -1229,11 +1218,11 @@ public class WokrDataSetActivity extends AppCompatActivity {
                         isItemOnOff = false;
                     }
 
-                    String isItemP = jsonObject.getString("isItemPublic");
+                    String isItemP = jsonObject.getString("isItemPrivate");
                     if (isItemP.equals("1")){
-                        isItemPublic = true;
+                        isItemPrivate = true;
                     }else if(isItemP.equals("0")){
-                        isItemPublic = false;
+                        isItemPrivate = false;
                     }
 
                     String cNum = jsonObject.getString("Completenum");
@@ -1289,11 +1278,17 @@ public class WokrDataSetActivity extends AppCompatActivity {
                         }
 
                     if (!isDayOrTodaySelected[0] && isDayOrTodaySelected[1]){
+                        isSelectedDays = isDayOrTodaySelected[0];
+                        isSelectedToday = isDayOrTodaySelected[1];
+
                         cdWeeksDialogDaysBlur.setVisibility(View.VISIBLE);
                         tvWeeksDialogSelectedToday.setTextColor(0xFF9999FF);
                         tvWeeks.setText("오늘 하루만");
                         tvWeeks.setTextColor(0xFF9999FF);
                     }else if (isDayOrTodaySelected[0] && !isDayOrTodaySelected[1]){
+                        isSelectedDays = isDayOrTodaySelected[0];
+                        isSelectedToday = isDayOrTodaySelected[1];
+
                         cdWeeksDialogDaysBlur.setVisibility(View.INVISIBLE);
                         tvWeeksDialogSelectedDays.setTextColor(0xFF9999FF);
                         tvWeeks.setText(replaceFirst);
@@ -1388,7 +1383,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                GworkToday.isModifySave =false;
+                Global.isModifySave =false;
                 Log.i("TAG", response.body());
             }
 
@@ -1399,7 +1394,6 @@ public class WokrDataSetActivity extends AppCompatActivity {
         });
     }
 
-    //todo:여기서도 에러남 ㅜㅜㅠㅠㅠㅠㅜㅜㅠㅠㅜ
     ActivityResultLauncher<Intent> intentActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
@@ -1420,7 +1414,6 @@ public class WokrDataSetActivity extends AppCompatActivity {
             }
         }
     });
-
 
     //Uri -- > 절대경로로 바꿔서 리턴시켜주는 메소드
     String getRealPathFromUri(Uri uri){

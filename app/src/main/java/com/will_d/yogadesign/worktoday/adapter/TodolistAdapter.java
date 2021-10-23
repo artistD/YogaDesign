@@ -1,7 +1,7 @@
 package com.will_d.yogadesign.worktoday.adapter;
 
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.text.method.TextKeyListener;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.will_d.yogadesign.R;
-import com.will_d.yogadesign.worktoday.GworkToday;
-import com.will_d.yogadesign.worktoday.RetrofitHelper;
-import com.will_d.yogadesign.worktoday.RetrofitService;
+import com.will_d.yogadesign.service.RetrofitHelper;
+import com.will_d.yogadesign.service.RetrofitService;
 import com.will_d.yogadesign.worktoday.item.TodolistItem;
 
 import java.text.SimpleDateFormat;
@@ -128,6 +127,8 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
         boolean[] isDayOrTodaySelected = item.getIsDayOrTodaySelected();
         if (!isDayOrTodaySelected[0] && isDayOrTodaySelected[1]){
             holder.cdTodayWork.setVisibility(View.VISIBLE);
+        }else {
+            holder.cdTodayWork.setVisibility(View.INVISIBLE);
         }
 
         if(item.getIsLogModify()){
@@ -175,6 +176,7 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
         private boolean isLogModify = false;
 
         private RelativeLayout rltodolistMissionComplete;
+        private TextView tvMissionClearTime;
 
         private CardView cdTodayWork;
 
@@ -197,6 +199,7 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
             cdLogModify = itemView.findViewById(R.id.cd_log_modify);
 
             rltodolistMissionComplete = itemView.findViewById(R.id.rl_todolist_mission_complete);
+            tvMissionClearTime = itemView.findViewById(R.id.tv_mission_clear_time);
 
 
             cdTodayWork = itemView.findViewById(R.id.cd_today_work);
@@ -374,6 +377,11 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
             });
 
 
+
+
+
+
+
             cdLog.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -439,7 +447,11 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
                                 String days = getTime + ".(" + dayStr + ")";
 
                                 isLogModify = true;
-                                todolistLogDataInsertDB(0 ,item.getNo(), days, logData, isLogModify);
+                                if (item.getIsTimeFirst()){ //true면 first가 아니라는 뜻임
+                                    todolistLogDataInsertDB(1 ,item.getNo(), days, logData, isLogModify);
+                                }else {
+                                    todolistLogDataInsertDB(0 ,item.getNo(), days, logData, isLogModify);
+                                }
                                 item.getRlTodolistLogDialog().setVisibility(View.INVISIBLE);
                                 item.getEtTodolistLog().setText("");
 
@@ -519,7 +531,10 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
                                 }
                                 String days = getTime + ".(" + dayStr + ")";
 
+                                isLogModify = true;
                                 todolistLogDataInsertDB(1, item.getNo(), days, logData, isLogModify);
+
+
                                 item.getRlTodolistLogDialog().setVisibility(View.INVISIBLE);
                                 item.getEtTodolistLog().setText("");
 
@@ -655,8 +670,10 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
             if (item.getIsGoalChecked()){
                 if (item.getGoalSet().equals("하루에 1번")){
                     if (isChecked3) {
+                        missionClearTimeSet();
                         rltodolistMissionComplete.setVisibility(View.VISIBLE);
                         WorkitemCounterLoadDB(position);
+
                         Log.i("asdf23", "ddd");
                     }
                     else {
@@ -666,6 +683,7 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
                     }
                 }else if (item.getGoalSet().equals("하루에 2번")){
                     if (isChecked3 && isChecked2) {
+                        missionClearTimeSet();
                         rltodolistMissionComplete.setVisibility(View.VISIBLE);
                         WorkitemCounterLoadDB(position);
                         Log.i("asdf23", "ddd");
@@ -677,6 +695,7 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
                     }
                 }else if (item.getGoalSet().equals("하루에 3번")){
                     if (isChecked3 && isChecked2 && isChecked1) {
+                        missionClearTimeSet();
                         rltodolistMissionComplete.setVisibility(View.VISIBLE);
                         WorkitemCounterLoadDB(position);
                         Log.i("asdf23", "ddd");
@@ -690,6 +709,7 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
 
             }else {
                 if (isChecked3) {
+                    missionClearTimeSet();
                     rltodolistMissionComplete.setVisibility(View.VISIBLE);
                     WorkitemCounterLoadDB(position);
                     Log.i("asdf23", "ddd");
@@ -701,6 +721,15 @@ public class TodolistAdapter extends RecyclerView.Adapter<TodolistAdapter.VH> {
                 }
             }
         }//missionComplete method....
+
+
+        public void missionClearTimeSet(){
+            long now = System.currentTimeMillis();
+            Date date = new Date(now);
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            String getTime = sdf.format(date);
+            tvMissionClearTime.setText(getTime);
+        }
 
 
 

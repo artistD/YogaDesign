@@ -8,9 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,9 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.will_d.yogadesign.R;
-import com.will_d.yogadesign.worktoday.GworkToday;
-import com.will_d.yogadesign.worktoday.RetrofitHelper;
-import com.will_d.yogadesign.worktoday.RetrofitService;
+import com.will_d.yogadesign.mainActivity.WorkShopActivity;
+import com.will_d.yogadesign.service.Global;
+import com.will_d.yogadesign.service.RetrofitHelper;
+import com.will_d.yogadesign.service.RetrofitService;
 import com.will_d.yogadesign.worktoday.adapter.TodolistAdapter;
 import com.will_d.yogadesign.worktoday.item.TodolistItem;
 
@@ -55,6 +56,8 @@ public class WorkShopTodolistFragment extends Fragment {
 
     private Boolean[] todolistBooleanStateInit = new Boolean[]{false, false, false};
 
+    private ProgressBar progressBar;
+
     private boolean isFirst = false;
     public static boolean isWorkItemAdd = false;
 
@@ -62,6 +65,7 @@ public class WorkShopTodolistFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         isFirst = true;
+
     }
 
     @Nullable
@@ -94,6 +98,11 @@ public class WorkShopTodolistFragment extends Fragment {
         adapter = new TodolistAdapter(getActivity(), todolistItems);
         recyclerView = view.findViewById(R.id.todolist_recycler);
         recyclerView.setAdapter(adapter);
+
+        progressBar = view.findViewById(R.id.progress_todo);
+
+
+
 
         //현재시간 구하기
         long now = System.currentTimeMillis();
@@ -139,75 +148,111 @@ public class WorkShopTodolistFragment extends Fragment {
         tvTodolistCurrentTime.setText(getTime + ".(" + dayStr + ")");
 
 
+        if(Global.workItemIndextNo!=null &&Global.workItems!=null){
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            String dayStr2 = sdf.format(date);
+            String s = sharedPreferences.getString("dayCompairisonTodo", "");
 
+            Log.i("zxcvb", s + " : " + dayStr2);
+            WorkShopActivity workShopActivity = (WorkShopActivity) getActivity();
+            if (!(dayStr2.equals(s))){
+                todolistItems.clear();
+                adapter.notifyDataSetChanged();
+                loading();
+                insertWorkitemTodolistBooleanStateInitDB();
+                editor.putString("dayCompairisonTodo", dayStr);
+                editor.commit();
+            }else if ((dayStr2.equals(s))&&workShopActivity.isCdTodolistClicked){
+                todolistItems.clear();
+                adapter.notifyDataSetChanged();
+                loading();
 
-    }
+                Global.workItemIndextNo.clear();
+                for (int i = 0; i< Global.workItems.size(); i++){
+                    Global.workItemIndextNo.add(Global.workItems.get(i).getNo());
+                    Log.i("workitemPostion", Global.workItems.get(i).getNo());
+                }
+                Log.i("workitemPostion", " -------- ");
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        String s = sharedPreferences.getString("dayCompairison", "");
+                Gson gson = new Gson();
+                String workItemIndexJsonStr = gson.toJson(Global.workItemIndextNo);
+                Log.i("workItemIndexJsonStr", workItemIndexJsonStr);
+                workItemPositionSetLoadToDB(workItemIndexJsonStr, Global.workItemIndextNo.size());
 
-        long now = System.currentTimeMillis();
-        Date date = new Date(now);
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
-        String dayStr = sdf.format(date);
-
-        if (!(dayStr.equals(s))){
-            insertWorkitemTodolistBooleanStateInitDB(); //여기서 isModify도 초기화 해주자
-            adapter.notifyDataSetChanged();
-            editor.putString("dayCompairison", dayStr);
-            editor.commit();
+            }
+            Log.i("asdfgh", !(dayStr2.equals(s))+"");
         }
-        Log.i("asdfgh", !(dayStr.equals(s))+"");
 
 
 
-        if (isFirst){
-            loadWorkTodayDataServer();
-            isFirst=false;
-        }
 
-        if (isWorkItemAdd){
-            loadWorkTodayDataServer();
-            isWorkItemAdd=false;
-        }
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
+        if (Global.workItemIndextNo!=null&&Global.workItems!=null){
 
+            WorkShopActivity workShopActivity = (WorkShopActivity) getActivity();
 
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        String s = sharedPreferences.getString("dayCompairison", "");
+            if (hidden){
 
-        long now = System.currentTimeMillis();
-        Date date = new Date(now);
+            }else if (!hidden && workShopActivity.isCdTodolistClicked){
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Data", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                String s = sharedPreferences.getString("dayCompairisonTodo", "");
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
-        String dayStr = sdf.format(date);
+                long now = System.currentTimeMillis();
+                Date date = new Date(now);
 
-        if (!(dayStr.equals(s))){
-            insertWorkitemTodolistBooleanStateInitDB(); //여기서 isModify도 초기화 해주자
-            adapter.notifyDataSetChanged();
-            editor.putString("dayCompairison", dayStr);
-            editor.commit();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+                String dayStr = sdf.format(date);
+
+                if (!(dayStr.equals(s))){
+                    todolistItems.clear();
+                    adapter.notifyDataSetChanged();
+                    loading();
+
+                    insertWorkitemTodolistBooleanStateInitDB(); //여기서 isModify도 초기화 해주자
+                    editor.putString("dayCompairisonTodo", dayStr);
+                    editor.commit();
+                }else {
+                    todolistItems.clear();
+                    adapter.notifyDataSetChanged();
+                    loading();
+
+                    Global.workItemIndextNo.clear();
+                    for (int i = 0; i< Global.workItems.size(); i++){
+                        Global.workItemIndextNo.add(Global.workItems.get(i).getNo());
+                        Log.i("workitemPostion", Global.workItems.get(i).getNo());
+                    }
+                    Log.i("workitemPostion", " -------- ");
+
+                    Gson gson = new Gson();
+                    String workItemIndexJsonStr = gson.toJson(Global.workItemIndextNo);
+                    Log.i("workItemIndexJsonStr", workItemIndexJsonStr);
+                    workItemPositionSetLoadToDB(workItemIndexJsonStr, Global.workItemIndextNo.size());
+                }
+                Log.i("asdfghKK", !(dayStr.equals(s))+"");
+
+            }
+
         }
-        Log.i("asdfgh", !(dayStr.equals(s))+"");
-
-
-
-        loadWorkTodayDataServer();
 
 
 
 
     }
+
+    public void loading(){
+        if (Global.workItems !=null&& Global.workItems.size()!=0){
+            progressBar.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.INVISIBLE);
+        }
+
+    }
+
 
     public void insertWorkitemTodolistBooleanStateInitDB(){
         Gson gson = new Gson();
@@ -219,6 +264,18 @@ public class WorkShopTodolistFragment extends Fragment {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 Log.i("asdf", response.body());
+
+                Global.workItemIndextNo.clear();
+                for (int i = 0; i< Global.workItems.size(); i++){
+                    Global.workItemIndextNo.add(Global.workItems.get(i).getNo());
+                    Log.i("workitemPostion", Global.workItems.get(i).getNo());
+                }
+                Log.i("workitemPostion", " -------- ");
+
+                Gson gson = new Gson();
+                String workItemIndexJsonStr = gson.toJson(Global.workItemIndextNo);
+                Log.i("workItemIndexJsonStr", workItemIndexJsonStr);
+                workItemPositionSetLoadToDB(workItemIndexJsonStr, Global.workItemIndextNo.size());
             }
 
             @Override
@@ -247,8 +304,10 @@ public class WorkShopTodolistFragment extends Fragment {
 
                 String jsonStr = response.body();
                 Log.i("loadTodolistData", response.body());
-                todolistItems.clear();
-                adapter.notifyDataSetChanged();
+//                todolistItems.clear();
+//                adapter.notifyDataSetChanged();
+                progressBar.setVisibility(View.INVISIBLE);
+                recyclerView.setVisibility(View.VISIBLE);
                 try {
                     JSONArray jsonArray = new JSONArray(jsonStr);
                     for (int i=0; i<jsonArray.length(); i++){
@@ -296,60 +355,69 @@ public class WorkShopTodolistFragment extends Fragment {
                         }
 
 
+                        String isTime = jsonObject.getString("isTimeFirst");
+                        boolean isTimeFirst = false;
+                        if (isTime.equals("1")){
+                            isTimeFirst = true;
+                        }else if(isTime.equals("0")){
+                            isTimeFirst = false;
+                        }
+
+
+
 
                         Calendar cal = Calendar.getInstance();
                         int day_of_week = cal.get(Calendar.DAY_OF_WEEK);
                         switch (day_of_week){
                             case 1://일
                                 if (weeksData[6]){
-                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk, todolistBooleanState, isDayOrTodaySelected, isLogModify));
+                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk, todolistBooleanState, isDayOrTodaySelected, isLogModify, isTimeFirst));
                                     adapter.notifyItemChanged(0);
                                 }
                                 break;
 
                             case 2://월
                                 if (weeksData[0]){
-                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk, todolistBooleanState, isDayOrTodaySelected, isLogModify));
+                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk, todolistBooleanState, isDayOrTodaySelected, isLogModify, isTimeFirst));
                                     adapter.notifyItemChanged(0);
                                 }
                                 break;
 
                             case 3://화
                                 if (weeksData[1]){
-                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk, todolistBooleanState, isDayOrTodaySelected, isLogModify));
+                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk, todolistBooleanState, isDayOrTodaySelected, isLogModify, isTimeFirst));
                                     adapter.notifyItemChanged(0);
                                 }
                                 break;
 
                             case 4://수
                                 if (weeksData[2]){
-                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk, todolistBooleanState, isDayOrTodaySelected, isLogModify));
+                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk, todolistBooleanState, isDayOrTodaySelected, isLogModify, isTimeFirst));
                                     adapter.notifyItemChanged(0);
                                 }
                                 break;
 
                             case 5://목
                                 if (weeksData[3]){
-                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk, todolistBooleanState, isDayOrTodaySelected, isLogModify));
+                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk, todolistBooleanState, isDayOrTodaySelected, isLogModify, isTimeFirst));
                                     adapter.notifyItemChanged(0);
                                 }
                                 break;
 
                             case 6://금
                                 if (weeksData[4]){
-                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk, todolistBooleanState, isDayOrTodaySelected, isLogModify));
+                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk, todolistBooleanState, isDayOrTodaySelected, isLogModify, isTimeFirst));
                                     adapter.notifyItemChanged(0);
                                 }
                                 break;
 
                             case 7://토
                                 if (weeksData[5]){
-                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk, todolistBooleanState, isDayOrTodaySelected, isLogModify));
+                                    todolistItems.add(0,new TodolistItem(no, completeNum, name, nickName, isGoalChecked, goalSet, rlTodolistLogDialog, etTodolistLog, tvTodolistLogCancel, tvTodolistLogOk, todolistBooleanState, isDayOrTodaySelected, isLogModify, isTimeFirst));
                                     adapter.notifyItemChanged(0);
                                 }
                                 break;
                         }
-
 
 
 
@@ -367,4 +435,31 @@ public class WorkShopTodolistFragment extends Fragment {
         });
 
     }
+
+    public void workItemPositionSetLoadToDB(String workItemIndexJsonStr, int workItemIndexSize){
+        Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
+        RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+
+        Call<String> call = retrofitService.workItemPositionSetLoadToDB(workItemIndexJsonStr, workItemIndexSize);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                loadWorkTodayDataServer();
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+
+
+
+
+
+
+
 }

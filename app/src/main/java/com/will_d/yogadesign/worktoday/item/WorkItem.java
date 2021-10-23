@@ -11,8 +11,6 @@ public class WorkItem {
 
     private String no;
 
-    private String sortationNo;
-
     @SerializedName("dstName")
     private String imgUrl;
 
@@ -46,10 +44,17 @@ public class WorkItem {
 
     private boolean[] isDayOrTodaySelected;
 
+
     //이친구들은 팝업 설정을 위한친구들임
     private RelativeLayout rlWorkitemDeleteDialog;
     private TextView tvWorkitemDeleteOK;
     private TextView tvWorkitemDeleteCancel;
+
+    //이친구는 log와 time에 대해서 신규로 등록할거냐 아니면 업데이트를 할거냐에 대한 boolean값임
+    public boolean isLogModify =false;
+    public boolean isTimeFirst =false;
+
+    private boolean isPrivate  =false;
 
 
 
@@ -57,9 +62,8 @@ public class WorkItem {
 
     }
 
-    public WorkItem(String no, String sortationNo, String imgUrl, String nickName, String name, boolean isgoal, String tvgoal, boolean ispreNotification, String tvpreNotification, boolean islocationNotification, String tvlocalNotification, boolean[] isweeks, boolean isItemInOff, int completeNum, boolean[] isDayOrTodaySelected, RelativeLayout rlWorkitemDeleteDialog, TextView tvWorkitemDeleteOK, TextView tvWorkitemDeleteCancel) {
+    public WorkItem(String no, String imgUrl, String nickName, String name, boolean isgoal, String tvgoal, boolean ispreNotification, String tvpreNotification, boolean islocationNotification, String tvlocalNotification, boolean[] isweeks, boolean isItemInOff, int completeNum, boolean[] isDayOrTodaySelected, RelativeLayout rlWorkitemDeleteDialog, TextView tvWorkitemDeleteOK, TextView tvWorkitemDeleteCancel, boolean isLogModify, boolean isTimeFirst, boolean isPrivate) {
         this.no = no;
-        this.sortationNo = sortationNo;
         this.imgUrl = imgUrl;
         this.nickName = nickName;
         this.name = name;
@@ -76,14 +80,13 @@ public class WorkItem {
         this.rlWorkitemDeleteDialog = rlWorkitemDeleteDialog;
         this.tvWorkitemDeleteOK = tvWorkitemDeleteOK;
         this.tvWorkitemDeleteCancel = tvWorkitemDeleteCancel;
+        this.isLogModify = isLogModify;
+        this.isTimeFirst = isTimeFirst;
+        this.isPrivate = isPrivate;
     }
 
     public String getNo() {
         return no;
-    }
-
-    public String getSortationNo() {
-        return sortationNo;
     }
 
     public String getImgUrl() {
@@ -138,7 +141,17 @@ public class WorkItem {
 
     public TextView getTvWorkitemDeleteCancel() { return tvWorkitemDeleteCancel; }
 
+    public boolean getIsLogModify() {
+        return isLogModify;
+    }
 
+    public boolean getIsTimeFirst() {
+        return isTimeFirst;
+    }
+
+    public boolean getIsPrivate() {
+        return isPrivate;
+    }
 }
 
 
