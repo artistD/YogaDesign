@@ -52,6 +52,7 @@ public class ProfileSetActivity extends AppCompatActivity {
     private EditText etUserStateMsg;
     private RelativeLayout rlProfileSetBlur;
 
+    private Uri uri;
     private boolean isPhotoChecked = false;
     private boolean isPermisssion  =false;
 
@@ -65,15 +66,20 @@ public class ProfileSetActivity extends AppCompatActivity {
         etUserStateMsg = findViewById(R.id.et_state_msg);
         rlProfileSetBlur = findViewById(R.id.rl_profileset_blur);
 
-        Glide.with(this).load(Global.myRealImgUrl).into(ivProfile);
-        etUserNickName.setText(Global.myNickName);
-        etUserStateMsg.setText("");
-
-
         String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (checkSelfPermission(permissions[0]) == PackageManager.PERMISSION_DENIED){
             requestPermissions(permissions, PERMISSION_EX_PHOTO);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (uri!=null) Glide.with(this).load(uri).into(ivProfile);
+        else Glide.with(this).load(Global.myRealImgUrl).into(ivProfile);
+
+        etUserNickName.setText(Global.myNickName);
+        etUserStateMsg.setText("");
     }
 
     public void clickClose(View view) {
@@ -81,9 +87,11 @@ public class ProfileSetActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = pref.edit();
         editor.putString("id","");
         editor.putBoolean("isFirstCompair", false);
+        editor.putBoolean("isFirstProfileSet", false);
+        editor.putBoolean("isReLogin", false);
         editor.putBoolean("isLogin", false);
-        editor.putBoolean("isFirstProfileChecked", false);
         editor.putString("myNickName", "");
+        editor.putString("myStateMsg", "");
         editor.putString("myImgRealPathUrl", "");
         editor.commit();
         startActivity(new Intent(this, LoginActivity.class));
@@ -92,10 +100,11 @@ public class ProfileSetActivity extends AppCompatActivity {
     public void clickStart(View view) {
         Global.myNickName = etUserNickName.getText().toString();
         Global.myStateMsg = etUserStateMsg.getText().toString();
+        Global.myRealImgUrl = getRealPathFromUri(uri);
 
         SharedPreferences pref = getSharedPreferences("Data", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
-        editor.putBoolean("isFirstProfileChecked", true);
+        editor.putBoolean("isFirstProfileSet", true);
         editor.putString("myNickName", Global.myNickName);
         editor.putString("myStateMsg", Global.myStateMsg);
         editor.putString("myImgRealPathUrl", Global.myRealImgUrl);
@@ -177,9 +186,7 @@ public class ProfileSetActivity extends AppCompatActivity {
         public void onActivityResult(ActivityResult result) {
             if (result.getResultCode() == RESULT_OK){
                 Intent intent = result.getData();
-                Uri uri = intent.getData();
-                Global.myRealImgUrl = getRealPathFromUri(uri);
-                Glide.with(ProfileSetActivity.this).load(uri).into(ivProfile);
+                uri = intent.getData();
                 isPhotoChecked = true;
             }else {
                 isPhotoChecked = false;

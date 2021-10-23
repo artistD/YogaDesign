@@ -53,10 +53,12 @@ public class ProfileModifyActivity extends AppCompatActivity {
 
     private boolean isPermisstion = false;
 
+    private Uri uri;
 
 
 
- ///ㅂㅈㅇ
+
+    ///ㅂㅈㅇ
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,7 +91,9 @@ public class ProfileModifyActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Glide.with(this).load(Global.myRealImgUrl).into(ivProfile);
+        if (uri!=null) Glide.with(this).load(uri).into(ivProfile);
+        else Glide.with(this).load(Global.myRealImgUrl).into(ivProfile);
+
         etUserNickName.setText(Global.myNickName);
         etUserStateMsg.setText(Global.myStateMsg);
 
@@ -101,6 +105,7 @@ public class ProfileModifyActivity extends AppCompatActivity {
     }
 
     public void clickSave(View view) {
+        Global.myRealImgUrl = getRealPathFromUri(uri);
         Global.myNickName = etUserNickName.getText().toString();
         Global.myStateMsg = etUserStateMsg.getText().toString();
 
@@ -168,8 +173,7 @@ public class ProfileModifyActivity extends AppCompatActivity {
         public void onActivityResult(ActivityResult result) {
             if (result.getResultCode()==RESULT_OK){
                 Intent intent = result.getData();
-                Uri uri = intent.getData();
-                Global.myRealImgUrl = getRealPathFromUri(uri);
+                uri = intent.getData();
                 isPhotoChecked = true;
             }else {
                 isPhotoChecked = false;

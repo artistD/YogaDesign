@@ -66,10 +66,7 @@ public class WorkShopUserSetFragment extends Fragment {
                 SharedPreferences.Editor editor = pref.edit();
                 editor.putBoolean("isLogin", false);
                 editor.commit();
-                memberLoginStateUpdateDB(myId);
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                startActivity(intent);
-                getActivity().finish();
+                memberLoginStateUpdateDB(false, myId);
 
 
             }
@@ -120,14 +117,17 @@ public class WorkShopUserSetFragment extends Fragment {
 
     }
 
-    public  void memberLoginStateUpdateDB(String myId) {
+    public  void memberLoginStateUpdateDB(boolean isLogin, String myId) {
         Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
         RetrofitService retrofitService = retrofit.create(RetrofitService.class);
-        Call<String> call = retrofitService.memberLoginStateUpdateDB(myId);
+        Call<String> call = retrofitService.memberLoginStateUpdateDB(isLogin, myId);
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                Log.i("memberLoginStateUpdateDB", response.body());
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivity(intent);
+                getActivity().finish();
             }
 
             @Override
@@ -150,6 +150,7 @@ public class WorkShopUserSetFragment extends Fragment {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 Log.i("isPrivate", response.body());
+
             }
 
             @Override

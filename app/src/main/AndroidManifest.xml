@@ -18,9 +18,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.YogaDesign"
         android:usesCleartextTraffic="true">
-        <activity
-            android:name=".mainActivity.TestActivity"
-            android:exported="true"/>
 
         <activity
             android:name=".square.activity.ChattingActivity"

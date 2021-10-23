@@ -147,7 +147,7 @@ public interface RetrofitService {
 
     @FormUrlEncoded
     @POST("/YogaDesign2/member/memberLoginStateUpdateDB.php")
-    Call<String> memberLoginStateUpdateDB(@Field("myId") String myId);
+    Call<String> memberLoginStateUpdateDB(@Field("isLogin") boolean isLogin, @Field("myId") String myId);
 
 
 

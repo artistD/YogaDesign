@@ -36,8 +36,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private ImageView ivBrand;
     private boolean isLogin = false;
-    private boolean isFirstProfileChecked = false;
-
+    private boolean isFirstProfileSet = false;
 
     private ArrayList<String> idEqual = new ArrayList<>();
     private boolean isIdEqual = false;
@@ -65,18 +64,21 @@ public class LoginActivity extends AppCompatActivity {
 
         pref = getSharedPreferences("Data", MODE_PRIVATE);
         isLogin = pref.getBoolean("isLogin", false);
-        Log.i("isLogin", isLogin +"");
-        isFirstProfileChecked = pref.getBoolean("isFirstProfileChecked", false);
-        Log.i("isFirstProfileChecked", isFirstProfileChecked + "");
+        isFirstProfileSet = pref.getBoolean("isFirstProfileSet", false);
 
-        if(isLogin && !isFirstProfileChecked){
-            Intent intent = new Intent(LoginActivity.this, ProfileSetActivity.class);
-            startActivity(intent);
-            finish();
-        }else if(isLogin && isFirstProfileChecked) {
-            startActivity(new Intent(LoginActivity.this, WorkShopActivity.class));
-            finish();
+
+        if (isLogin){
+            if (isFirstProfileSet){
+                startActivity(new Intent(LoginActivity.this, WorkShopActivity.class));
+                finish();
+            }else {
+                Intent intent = new Intent(LoginActivity.this, ProfileSetActivity.class);
+                startActivity(intent);
+                finish();
+            }
+
         }
+
     }
 
     public void clickKaKaoLogin(View view) {
@@ -89,36 +91,7 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public Unit invoke(User user, Throwable throwable) {
                             if (user!=null){
-                                if (isFirstProfileChecked){
-
-                                }else {
-                                    Global.myRealImgUrl = user.getKakaoAccount().getProfile().getProfileImageUrl();
-                                    Global.myNickName = user.getKakaoAccount().getProfile().getNickname();
-                                }
-
-                                String id = String.valueOf(user.getId());
-                                SharedPreferences pref= getSharedPreferences("Data", MODE_PRIVATE);
-                                if (isFirstProfileChecked){
-                                    isLogin =true;
-                                    SharedPreferences.Editor editor = pref.edit();
-                                    editor.putBoolean("isLogin", isLogin);
-                                }else {
-                                    isLogin =true;
-                                    SharedPreferences.Editor editor = pref.edit();
-                                    editor.putString("id", id);
-                                    editor.putBoolean("isLogin", isLogin);
-                                    editor.putBoolean("isFirstCompair", true);
-                                    editor.putString("myNickName", Global.myNickName);
-                                    editor.putString("myImgRealPathUrl", Global.myRealImgUrl);
-                                    editor.commit();
-                                }
-
-
-//                                isFirstProfileChecked = pref.getBoolean("isFirstProfileChecked", false);
-                                memberLoadDB();
-                                Log.i("Global", id);
-
-
+                                memberLoadDB(user);
                             }
                             return null;
                         }
@@ -132,13 +105,15 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    public void memberLoadDB(){
+    public void memberLoadDB(User user){
         Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
         RetrofitService retrofitService = retrofit.create(RetrofitService.class);
         Call<String> call = retrofitService.memberLoadDataFromServer();
 
+        String userId = String.valueOf(user.getId()); //**********
+
         idEqual.clear();
-        String prefId = pref.getString("id", "");
+        Log.i("hjyuuinbwewef", userId);
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
@@ -150,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
                         String id = jsonObject.getString("id");
                         idEqual.add(id);
 
-                        if (id.equals(prefId)){
+                        if (id.equals(userId)){
 
                             String nickName = jsonObject.getString("name");
                             String profileDstName = jsonObject.getString("frofile");
@@ -173,17 +148,19 @@ public class LoginActivity extends AppCompatActivity {
                             mySteteMsg = stateMsg;
                             myIsUserPublic = isUserPublic;
                         }
+
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
                 for (int i=0;i<idEqual.size(); i++){
-                    if(idEqual.get(i).equals(prefId)){
+                    if(idEqual.get(i).equals(userId)){
                         isIdEqual = true;
                         break;
                     }else {
                         isIdEqual =false;
+                        Log.i("checekdd", idEqual.get(i));
                     }
                 }
 
@@ -193,30 +170,65 @@ public class LoginActivity extends AppCompatActivity {
                     Global.myRealImgUrl = myProfileUrl;
                     Global.myIsUserPrivate = !myIsUserPublic;
                     Global.isReLogin = true;
-                    startActivity(new Intent(LoginActivity.this, WorkShopActivity.class));
-                    finish();
+
+                    //기존사용자 설정
+                    isLogin =true;
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putBoolean("isLogin", isLogin);
+                    editor.putBoolean("isFirstProfileSet", true);
+                    editor.putString("id", userId);
+                    editor.putBoolean("isFirstCompair", false);
+                    editor.putString("myNickName", Global.myNickName);
+                    editor.putString("myImgRealPathUrl", Global.myRealImgUrl);
+                    editor.putString("myStateMsg", Global.myStateMsg);
+                    editor.putBoolean("isReLogin", Global.isReLogin);
+                    editor.commit();
+                    memberLoginStateUpdateDB(true, userId);
                     return;
                 }else {
+                    Global.myRealImgUrl = user.getKakaoAccount().getProfile().getProfileImageUrl();
+                    Global.myNickName = user.getKakaoAccount().getProfile().getNickname();
+
+                    //신규사용자 설정
+                    isLogin =true;
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putString("id", userId);
+                    editor.putBoolean("isLogin", isLogin);
+                    editor.putBoolean("isFirstCompair", true);
+                    editor.putString("myNickName", Global.myNickName);
+                    editor.putString("myImgRealPathUrl", Global.myRealImgUrl);
+                    editor.commit();
+
                     Intent intent = new Intent(LoginActivity.this, ProfileSetActivity.class);
                     startActivity(intent);
                     LoginActivity.this.finish();
                 }
-
-//                if (isFirstProfileChecked){
-//                    Intent intent = new Intent(LoginActivity.this, WorkShopActivity.class);
-//                    startActivity(intent);
-//                    LoginActivity.this.finish();
-//                }else {
-//                    Intent intent = new Intent(LoginActivity.this, ProfileSetActivity.class);
-//                    startActivity(intent);
-//                    LoginActivity.this.finish();
-//                }
 
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
 
+            }
+        });
+    }
+
+
+    public  void memberLoginStateUpdateDB(boolean isLogin, String myId) {
+        Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
+        RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+        Call<String> call = retrofitService.memberLoginStateUpdateDB(isLogin, myId);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                Log.i("memberLoginStateUpdateDB", response.body());
+                startActivity(new Intent(LoginActivity.this, WorkShopActivity.class));
+                finish();
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.i("memberLoginStateUpdateDB", t.getMessage());
             }
         });
     }
