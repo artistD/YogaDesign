@@ -432,25 +432,37 @@ public class WokrDataSetActivity extends AppCompatActivity {
                                     String addr = etLocalNotificationSearch.getText().toString();
                                     Geocoder geocoder = new Geocoder(WokrDataSetActivity.this, Locale.KOREA);
                                     try {
-                                        googleMap.clear();
-                                        List<Address> address  = geocoder.getFromLocationName(addr, 3);
+                                        if (geocoder!=null){
+                                            List<Address> address  = geocoder.getFromLocationName(addr, 3);
+                                            if (address.size()!=0){
+                                                googleMap.clear();
 
-                                        double lat = address.get(0).getLatitude();
-                                        double lon = address.get(0).getLongitude();
+                                                double lat = address.get(0).getLatitude();
+                                                double lon = address.get(0).getLongitude();
 
-                                        LatLng userLocation = new LatLng(lat, lon);
-                                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 18));
+                                                LatLng userLocation = new LatLng(lat, lon);
+                                                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 18));
 
-                                        MarkerOptions marker = new MarkerOptions();
-                                        marker.position(userLocation);
-                                        marker.title("검색한 나의 위치");
-                                        marker.snippet("알림을 받고싶은 위치를 지정해주세요!");
-                                        marker.isVisible();
+                                                MarkerOptions marker = new MarkerOptions();
+                                                marker.position(userLocation);
+                                                marker.title("검색한 나의 위치");
+                                                marker.snippet("알림을 받고싶은 위치를 지정해주세요!");
+                                                marker.isVisible();
 
-                                        googleMap.addMarker(marker);
+                                                googleMap.addMarker(marker);
 
-                                        latitude = lat;
-                                        longitude = lon;
+                                                latitude = lat;
+                                                longitude = lon;
+
+                                            }else {
+                                                Toast.makeText(WokrDataSetActivity.this, "검색 실패", Toast.LENGTH_SHORT).show();
+                                            }
+
+
+                                        }else {
+                                            Toast.makeText(WokrDataSetActivity.this, "검색 실패", Toast.LENGTH_SHORT).show();
+                                       }
+
 
                                     } catch (IOException e) {
                                         Toast.makeText(WokrDataSetActivity.this, "검색 실패", Toast.LENGTH_SHORT).show();
