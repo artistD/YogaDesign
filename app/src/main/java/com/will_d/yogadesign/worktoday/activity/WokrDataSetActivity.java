@@ -75,7 +75,12 @@ import soup.neumorphism.NeumorphImageView;
 
 public class WokrDataSetActivity extends AppCompatActivity {
 
-    private final int PERMISSION_EX_PHOTO =100;
+
+
+    private final int PERMISSION_LOCATION= 1100;
+    private boolean isLocatioPermissionChecked = false;
+    private final int PERMISSION_EX_PHOTO =100;//TODO : 여기 꼭 질문해보자
+    private boolean isPhotoPermissionChecked = false;
 
     private EditText etName;
     private TextView tvNickname;
@@ -284,6 +289,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
         String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (checkSelfPermission(permissions[0]) == PackageManager.PERMISSION_DENIED){
             requestPermissions(permissions, PERMISSION_EX_PHOTO);
+            isPhotoPermissionChecked = true;
         }
 
 
@@ -390,6 +396,12 @@ public class WokrDataSetActivity extends AppCompatActivity {
                     mcdLocalNotificationFixed.setVisibility(View.VISIBLE);
                     localNotificationDialog.setVisibility(View.VISIBLE);
                     Log.i("TAG", isLocalNotificationChecked+"");
+                    int checkResult = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
+                    if (checkResult == PackageManager.PERMISSION_DENIED){
+                        String[] permission = new String[]{Manifest.permission.ACCESS_FINE_LOCATION};
+                        requestPermissions(permission, PERMISSION_LOCATION);
+                        isLocatioPermissionChecked = true;
+                    }
 
                     mapFragment.getMapAsync(new OnMapReadyCallback() {
                         @Override
@@ -529,11 +541,27 @@ public class WokrDataSetActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode==PERMISSION_EX_PHOTO && grantResults[0]==PackageManager.PERMISSION_GRANTED){
-            Toast.makeText(this, "외부버장소 접근 허용", Toast.LENGTH_SHORT).show();
-        }else {
-            Toast.makeText(this, "이미지 업로드 불가", Toast.LENGTH_SHORT).show();
+
+        if (isPhotoPermissionChecked){
+            if(requestCode==PERMISSION_EX_PHOTO && grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                Toast.makeText(this, "외부버장소 접근 허용", Toast.LENGTH_SHORT).show();
+            }else {
+                Toast.makeText(this, "이미지 업로드 불가", Toast.LENGTH_SHORT).show();
+            }
+            isPhotoPermissionChecked = false;
         }
+
+
+
+        if (isLocatioPermissionChecked){
+            if (requestCode==PERMISSION_LOCATION && grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                Toast.makeText(this, "사용가능", Toast.LENGTH_SHORT).show();
+            }else {
+                Toast.makeText(this, "사용불가", Toast.LENGTH_SHORT).show();
+            }
+            isLocatioPermissionChecked = false;
+        }
+
     }
 
     @Override
@@ -1415,6 +1443,7 @@ public class WokrDataSetActivity extends AppCompatActivity {
         }
     });
 
+
     //Uri -- > 절대경로로 바꿔서 리턴시켜주는 메소드
     String getRealPathFromUri(Uri uri){
         String[] proj= {MediaStore.Images.Media.DATA};
@@ -1426,5 +1455,8 @@ public class WokrDataSetActivity extends AppCompatActivity {
         cursor.close();
         return  result;
     }
+
+
+
 
 }//WorkDataSetActivity class....

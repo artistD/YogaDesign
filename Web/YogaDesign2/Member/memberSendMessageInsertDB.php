@@ -2,7 +2,7 @@
 
     header('Content-Type:text/plain; charset=utf-8');
 
-    
+    $isImgKakao = $_POST['isImgKakao'];
     $id = $_POST['id'];
     $userCheckedId = $_POST['userCheckedId'];
     $myNickName = $_POST['myNickName'];
@@ -11,15 +11,19 @@
 
 
 
-
-    $file = $_FILES['img'];
+    if($isImgKakao == 'true'){
+       $myKaKaoHttpStr = $_POST['myKaKaoHttpStr'];
+    }else{
+        $file = $_FILES['img'];
     
-    $srcName = $file['name'];
-    $tmpName = $file['tmp_name'];
-    $size = $file['size'];
+        $srcName = $file['name'];
+        $tmpName = $file['tmp_name'];
+        $size = $file['size'];
+    
+        $dstName= "./uploaded/" . date('YmdHis') . $srcName;
+        move_uploaded_file($tmpName, $dstName);
+    }
 
-    $dstName= "./uploaded/" . date('YmdHis') . $srcName;
-    move_uploaded_file($tmpName, $dstName);
 
     $myNickName = addslashes($myNickName);
     $myMsg = addslashes($myMsg);
@@ -27,9 +31,15 @@
     $conn = mysqli_connect("localhost","willd88","messid88!!","willd88");
     mysqli_query($conn, "set names utf8");
 
-    $sql ="INSERT INTO ChattingYogaDesign(id, userCheckedId, myNickName, dstName, myMsg, day) VALUES('$id', '$userCheckedId', '$myNickName', '$dstName', '$myMsg' ,'$day')";
-    $result = mysqli_query($conn, $sql);
+    if($isImgKakao =='true'){
+        $sql ="INSERT INTO ChattingYogaDesign(id, userCheckedId, myNickName, dstName, myMsg, day) VALUES('$id', '$userCheckedId', '$myNickName', '$myKaKaoHttpStr', '$myMsg' ,'$day')";
+    
+    }else{
+        $sql ="INSERT INTO ChattingYogaDesign(id, userCheckedId, myNickName, dstName, myMsg, day) VALUES('$id', '$userCheckedId', '$myNickName', '$dstName', '$myMsg' ,'$day')";
+        
+    }
 
+    $result = mysqli_query($conn, $sql);
     $sql2 = "SELECT no FROM ChattingYogaDesign WHERE id ='$id' ORDER BY no ASC";
     $result2 = mysqli_query($conn, $sql2);
     

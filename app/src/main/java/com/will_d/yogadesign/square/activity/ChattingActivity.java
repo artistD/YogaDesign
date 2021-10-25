@@ -136,7 +136,16 @@ public class ChattingActivity extends AppCompatActivity {
                 SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy.MM.dd");
                 String getTime = simpleDate.format(date);
 
-                memberSendMessageInsertDB(id, myMsg, getTime);
+
+                //여기가 가장 중요한 부분임
+                boolean isImgKakao = false;
+                if (Global.myRealImgUrl.contains("k.kakao")){
+                    isImgKakao = true;
+
+                }else {
+                    isImgKakao  = false;
+                }
+                memberSendMessageInsertDB(isImgKakao, id, myMsg, getTime);
 
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
@@ -175,7 +184,13 @@ public class ChattingActivity extends AppCompatActivity {
                         String id = jsonObject.getString("id");
                         String nickName = jsonObject.getString("myNickName");
                         String dstName = jsonObject.getString("dstName");
-                        String imgUrl = "http://willd88.dothome.co.kr/YogaDesign2/member/" + dstName;
+                        String imgUrl;
+                        if (dstName.contains("k.kakao")){
+                           imgUrl = dstName;
+                        }else {
+                            imgUrl = "http://willd88.dothome.co.kr/YogaDesign2/member/" + dstName;
+                        }
+
                         String myMsg = jsonObject.getString("myMsg");
                         String day = jsonObject.getString("day");
 
@@ -202,17 +217,26 @@ public class ChattingActivity extends AppCompatActivity {
 
     }
 
-    public void memberSendMessageInsertDB(String id, String myMsg, String getTime){
+    public void memberSendMessageInsertDB(boolean isImgKaKao, String id, String myMsg, String getTime){
         Retrofit retrofit = RetrofitHelper.getRetrofitScalars();
         RetrofitService retrofitService = retrofit.create(RetrofitService.class);
 
-        MultipartBody.Part filePart = null;
-        File file = new File(Global.myRealImgUrl);
-        RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
-        filePart = MultipartBody.Part.createFormData("img", file.getName(), requestBody);
 
 
         Map<String, String> dataPart = new HashMap<>();
+        MultipartBody.Part filePart = null;
+
+        if (isImgKaKao){
+            dataPart.put("myKaKaoHttpStr", Global.myRealImgUrl);
+
+        }else {
+            File file = new File(Global.myRealImgUrl);
+            RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
+            filePart = MultipartBody.Part.createFormData("img", file.getName(), requestBody);
+        }
+
+
+        dataPart.put("isImgKakao", String.valueOf(isImgKaKao));
         dataPart.put("id", id);
         dataPart.put("userCheckedId", checkedId);
         dataPart.put("myNickName", Global.myNickName);
@@ -230,6 +254,7 @@ public class ChattingActivity extends AppCompatActivity {
                     JSONObject jsonObject = jsonArray.getJSONObject(jsonArray.length()-1);
                     String no = jsonObject.getString("no");
                     Log.i("twefgwgwegw", no);
+
                     items.add(new MessageItem(no, id, Global.myNickName, myMsg, getTime, Global.myRealImgUrl));
                     listView.setSelection(items.size()-1);
                 } catch (JSONException e) {

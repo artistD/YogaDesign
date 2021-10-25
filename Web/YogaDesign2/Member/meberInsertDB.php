@@ -40,12 +40,15 @@
 
     if($isPhotoChecked == 'true'){
         $sql ="INSERT INTO MemberYogaDesign(id, name, frofile, stateMsg, isLogin, isUserPublic, favoriteNum, favoriteCheckedUserList, date) VALUES('$id', '$nickName', '$dstName', '$stateMsg', $isLogin, $isUserPublic, '$favoriteNum', '$favoriteCheckedUserList', '$now')";
-        $result = mysqli_query($conn, $sql);
-
+        $sql2 = "UPDATE ChattingYogaDesign SET myNickName = '$nickName', dstName = '$dstName' WHERE id='$id'";
+    
     }else{
         $sql ="INSERT INTO MemberYogaDesign(id, name, frofile, stateMsg, isLogin, isUserPublic, favoriteNum, favoriteCheckedUserList, date) VALUES('$id', '$nickName', '$myKaKaoHttpStr', '$stateMsg', $isLogin, $isUserPublic, '$favoriteNum', '$favoriteCheckedUserList', '$now')";
-        $result = mysqli_query($conn, $sql);
+        $sql2 = "UPDATE ChattingYogaDesign SET myNickName = '$nickName', dstName = '$myKaKaoHttpStr' WHERE id='$id'";
     }
+
+    $result = mysqli_query($conn, $sql);
+        $result2 = mysqli_query($conn, $sql2);
 
 
     if($result) echo "게시글 업로드 되었습니다.";

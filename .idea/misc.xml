@@ -8,6 +8,7 @@
         <entry key="app/src/main/res/drawable/ic_empty_favorite.xml" value="0.13854166666666667" />
         <entry key="app/src/main/res/layout/activity_alarm.xml" value="0.24114583333333334" />
         <entry key="app/src/main/res/layout/activity_alarm_data_set.xml" value="0.24114583333333334" />
+        <entry key="app/src/main/res/layout/activity_chatting.xml" value="0.10135135135135136" />
         <entry key="app/src/main/res/layout/activity_intro.xml" value="0.2048888888888889" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.24010416666666667" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2630535251058521" />
@@ -33,6 +34,7 @@
         <entry key="app/src/main/res/layout/fragment_workshop_todolist.xml" value="0.12135416666666667" />
         <entry key="app/src/main/res/layout/fragment_workshop_userset.xml" value="0.375" />
         <entry key="app/src/main/res/layout/fragment_workshop_work.xml" value="0.20765765765765765" />
+        <entry key="app/src/main/res/layout/listview_chatting_my_mesage.xml" value="0.25" />
         <entry key="app/src/main/res/layout/recycler_alarmitem.xml" value="0.24114583333333334" />
         <entry key="app/src/main/res/layout/recycler_logitem.xml" value="0.24114583333333334" />
         <entry key="app/src/main/res/layout/recycler_square_member.xml" value="0.45" />

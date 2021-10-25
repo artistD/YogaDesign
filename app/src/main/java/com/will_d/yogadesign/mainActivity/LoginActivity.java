@@ -81,8 +81,11 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+
+    //TODO : 일단 여기 문제를 해결하는것이 가장 중요함 일단 계정로그인이 안된다고 해서 카카오로그인으로 전환할려고하는데 왜 계정로그인에서 oAuthToken이
+    //발급이 안되는지 판단이 안됨 [동영상 보여주기]
     public void clickKaKaoLogin(View view) {
-        UserApiClient.getInstance().loginWithKakaoAccount(this, new Function2<OAuthToken, Throwable, Unit>() {
+        UserApiClient.getInstance().loginWithKakaoTalk(this, new Function2<OAuthToken, Throwable, Unit>() {
             @Override
             public Unit invoke(OAuthToken oAuthToken, Throwable throwable) {
                 if (oAuthToken!=null){

@@ -45,6 +45,7 @@ import retrofit2.Retrofit;
 
 
 public class ProfileSetActivity extends AppCompatActivity {
+    //Todo: permissionCode 에대해서 질문하자!!!
     private final int PERMISSION_EX_PHOTO = 1018;
 
     private ImageView ivProfile;

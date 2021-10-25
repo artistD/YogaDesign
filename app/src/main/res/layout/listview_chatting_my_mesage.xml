@@ -59,16 +59,17 @@
 
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="#339999FF">
 
                 <TextView
                     android:id="@+id/tv_message"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="qwdqqdwqwdqwdqwdqw"
                     android:maxWidth="256dp"
-                    android:textSize="16sp"
-                    android:padding="12dp"/>
+                    android:padding="12dp"
+                    android:text="qwdqqdwqwdqwdqwdqw"
+                    android:textSize="16sp" />
 
 
             </RelativeLayout>
