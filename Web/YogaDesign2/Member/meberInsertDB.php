@@ -20,6 +20,7 @@
         $srcName = $file['name'];
         $tmpName = $file['tmp_name'];
         $size = $file['size'];
+        
     
         $dstName= "./uploaded/" . date('YmdHis') . $srcName;
         move_uploaded_file($tmpName, $dstName);
@@ -34,7 +35,7 @@
 
     $now = date('Y-m-d H:i:s');
 
-
+    
     $conn = mysqli_connect("localhost","willd88","messid88!!","willd88");
     mysqli_query($conn, "set names utf8");
 
